@@ -127,6 +127,9 @@ static void vollo_example(ExampleOptions options) {
     }
   }
 
+  assert(vollo_rt_model_input_num_elements(model, 0) == num_input_elems);
+  assert(vollo_rt_model_output_num_elements(model, 0) == num_output_elems);
+
   if (options.input_path != NULL) {
     // Check that the input has the number of input elements that the model expects
     assert(input_array.buffer_len == num_input_elems);
@@ -375,7 +378,7 @@ void print_help(const char* example_program) {
 
     "    -w, --num-warmup-inferences\n"
     "        Number of extra inferences to run before starting to measure\n"
-    "        Defaults to 1000\n"
+    "        Defaults to 10000\n"
     "\n"
 
     "    -j, --json\n"
@@ -405,7 +408,7 @@ int main(int argc, char** argv) {
   options.random_input = false;
   options.max_concurrent_jobs = 1;
   options.num_inferences = 10000;
-  options.num_warmup_inferences = 1000;
+  options.num_warmup_inferences = 10000;
   options.json = false;
   options.input_path = NULL;
   options.output_path = NULL;

@@ -50,7 +50,7 @@ NNIR can be compiled to a VOLLO program given a VOLLO accelerator configuration.
 ```python
 import vollo_compiler
 
-config = vollo_compiler.Config.ia_420f()
+config = vollo_compiler.Config.ia_420f_c6b32()
 program = nnir.to_program(config)
 ```
 
@@ -68,10 +68,10 @@ The VOLLO compiler can be used to simulate programs in the VOLLO virtual machine
 This is an instruction level simulation of the VOLLO accelerator which can be
 used to:
 
-* Estimate performance of a model.
+- Estimate performance of a model.
   The VM is not cycle accurate but provides an indicative cycle count of a
   model.
-* Verify the correctness of the compilation stages, including the effect of
+- Verify the correctness of the compilation stages, including the effect of
   quantisation.
   Note the output of the VM is not bit accurate to the VOLLO accelerator.
 
@@ -81,7 +81,7 @@ It should produce the same result as the source PyTorch model, within some
 range of floating point error.
 
 ```python
-vm = nnir.to_vm(vollo_compiler.Config.ia_420f())
+vm = program.to_vm()
 vm_output = vm.run(input.detach().numpy())
 torch.testing.assert_close(expected_output, torch.from_numpy(vm_output))
 print(vm.cycle_count())

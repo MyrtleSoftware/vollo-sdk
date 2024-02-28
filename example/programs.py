@@ -1,3 +1,7 @@
+"""
+    CLI to generate and compile VOLLO reference models.
+"""
+
 import torch
 import vollo_compiler
 import vollo_torch
@@ -48,8 +52,8 @@ class CNN(nn.Module):
 
 
 all_configs = {
-    "ia_420f": vollo_compiler.Config.ia_420f(),
-    "ia_840f": vollo_compiler.Config.ia_840f(),
+    "ia_420f": vollo_compiler.Config.ia_420f_c6b32(),
+    "ia_840f": vollo_compiler.Config.ia_840f_c3b64(),
 }
 
 all_models = {
@@ -64,7 +68,7 @@ def cli():
 
     parser = argparse.ArgumentParser(
         prog=__name__,
-        description="Generate and export a Vollo LSTM model to Onnx",
+        description="Generate and compile a VOLLO reference model",
     )
     parser.add_argument(
         "-l",
@@ -78,11 +82,16 @@ def cli():
         choices=list(all_models.keys()),
         help="name of the Vollo model to generate",
     )
-    parser.add_argument(
+    config_group = parser.add_mutually_exclusive_group()
+    config_group.add_argument(
         "-c",
         "--config",
+        help="hardware configuration JSON to use",
+    )
+    config_group.add_argument(
+        "--config-preset",
         choices=list(all_configs.keys()),
-        help="hardware configuration to use",
+        help="hardware configuration preset to use",
     )
     parser.add_argument(
         "-o",
@@ -101,8 +110,8 @@ def cli():
         parser.print_help()
         return 1
 
-    if args.config is None:
-        print("Expected --config argument")
+    if args.config is None and args.config_preset is None:
+        print("Expected --config or --config-preset argument")
         parser.print_help()
         return 1
 
@@ -110,7 +119,11 @@ def cli():
         args.program_out = f"{args.model_name}.vollo"
 
     # Create Vollo model
-    config = all_configs[args.config]
+    if args.config_preset is not None:
+        config = all_configs[args.config_preset]
+    else:
+        config = vollo_compiler.Config.load(args.config)
+
     model, input_shape, transforms = all_models[args.model_name]
 
     x = torch.randn(input_shape).bfloat16().to(torch.float32)
@@ -136,7 +149,7 @@ def cli():
     program = nnir_graph.to_program(config)
 
     # run in the VM
-    vm = vollo_compiler.VM.with_program(program)
+    vm = program.to_vm()
     actual_y = vm.run(x.detach().numpy())
     np.testing.assert_allclose(
         expected_y.detach().numpy(), actual_y, atol=1e-02, rtol=1e-02
