@@ -101,19 +101,15 @@ def cli():
     args = parser.parse_args()
 
     if args.list_models:
-        for model_name in all_configs().keys():
+        for model_name in all_configs.keys():
             print(model_name)
         return 0
 
     if args.model_name is None:
-        print("Expected --list-models or --model-name argument")
-        parser.print_help()
-        return 1
+        parser.error("Expected --list-models or --model-name argument")
 
     if args.config is None and args.config_preset is None:
-        print("Expected --config or --config-preset argument")
-        parser.print_help()
-        return 1
+        parser.error("Expected --config or --config-preset argument")
 
     if args.program_out is None:
         args.program_out = f"{args.model_name}.vollo"
@@ -154,6 +150,8 @@ def cli():
     np.testing.assert_allclose(
         expected_y.detach().numpy(), actual_y, atol=1e-02, rtol=1e-02
     )
+    print(f"VM output matches expected output")
+    print(f"Took {vm.cycle_count()} cycles")
 
     program_name = args.program_out
     program.save(program_name)

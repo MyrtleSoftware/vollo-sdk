@@ -57,7 +57,6 @@ typedef struct ExampleOptions {
 // - Init
 // - Add accelerators
 // - Load program
-// - Model init
 // - Add jobs
 // - Poll the jobs until completion
 // - Teardown/Cleanup
@@ -93,47 +92,69 @@ static void vollo_example(ExampleOptions options) {
   EXIT_ON_ERROR(vollo_rt_load_program(ctx, options.program_path));
 
   //////////////////////////////////////////////////
-  // Model init
+  // Get model metadata
   size_t num_models = vollo_rt_num_models(ctx);
   assert(num_models == 1);
 
-  vollo_rt_model_t model;
-  EXIT_ON_ERROR(vollo_rt_model_init(ctx, 0, &model));
+  size_t model_index = 0;
 
-  //////////////////////////////////////////////////
-  // Setup inputs/outputs buffers
-
-  size_t model_num_inputs = vollo_rt_model_num_inputs(model);
+  size_t model_num_inputs = vollo_rt_model_num_inputs(ctx, model_index);
   assert(model_num_inputs == 1);
 
-  size_t model_num_outputs = vollo_rt_model_num_inputs(model);
+  size_t model_num_outputs = vollo_rt_model_num_inputs(ctx, model_index);
   assert(model_num_outputs == 1);
 
-  size_t num_input_elems = 1;
-  size_t num_output_elems = 1;
+  fprintf(stderr, "Program metadata:\n", options.program_path);
+  fprintf(stderr, "  %ld input with shape: [", model_num_inputs);
 
+  // Initialised to 1 to get the product of the shape dims
+  size_t num_input_elems = 1;
   {
-    const size_t* input_shape = vollo_rt_model_input_shape(model, 0);
-    const size_t* output_shape = vollo_rt_model_output_shape(model, 0);
+    const size_t* input_shape = vollo_rt_model_input_shape(ctx, model_index, 0);
 
     while (*input_shape != 0) {
+      fprintf(stderr, "%ld", *input_shape);
       num_input_elems *= *input_shape;
       input_shape++;
-    }
 
-    while (*output_shape != 0) {
-      num_output_elems *= *output_shape;
-      output_shape++;
+      if (*input_shape != 0) {
+        fprintf(stderr, ", ");
+      } else {
+        fprintf(stderr, "]\n");
+      }
     }
   }
 
-  assert(vollo_rt_model_input_num_elements(model, 0) == num_input_elems);
-  assert(vollo_rt_model_output_num_elements(model, 0) == num_output_elems);
+  fprintf(stderr, "  %ld output with shape: [", model_num_outputs);
+
+  // Initialised to 1 to get the product of the shape dims
+  size_t num_output_elems = 1;
+  {
+    const size_t* output_shape = vollo_rt_model_output_shape(ctx, model_index, 0);
+    while (*output_shape != 0) {
+      fprintf(stderr, "%ld", *output_shape);
+      num_output_elems *= *output_shape;
+      output_shape++;
+
+      if (*output_shape != 0) {
+        fprintf(stderr, ", ");
+      } else {
+        fprintf(stderr, "]\n");
+      }
+    }
+  }
+
+  if (vollo_rt_model_input_streaming_dim(ctx, model_index, 0) >= 0) {
+    fprintf(stderr, "  The model is streaming\n");
+  }
+
+  assert(vollo_rt_model_input_num_elements(ctx, model_index, 0) == num_input_elems);
+  assert(vollo_rt_model_output_num_elements(ctx, model_index, 0) == num_output_elems);
 
   if (options.input_path != NULL) {
     // Check that the input has the number of input elements that the model expects
     assert(input_array.buffer_len == num_input_elems);
-    const size_t* input_shape = vollo_rt_model_input_shape(model, 0);
+    const size_t* input_shape = vollo_rt_model_input_shape(ctx, model_index, 0);
 
     // Check that the input has the shape of input that the model expects
     for (size_t i = 0; i < input_array.shape_len; i++) {
@@ -141,6 +162,9 @@ static void vollo_example(ExampleOptions options) {
       input_shape++;
     }
   }
+
+  //////////////////////////////////////////////////
+  // Setup inputs/outputs buffers
 
   // Number of input vectors
   // When random input is used, we randomly select a vector of random data for each inference
@@ -180,7 +204,7 @@ static void vollo_example(ExampleOptions options) {
   size_t inf_started = 0;
   size_t inf_completed = 0;
 
-  // We don't need user context here
+  // We don't need a user context here
   // Since we're only using 1 model, the inferences are guaranteed to complete
   // in the same order they were started
   uint64_t user_ctx = 0;
@@ -206,12 +230,12 @@ static void vollo_example(ExampleOptions options) {
         const float* input_arr[1] = {inputs_fp32[input_ix]};
         float* output_arr[1] = {output_fp32};
 
-        EXIT_ON_ERROR(vollo_rt_add_job_fp32(ctx, model, user_ctx, input_arr, output_arr));
+        EXIT_ON_ERROR(vollo_rt_add_job_fp32(ctx, model_index, user_ctx, input_arr, output_arr));
       } else {
         const bf16* input_arr[1] = {inputs[input_ix]};
         bf16* output_arr[1] = {output};
 
-        EXIT_ON_ERROR(vollo_rt_add_job_bf16(ctx, model, user_ctx, input_arr, output_arr));
+        EXIT_ON_ERROR(vollo_rt_add_job_bf16(ctx, model_index, user_ctx, input_arr, output_arr));
       }
 
       inf_started++;
@@ -303,7 +327,7 @@ static void vollo_example(ExampleOptions options) {
     output_array.buffer = (float*)malloc(sizeof(float) * num_output_elems);
     output_array.buffer_len = num_output_elems;
     {
-      const size_t* output_shape = vollo_rt_model_output_shape(model, 0);
+      const size_t* output_shape = vollo_rt_model_output_shape(ctx, model_index, 0);
 
       output_array.shape_len = 0;
       while (*output_shape != 0) {
@@ -340,7 +364,6 @@ static void vollo_example(ExampleOptions options) {
   free(inputs);
   free(inputs_fp32);
 
-  vollo_rt_model_destroy(model);
   vollo_rt_destroy(ctx);
 
   if (options.input_path != NULL) {

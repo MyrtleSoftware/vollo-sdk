@@ -1,6 +1,6 @@
 # Running an example
 
-The VOLLO SDK contains a trivial program for each accelerator to check the accelerator is working.
+The VOLLO SDK contains a trivial program for each accelerator to check if the accelerator is working.
 
 1. Ensure you have run the setup steps:
 
@@ -36,10 +36,13 @@ The VOLLO SDK contains a trivial program for each accelerator to check the accel
    ```sh
    Using program: "example/identity_b64.vollo"
    Using vollo-rt version: 0.12.0
+   Program metadata:
+     1 input with shape: [128]
+     1 output with shape: [128]
    Starting 10000 inferences
    Done
-   Ran 10000 inferences in 0.036088 s with:
-     mean latency of 3.586189 us
-     99% latency of 4.337000 us
-     throughput of 277098.332666 inf/s
+   Ran 10000 inferences in 0.039822 s with:
+     mean latency of 3.961121 us
+     99% latency of 4.698000 us
+     throughput of 251116.318761 inf/s
    ```
