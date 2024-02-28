@@ -54,7 +54,7 @@ The model can now be compiled and simulated as in Example 1.
 ```python
 import vollo_compiler
 
-config = vollo_compiler.Config.ia_420f()
+config = vollo_compiler.Config.ia_420f_c6b32()
 program = nnir.to_program(config)
 program.save('mlp.vollo')
 ```
@@ -101,11 +101,11 @@ input = torch.randn(2, input_size)
 (model, expected_output) = vollo_torch.fx.prepare_shape(model, input)
 nnir = vollo_torch.fx.nnir.to_nnir(model)
 nnir = nnir.unweave()
-config = vollo_compiler.Config.ia_420f()
+config = vollo_compiler.Config.ia_420f_c6b32()
 program = nnir.to_program(config)
 
 # Test the program
-vm = nnir.to_vm(vollo_compiler.Config.ia_420f())
+vm = program.to_vm()
 vm_output = vm.run(input.detach().numpy())
 torch.testing.assert_close(expected_output, torch.from_numpy(vm_output))
 ```

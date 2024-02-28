@@ -28,7 +28,7 @@ source vollo-venv/bin/activate
 
 info "installing Vollo Python libraries requirements"
 pip3 install --upgrade pip
-pip3 install "$VOLLO_SDK"/python/vollo_python-*.whl
+pip3 install "$VOLLO_SDK"/python/vollo_compiler-*.whl
 pip3 install "$VOLLO_SDK"/python/vollo_torch-*.whl  --extra-index-url https://download.pytorch.org/whl/cpu
 
 info "building example application"
@@ -38,22 +38,14 @@ chmod +w example
 
 cmd="example/vollo-example"
 
-info "Getting bitstream info for vollo device"
-if "$VOLLO_SDK"/bin/vollo-tool bitstream-check "$VOLLO_SDK"/bitstream/vollo-ia840f.json &> /dev/null; then
-  device="ia_840f"
-  echo "Detected vollo-ia840f"
-elif "$VOLLO_SDK"/bin/vollo-tool bitstream-check "$VOLLO_SDK"/bitstream/vollo-ia420f.json &> /dev/null; then
-  device="ia_420f"
-  echo "Detected vollo-ia420f"
-else
-  echo "Failed to find vollo device(s) matching this vollo-sdk"
-fi
+info "Getting hardware config for vollo device"
+"$VOLLO_SDK"/bin/vollo-tool read-hw-config | jq '.[0].hw_config' > hw_config.json
 
 models=("identity-128" "mlp" "cnn")
 
 info "Generating models"
 for m in "${models[@]}"; do
-  python3 "$VOLLO_SDK"/example/programs.py -m "$m" -c "$device"
+  python3 "$VOLLO_SDK"/example/programs.py -m "$m" -c hw_config.json
 done
 echo
 echo

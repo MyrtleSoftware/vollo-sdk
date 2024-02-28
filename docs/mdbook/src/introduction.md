@@ -5,8 +5,8 @@ learning (ML) models on FPGA platforms.
 
 This document outlines the following:
 
-* Key features of VOLLO.
-* The VOLLO architecture and customer interfaces.
-* Hardware requirements and setup.
-* The VOLLO compiler API.
-* The VOLLO runtime API.
+- Key features of VOLLO.
+- The VOLLO architecture and customer interfaces.
+- Hardware requirements and setup.
+- The VOLLO compiler API.
+- The VOLLO runtime API.

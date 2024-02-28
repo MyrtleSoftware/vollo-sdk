@@ -112,7 +112,8 @@ For example, using the VM:
 ```python
 import vollo_compiler
 
-vm = nnir.to_vm(vollo_compiler.Config.ia_420f())
+program = nnir.to_program(vollo_compiler.Config.ia_420f_c6b32())
+vm = program.to_vm()
 
 vm_outputs = []
 for i in range(5):
@@ -133,9 +134,9 @@ The streaming CNN satisfies the property that, given an input sequence, the i-th
 element of the output sequence of the non-streaming CNN will be equal to the
 output of the i-th iteration of feeding the input to the streaming CNN.
 
-The streaming CNN can then be compiled to a VOLLO program.
+The streaming CNN can be saved and run on the accelerator like any other
+program:
 
 ```python
-config = vollo_compiler.Config.ia_420f()
-program = nnir.to_program(config)
+program.save('cnn.vollo')
 ```

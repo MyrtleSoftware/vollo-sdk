@@ -1,4 +1,4 @@
-# Initial Setup
+# Setting up the VOLLO accelerator
 
 This section describes how to program your accelerator card with the VOLLO
 Accelerator upon first use and how to reprogram your accelerator card with
@@ -10,13 +10,13 @@ VOLLO accelerator.
 
 The initial setup instructions should be run in the VOLLO SDK directory.
 
-```bash
-> cd vollo-sdk-<VERSION>
+```sh
+cd vollo-sdk-<VERSION>
 ```
 
 When using VOLLO, you should also have the `setup.sh` script sourced to set up
 environment variables used by VOLLO:
 
-```bash
-> source setup.sh
+```sh
+source setup.sh
 ```
