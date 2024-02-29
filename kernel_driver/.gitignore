@@ -1,0 +1,13 @@
+*.o.cmd
+*.o.ur-safe
+*.ko.cmd
+.cache.mk
+*Module.symvers*
+modules.order
+*.ko
+*.mod
+*.cmd
+*.mod.c
+.tmp_versions
+.ccls-cache
+compile_commands.json
