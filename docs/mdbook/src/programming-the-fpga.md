@@ -120,6 +120,7 @@ NOTE: this can only be done with an FPGA that is already programmed with a Vollo
    interrupt this process until it completes.
 
    ```sh
+   sudo ./load-kernel-driver.sh
    bin/vollo-tool fpga-config overwrite-partition <device index> <.rpd.tar.gz file> USER_IMAGE
    ```
 
@@ -135,5 +136,6 @@ NOTE: this can only be done with an FPGA that is already programmed with a Vollo
 8. Check the correct Vollo bitstream is loaded:
 
    ```sh
+   sudo ./load-kernel-driver.sh
    bin/vollo-tool bitstream-check bitstream/<bitstream-name>.json
    ```

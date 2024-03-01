@@ -32,9 +32,10 @@ pip3 install "$VOLLO_SDK"/python/vollo_compiler-*.whl
 pip3 install "$VOLLO_SDK"/python/vollo_torch-*.whl  --extra-index-url https://download.pytorch.org/whl/cpu
 
 info "building example application"
-cp -r "$VOLLO_SDK"/example example
+mkdir example
+cp "$VOLLO_SDK"/example/{example.c,npy.h,Makefile} example/
 chmod +w example
-( cd example; make )
+( cd example; make vollo-example)
 
 info "Getting hardware config for vollo device"
 "$VOLLO_SDK"/bin/vollo-tool read-hw-config | jq '.[0].hw_config' > hw_config.json
