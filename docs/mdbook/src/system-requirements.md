@@ -19,4 +19,4 @@ It currently supports the following accelerator cards:
 
 ## Operating System Requirements
 
-VOLLO is compatible with Ubuntu 20.04 and later.
+Vollo is compatible with Ubuntu 20.04 and later.

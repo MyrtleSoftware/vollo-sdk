@@ -4,19 +4,19 @@ The product architecture is shown in the diagram below:
 
 ![System Architecture](assets/system-architecture.svg)
 
-VOLLO provides a C API to the user, running on the system host CPU.
-VOLLO targets FPGAs to provide low latency inference.
+Vollo provides a C API to the user, running on the system host CPU.
+Vollo targets FPGAs to provide low latency inference.
 The FPGA images are prebuilt and included in the product.
 
-VOLLO consists of the following elements:
+Vollo consists of the following elements:
 
-- VOLLO Accelerator Bitstream. Programming file for the FPGA on the PCIe
+- Vollo Accelerator Bitstream. Programming file for the FPGA on the PCIe
   accelerator card. See the [Accelerator Setup](accelerator-setup.md) section for
   instructions on programming your FPGA with the bitstream.
 
-- [VOLLO Compiler](vollo-compiler.md). Compiles ML models defined in PyTorch
-  to VOLLO programs.
+- [Vollo Compiler](vollo-compiler.md). Compiles ML models defined in PyTorch
+  to Vollo programs.
 
-- [VOLLO Runtime](vollo-runtime.md). The runtime library for VOLLO. It provides
+- [Vollo Runtime](vollo-runtime.md). The runtime library for Vollo. It provides
   an asynchronous inference interface for handling input and output for the
   accelerated model.

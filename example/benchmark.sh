@@ -36,27 +36,25 @@ cp -r "$VOLLO_SDK"/example example
 chmod +w example
 ( cd example; make )
 
-cmd="example/vollo-example"
-
 info "Getting hardware config for vollo device"
 "$VOLLO_SDK"/bin/vollo-tool read-hw-config | jq '.[0].hw_config' > hw_config.json
 
-models=("identity-128" "mlp" "cnn")
-
-info "Generating models"
-for m in "${models[@]}"; do
-  python3 "$VOLLO_SDK"/example/programs.py -m "$m" -c hw_config.json
-done
-echo
-echo
-
 echo "------------------------------------------------------------------"
-echo "-- RUNNING INFERENCE BENCHMARKS ----------------------------------"
+echo "-- COMPILING AND RUNNING BENCHMARK PROGRAMS ----------------------"
 echo "------------------------------------------------------------------"
 echo
 
-for m in "${models[@]}"; do
-    info "Running inference for $m:"
+cmd="example/vollo-example"
+
+for m in $(python3 "$VOLLO_SDK"/example/programs.py --list-models); do
+  info "Compiling program for $m example"
+  if python3 "$VOLLO_SDK"/example/programs.py -m "$m" -c hw_config.json;
+  then
+    info "Program compiled for $m example, now running inference"
     $cmd "$m.vollo"
-  echo
+    echo
+  else
+    info "Failed to compile model $m, it is not currently supported on this hardware config"
+    echo
+  fi
 done

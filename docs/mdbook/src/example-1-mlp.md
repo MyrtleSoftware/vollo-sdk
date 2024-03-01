@@ -29,7 +29,7 @@ model = MLP(input_size, output_size, hidden_size)
 ```
 
 The first stage of compiling a model is to lower it to NNIR.
-NNIR is the VOLLO compiler's intermediate representation for representing neural
+NNIR is the Vollo compiler's intermediate representation for representing neural
 network graphs.
 NNIR sits at a similar level of abstraction to ONNX, with most NNIR operators
 having direct ONNX or PyTorch analogues.
@@ -45,7 +45,7 @@ input = torch.randn(input_size)
 nnir = vollo_torch.fx.nnir.to_nnir(model)
 ```
 
-NNIR can be compiled to a VOLLO program given a VOLLO accelerator configuration.
+NNIR can be compiled to a Vollo program given a Vollo accelerator configuration.
 
 ```python
 import vollo_compiler
@@ -54,7 +54,7 @@ config = vollo_compiler.Config.ia_420f_c6b32()
 program = nnir.to_program(config)
 ```
 
-Save the program to a file so that it can be used for inference by the [VOLLO
+Save the program to a file so that it can be used for inference by the [Vollo
 runtime](vollo-runtime.md).
 
 ```python
@@ -63,9 +63,9 @@ program.save('mlp.vollo')
 
 ## Simulation
 
-The VOLLO compiler can be used to simulate programs in the VOLLO virtual machine
+The Vollo compiler can be used to simulate programs in the Vollo virtual machine
 (VM).
-This is an instruction level simulation of the VOLLO accelerator which can be
+This is an instruction level simulation of the Vollo accelerator which can be
 used to:
 
 - Estimate performance of a model.
@@ -73,7 +73,7 @@ used to:
   model.
 - Verify the correctness of the compilation stages, including the effect of
   quantisation.
-  Note the output of the VM is not bit accurate to the VOLLO accelerator.
+  Note the output of the VM is not bit accurate to the Vollo accelerator.
 
 Construct a VM instance with the program for your NNIR graph loaded.
 Run the VM by passing it a numpy array of the input.
@@ -85,10 +85,13 @@ vm = program.to_vm()
 vm_output = vm.run(input.detach().numpy())
 torch.testing.assert_close(expected_output, torch.from_numpy(vm_output))
 print(vm.cycle_count())
+# Translate the estimated cycle count to a duration for the compute (not
+# including IO) in microseconds, using the bitstream clock speed (320 MHz)
+print(f"{vm.compute_duration_us():.1f}us")
 ```
 
 The VM records the number of cycles the program took to execute.
 Note there will be some discrepancy between the VM's cycle count and the true
 cycle count, so the VM's cycle count should be treated as an estimate.
 Also note that the VM does not model the latency of the communication between
-the host and the VOLLO accelerator.
+the host and the Vollo accelerator.

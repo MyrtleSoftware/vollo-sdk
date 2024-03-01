@@ -1,22 +1,22 @@
-# Setting up the VOLLO accelerator
+# Setting up the Vollo accelerator
 
-This section describes how to program your accelerator card with the VOLLO
+This section describes how to program your accelerator card with the Vollo
 Accelerator upon first use and how to reprogram your accelerator card with
-updated versions of the VOLLO Accelerator.
-It also describes how to obtain a VOLLO license which you will need to use the
-VOLLO accelerator.
+updated versions of the Vollo Accelerator.
+It also describes how to obtain a Vollo license which you will need to use the
+Vollo accelerator.
 
 ## Environment Variable Setup
 
-The initial setup instructions should be run in the VOLLO SDK directory.
+The initial setup instructions should be run in the Vollo SDK directory.
 
-```sh
+```bash
 cd vollo-sdk-<VERSION>
 ```
 
-When using VOLLO, you should also have the `setup.sh` script sourced to set up
-environment variables used by VOLLO:
+When using Vollo, you should also have the `setup.sh` script sourced in `bash`
+to set up environment variables used by Vollo:
 
-```sh
+```bash
 source setup.sh
 ```

@@ -1,0 +1,101 @@
+MYRTLE SOFTWARE END USER LICENSE AGREEMENT (“EULA”)
+PLEASE READ THIS AGREEMENT CAREFULLY. 
+THIS EULA, (TOGETHER WITH THE EVALUATION FORM, THE "AGREEMENT"), IS ENTERED INTO  BETWEEN YOU (“USER”) AND MYRTLE SOFTWARE LTD, A COMPANY INCORPORATED UNDER THE LAWS OF ENGLAND AND WALES AT THIRD FLOOR, ST ANDREWS HOUSE, 59 ST ANDREWS STREET, CAMBRIDGE CB2 3BZ, COMPANY NUMBER 4978210 (THE  "COMPANY"), WHICH APPLIES TO USER'S USE OF THE COMPANY'S SOFTWARE, DOCUMENTATION AND CONTENT.  
+USER AND THE COMPANY MAY EACH BE REFERRED TO AS A “PARTY” AND TOGETHER AS THE “PARTIES”. IF THE USER DOWNLOADS, INSTALLS, ACCESSES, OR OTHERWISE USES ANY OF THE SERVICES, USER HEREBY AGREES TO AND SHALL BE BOUND BY THE TERMS OF THIS EULA.  
+IF USER DOES NOT AGREE TO THE TERMS OF THIS EULA, THE USER IS NOT PERMITTED TO PROCEED FURTHER OR USE ANY OF THE COMPANY SERVICE.  COMPANY RESERVES THE RIGHT TO CHANGE THE TERMS OF THIS EULA AT ANY TIME UPON THIRTY (30) DAYS WRITTEN NOTICE THROUGH OUR WEBSITE. 
+
+
+1. DEFINITIONS AND INTERPRETATIONS
+   1. "Authorised Reseller" means a reseller that is enrolled with the Company under a partner programme or similar arrangement.
+"Authorised User" means an employee, contractor or consultant of the User who has log in credentials for, or access to, the Services.
+"Confidential Information" means all confidential or proprietary information (however recorded or preserved) disclosed by one party or its employees, officers, subcontractors, representatives or advisers to the other party and the other party’s representatives, including the terms of this Agreement, the business, affairs, customers, clients, suppliers, plans, intentions, market opportunities, operations, processes, products, services, data, know-how, or trade secrets of the disclosing party.
+"Derived Data" means any data which is derived from User's use of the Services, which shall include: (i) any meta-data created in the User's use of the Services such as the number of connections and volume of data; (ii) any data which is processed and stored as mathematical constructs; and (iii) statistical or aggregated data, but shall exclude any personal data.
+"E-Portal" means shall mean the e-ticketing portal provided by the Authorised Reseller to raise any issues that need to be resolved by the Company and that require Support. 
+"Intellectual Property Rights" means patents, rights to inventions, copyright and neighbouring and related rights, trade marks, goodwill and all other intellectual property rights, in each case whether registered or unregistered and including all applications and rights to apply for and be granted, renewals or extensions of, and rights to claim priority from, such rights and all similar or equivalent rights or forms of protection which subsist or will subsist now or in the future in any part of the world.
+"Rights" means individually or collectively, Services, all software, hardware, algorithms, methodologies, Derived Data, other technology used by the Company to provide the Services, and all Intellectual Property Rights and proprietary rights in all of the foregoing.
+"Services" means the provision of the Company's software, documentation and content when as purchased by the User from the Company or Authorised reseller.
+"Support" means the support services that the Company will provide to the User during the period of use of the Services.
+"Website" means www.myrtle.ai.
+2. EVALUATIONS AND BETA TESTING
+   1. This clause 2 applies if the Company has agreed to provide the User with a non-transferable, non-exclusive, revocable, non-sublicensable license to access the Services to either: (a) conduct a proof of value of the Services (a "Proof of Value"); or (b) conduct a technical preview (a "Product Review") of a product of the Company which may or may not include unreleased features (a "Beta Product"), free of charge for the Evaluation Period specified in the Evaluation Form. Either Party may terminate a Proof of Value or Product Review for any reason on no less than 7 days' notice to the other. During an Evaluation Period, in addition to the restrictions set out at clauses 3.2 and 3.3 below, the User may be provided with access to test data in a non-live environment only, on the terms of this Agreement. 
+   2. Services and/or Beta Products provided to Customer during an Evaluation Period are provided "as is" and the Company provides no representations, warranties or guarantees whether express or implied regarding the Services. To the fullest extent permitted by applicable law, the Company shall have no liability to the Customer whether in contract, tort or otherwise and clause 8.4 shall not apply. 
+   3. On expiry or termination of the Evaluation Period any rights granted to the User herein shall cease and the provisions of clause 7 shall apply. 
+3. ACCESS TO THE SERVICE 
+   1. Subject to the terms and conditions of this EULA and any agreement agreed between the User and  Company, the Company hereby grants the User a non-exclusive, non-transferable license, during the term of the Agreement and subject to the terms of the Agreement, to use and access the Services, solely in accordance with the published documentation for the Services, for the Users own internal-use purposes.  
+   2. The User agrees not to: 
+      1. permit any third party to access and/or use the Services; 
+      2. rent, lease, loan, or sell access to the Services to any third party; 
+      3. interfere with, disrupt, alter, translate, or modify the Services or any part thereof, or create an undue burden on the Services or the networks or services connected to the Services; 
+      4. reverse-engineer the Services (except to the extent that such restriction on reverse engineering is prohibited by law in which case User shall provide the Company with prompt written notice prior to any such action), or access the Services to build a competitive product or service; or
+      5. introduce software or automated agents or scripts to the Services so as to produce multiple accounts, generate automated searches, requests and queries, or to strip or mine data from the Services.  
+   3. The Services, including any accounts,  passwords or other such log in or access information, may not be used by more than one individual user, and User agrees not to assist with or permit this.  
+   4. The Company reserves the right, at its discretion, to suspend or terminate any use and access to the Services that the Company reasonably determines have been used by an unauthorised third party.   
+4. OWNERSHIP AND INTELLECTUAL PROPERTY RIGHTS
+   1. The User acknowledges and agrees that the Rights, shall be the exclusive property of the Company. 
+   2. The User  hereby assigns to  the Company any suggestions, ideas, enhancement requests, improvements, feedback, recommendations or other information provided by the User related to the Services. 
+   3. All rights not expressly granted to the User are reserved to the Company. 
+   4. The Company makes no representation or warranty as to the validity or enforceability of the intellectual property rights in the Services.
+   5. Subject to clause 4.6 and 4.7, the Company shall defend the User against any third party claim that the use of the Services in accordance with this Agreement infringes any third party intellectual property right and shall indemnify the User for and against any amounts awarded against the User in judgment or settlement of such claims, provided that:
+      1. the Company is given prompt notice of such claim; 
+      2. User provides reasonable co-operation to the Company in the defence and settlement of such claim, at the Company’s expense; 
+      3. the Company is given sole authority to defend or settle the claim; and 
+      4. the User makes no admission of liability or fault itself or on behalf of the Company.
+   6. In the defence or settlement of any claim pursuant to clause 4.5 above, the Company may at its sole option and expense either: 
+      1. procure for the User the right to continue using the Services in the manner contemplated by this Agreement; 
+      2. replace or modify the Services so that it becomes non-infringing; or 
+      3. terminate this Agreement immediately by providing written notice to the User, without liability to the User.
+   7. The Company shall not be required to indemnify the User and disclaims all liability to the User, to the fullest extent permissible by applicable law,  if the alleged infringement is based on: 
+      1. modification of the Services by anyone other than the Company; or 
+      2. the User or any Authorised User’s use of the Services otherwise than in accordance with this Agreement or in a manner contrary to the instructions given to the User by the Company; or 
+      3. the User or any Authorised User’s use of the Services after notice of the alleged or actual infringement from the Company or any appropriate authority; or 
+      4. use or combination of the Services with any other software or hardware, in circumstances where, but for such combination, no infringement would have occurred.
+   8. User shall defend the Company against all, or any costs, claims, damages or expenses incurred by the Company in respect of any third party claim relating to the Customer’s or any Authorised User’s use of the Services otherwise than in accordance with this Agreement, provided that:
+      1. the User is given prompt notice of such claim; 
+      2. the Company provides reasonable co-operation to the User in the defence and settlement of such claim, at the User’s expense; 
+      3. the User is given sole authority to defend or settle the claim; 
+      4. the Company makes no admission of liability or fault itself or on behalf of the User;
+      5. any settlement will not entail an admission of fault or guilt by Company; and 
+   9. the settlement includes, as an unconditional term, the claimant’s or the plaintiff’s release of Company from all liability in respect of the claim).
+5. CONFIDENTIAL INFORMATION 
+   1. User will not use any Confidential Information for any purpose not expressly permitted by this EULA, and will disclose the Confidential Information only to the employees, consultants (to the extent acting on the User's  behalf and for its benefit), and agents of the User who have a need to know such Confidential Information for purposes of the Agreement and who are under a duty of confidentiality no less restrictive than the User’s duty hereunder.  
+   2. The User will protect the Confidential Information from unauthorised use, access, or disclosure in the same manner as the User protects its own confidential or proprietary information of a similar nature and with no less than reasonable care.  
+   3. The User will be allowed to disclose the Confidential Information to the extent that such disclosure is: 
+      1. specifically approved in writing by the Company, 
+      2. necessary in the course of legal proceedings for the User to defend itself or to enforce its rights under this EULA; or
+      3. required by law or by the order of a court or similar judicial or administrative body, provided that the User notifies the Company of such required disclosure promptly and in writing and cooperates with  the Company, at  the Company’s reasonable request and expense, in any lawful action to contest or limit the scope of such required disclosure.  
+   4. User will return to  the Company or destroy all tangible copies of Confidential Information in the User’s possession or control and permanently erase all electronic copies of Confidential Information promptly upon the expiration or termination of this EULA, whichever occurs first.
+6. SUPPORT SERVICES
+During the term of the EULA, the Company may provide support services directly to the User, or through the Authorised Reseller, such support terms being set out in the agreement between the User and the Authorised Reseller.
+7. TERMINATION 
+   1. Company may terminate this Agreement immediately whereby the User is in breach of the provisions of clause 3.2.
+   2. Notwithstanding the foregoing, any term or condition of the Agreement which by its sense or nature should be deemed to survive such termination shall so survive.  
+   3. Without affecting any other right or remedy available to it, either party may terminate this agreement with immediate effect by giving written notice to the other party if:
+      1. the fees are payable directly to the Company, the other party fails to pay an amount due under this agreement on the due date for payment and remains in default not less than ten (10) days after being notified to make such payment;
+      2. the other party commits a material breach of any term of this agreement and (if such breach is remediable) fails to remedy that breach within a period of thirty (30) days after being notified in writing to do so;
+      3. the other party takes or has taken against it (other than in relation to a solvent restructuring) any step or action towards its entering bankruptcy, administration, provisional liquidation or any composition or arrangement with its creditors, applying to court for or obtaining a moratorium under Part A1 of the Insolvency Act 1986, being wound up (whether voluntarily or by order of the court), being struck off the register of companies, having a receiver appointed to any of its assets, or its entering a procedure in any jurisdiction with a similar effect to a procedure listed in this clause 7.3.3;
+      4. the other party suspends or ceases, or threatens to suspend or cease, carrying on business; or
+      5. the User enters into an agreement with an Authorised Reseller which subsequently terminates or is terminated.
+   4. Without affecting any other right or remedy available to it, either party may terminate this agreement on giving not less than one months' written notice
+8. LIMITATION OF LIABILITY   
+   1. The Software is provided by the Company on an 'as is' basis and accordingly all implied warranties terms or otherwise are hereby expressly excluded from the terms of this Agreement, including any terms relating to fitness for purpose, satisfactory quality or otherwise.
+   2. In no event shall the Company be liable to the User for any special, indirect, incidental or consequential damages, or any damages or costs due to any direct or indirect loss of profits, data, use or goodwill, personal or property damage resulting from or in connection with this EULA, the service, or the use or inability to use the service, regardless of the cause of action or the theory of liability, whether in tort (including negligence), contract, or otherwise, even if the Company has been notified of the likelihood of such damages.  
+   3. Subject to clause 8.4, the maximum aggregate liability of the Company arising out of or in any way connected to this EULA whether in contract, tort (including negligence but excluding willful misconduct) or otherwise, shall be £10,000.
+   4. Neither party limits its liability (if any) to the other for: personal injury or death resulting from negligence; fraud; or any matter for which it would be illegal to exclude or to attempt to exclude its liability. 
+   5. The Company cannot guarantee the accuracy and functionality of the output of the Services and their results and so the Company shall have no liability in relation to the output and any subsequent usage of any data from the output by the User.
+9. FEES 
+   1. User shall pay the fees in accordance with this clause 9 and any payment terms specified by the Company from time to time without set-off in respect of any liability of the Company. 
+   2. Unless otherwise agreed with the Company, fees (and any expenses or other sums) payable under this Agreement are due at the point of sale. Payment confirmation will be provided after payment has been taken. 
+   3. All fees, expenses or other sums payable under this Agreement are exclusive of any applicable value added tax or other applicable taxes or duties for which the User shall be additionally liable. 
+   4. If any sum payable to the Company is not paid within 14 days after the due date the Company may suspend performance of its obligations and/or charge interest on a daily basis at the rate of 4% above the Bank of England's base rate from time to time in force, compounded quarterly, from the date for payment of that sum to the date of actual payment.
+   5. The Company shall be entitled to increase the  fees at any time upon thirty (30) days' prior written notice to the User before the start of a new or renewed . 
+   6. Where the User: (a) is participating in a Proof of Value; or (b)  has purchased the Services through an Authorised Reseller of the Supplier this clause 9 shall not apply.  
+10. MISCELLANEOUS 
+   1. Jurisdiction. This EULA and any dispute or claim arising out of it or in connection with it or its subject matter or formation (including non-contractual disputes or claims) shall be governed by and construed in accordance with the laws of England and Wales.  Each Party irrevocably agrees that the courts of England have exclusive jurisdiction to any dispute or claim arising out of or in connection with this EULA or its subject matter or formation (including non-contractual disputes or claims).   
+   2. No Partnership and Agency. The relationship between the parties is that of independent contractors and nothing in this Agreement shall be construed to create a partnership, joint venture, or agency relationship between the parties, nor authorise any Party to make or enter into any commitments for or on behalf of the other Party. Each Party confirms it is acting on its own behalf and not for the benefit of any other person. The parties acknowledge that the arrangements between them are non-exclusive. Nothing contained in this Agreement shall prohibit either of the parties from conducting business activities with other third parties. 
+   3. Compliance with laws. You shall always comply with all international and domestic laws, ordinances, regulations, and statutes that are applicable to its purchase and use of the Services.
+   4. Severance. If any provision of this EULA is, for any reason, held to be invalid or unenforceable, the other provisions of this EULA will remain enforceable, and the invalid or unenforceable provision will be deemed modified so that it is valid and enforceable to the maximum extent permitted by law.  
+   5. Waiver. No failure or delay by a Party to exercise any right or remedy provided under this Agreement or by law shall constitute a waiver of that or any other right or remedy, nor shall it prevent or restrict the further exercise of that or any other right or remedy. No single or partial exercise of such right or remedy shall prevent or restrict the further exercise of that or any other right or remedy. 
+   6. Assignment. Neither Party shall assign, subcontract, delegate, or otherwise transfer this EULA, or its rights and obligations herein, without obtaining the prior written consent of the other Party, and any attempted assignment, subcontract, delegation, or transfer in violation of the foregoing will be null and void; provided, however, that the Company may assign this EULA in connection with a merger, acquisition, reorganization or sale of all or substantially all of its assets, or other operation of law, without the User’s consent.  
+   7. Force Majeure. Any delay in the performance of any duties or obligations of either Party will not be considered a breach of this EULA if such delay is caused by a labor dispute, shortage of materials, fire, earthquake, flood, or any other event beyond the control of such Party, provided that such Party uses reasonable efforts, under the circumstances, to notify the other Party of the cause of such delay and to resume performance as soon as possible.   
+   8. Variation. No modification of or amendment to this EULA, or any waiver of any rights under this EULA, will be effective unless in writing and signed by an officer of the Company. 
+   9. Counterparts. This Agreement may be executed in any number of counterparts, each of which when executed shall constitute a duplicate original, but all the counterparts shall together constitute the one agreement.

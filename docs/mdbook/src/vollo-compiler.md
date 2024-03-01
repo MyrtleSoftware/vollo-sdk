@@ -1,22 +1,22 @@
-# VOLLO Compiler
+# Vollo Compiler
 
-The VOLLO compiler is made up of 2 Python libraries:
+The Vollo compiler is made up of 2 Python libraries:
 
 - The `vollo-torch` PyTorch frontend to the compiler.
 - The `vollo-compiler` backend that can transform and compile a model to a
-  VOLLO program (`.vollo` file).
+  Vollo program (`.vollo` file).
 
-The [VOLLO Runtime](vollo-runtime.md) section describes how to run a VOLLO
-program on a VOLLO accelerator.
-The VOLLO compiler API also includes functionality to simulate and estimate
-performance of VOLLO programs.
+The [Vollo Runtime](vollo-runtime.md) section describes how to run a Vollo
+program on a Vollo accelerator.
+The Vollo compiler API also includes functionality to simulate and estimate
+performance of Vollo programs.
 
 ## Installation
 
-Set up VOLLO environment variables by [sourcing
-`setup.sh`](accelerator-setup.md#environment-variable-setup).
+Set up Vollo environment variables by [sourcing
+`setup.sh`](accelerator-setup.md#environment-variable-setup) in `bash`.
 
-Install the wheel files for the VOLLO compiler libraries. It's recommended that
+Install the wheel files for the Vollo compiler libraries. It's recommended that
 you install these into a [virtual
 environment](https://docs.python.org/3/library/venv.html).
 

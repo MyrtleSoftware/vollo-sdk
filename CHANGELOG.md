@@ -1,4 +1,4 @@
-# Release Notes
+# Changelog
 
 ## 0.12.0
 

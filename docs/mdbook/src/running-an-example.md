@@ -1,6 +1,6 @@
 # Running an example
 
-The VOLLO SDK contains a trivial program for each accelerator to check if the accelerator is working.
+The Vollo SDK contains a trivial program for each accelerator to check if the accelerator is working.
 
 1. Ensure you have run the setup steps:
 

@@ -104,7 +104,7 @@ static void vollo_example(ExampleOptions options) {
   size_t model_num_outputs = vollo_rt_model_num_inputs(ctx, model_index);
   assert(model_num_outputs == 1);
 
-  fprintf(stderr, "Program metadata:\n", options.program_path);
+  fprintf(stderr, "Program metadata:\n");
   fprintf(stderr, "  %ld input with shape: [", model_num_inputs);
 
   // Initialised to 1 to get the product of the shape dims

@@ -1,6 +1,6 @@
 # Example 3: CNN
 
-VOLLO supports streaming 1D convolutional neural networks (CNNs), which might
+Vollo supports streaming 1D convolutional neural networks (CNNs), which might
 require you to make some changes to your model if you are currently using a
 non-streaming 1D CNN.
 
@@ -13,7 +13,7 @@ that input.
 Streaming convolutions will have much lower latency than non-streaming
 convolutions, but they have to maintain some state, namely the most recent
 window of input, making them unnatural to define in ML frameworks like PyTorch.
-To enable the use of of streaming convolutions, the VOLLO compiler includes a
+To enable the use of of streaming convolutions, the Vollo compiler includes a
 `streaming_transform` which transforms a non-streaming CNN into a streaming CNN,
 as long as the non-streaming CNN meets certain constraints.
 

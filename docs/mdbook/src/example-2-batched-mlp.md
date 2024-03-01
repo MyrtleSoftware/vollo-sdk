@@ -37,7 +37,7 @@ input = torch.randn(batch_size, input_size)
 nnir = vollo_torch.fx.nnir.to_nnir(model)
 ```
 
-The VOLLO accelerator is a vector (1D) processor and the VOLLO compiler
+The Vollo accelerator is a vector (1D) processor and the Vollo compiler
 optimises for operating on vectors, so the NNIR graph needs to be transformed
 to "unbatch" the 2D batch of inputs before it can be compiled to a program.
 

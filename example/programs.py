@@ -3,6 +3,7 @@
 """
 
 import torch
+
 import vollo_compiler
 import vollo_torch
 import numpy as np
@@ -15,7 +16,7 @@ class Identity(torch.nn.Module):
 
 
 class MLP(nn.Module):
-    def __init__(self, input_size, output_size, hidden_size):
+    def __init__(self, input_size, hidden_size, output_size):
         super().__init__()
         self.fc1 = nn.Linear(input_size, hidden_size)
         self.fc2 = nn.Linear(hidden_size, hidden_size)
@@ -23,18 +24,19 @@ class MLP(nn.Module):
 
     def forward(self, x):
         x = nn.functional.relu(self.fc1(x))
-        x = nn.functional.relu(self.fc2(x)) + x
+        x = nn.functional.relu(self.fc2(x))
         return self.out(x)
 
 
+# A simple convolutional block with a residual connection
 class ConvBlock(nn.Module):
     def __init__(self, channels, kernel_size):
         super().__init__()
         self.conv = vollo_torch.nn.PaddedConv1d(channels, channels, kernel_size)
 
-    def forward(self, x):
-        x = self.conv(x)
-        return nn.functional.relu(x)
+    def forward(self, inp):
+        x = self.conv(inp)
+        return nn.functional.relu(x) + inp
 
 
 class CNN(nn.Module):
@@ -51,15 +53,61 @@ class CNN(nn.Module):
         return x
 
 
+class LSTM(nn.Module):
+    def __init__(self, num_layers, input_size, hidden_size, output_size):
+        super().__init__()
+        assert num_layers >= 1
+        self.lstm = vollo_torch.nn.LSTM(input_size, hidden_size, num_layers=num_layers)
+        self.fc = nn.Linear(hidden_size, output_size)
+
+    def forward(self, x):
+        x = self.lstm(x)
+        x = self.fc(x)
+        return x
+
+
 all_configs = {
     "ia_420f": vollo_compiler.Config.ia_420f_c6b32(),
     "ia_840f": vollo_compiler.Config.ia_840f_c3b64(),
 }
 
+# The number of timesteps in the streaming dimension of the model
+# NOTE: as the models are using a streaming transformation, this dimension will be streamed over:
+# the timesteps are computed sequentially, and we are interested in the latency per timestep.
+# the value of STREAM_DIM is not important.
+STREAM_DIM = 32
+
 all_models = {
     "identity-128": (Identity(), [128], {}),
-    "mlp": (MLP(784, 32, 128), [10, 784], {"unweave": []}),
-    "cnn": (CNN(4, 32, 128), [128, 32], {"streaming_transform": [1]}),
+    # mlp models
+    "mlp_b1": (MLP(256, 384, 128), [1, 256], {"unweave": []}),
+    "mlp_b4": (MLP(256, 384, 128), [4, 256], {"unweave": []}),
+    "mlp_b8": (MLP(256, 384, 128), [8, 256], {"unweave": []}),
+    # cnn models
+    "tiny_cnn": (CNN(3, 8, 128), [128, STREAM_DIM], {"streaming_transform": [1]}),
+    "small_cnn": (CNN(3, 8, 256), [256, STREAM_DIM], {"streaming_transform": [1]}),
+    "med_cnn": (CNN(6, 8, 256), [256, STREAM_DIM], {"streaming_transform": [1]}),
+    # lstm models
+    "tiny_lstm": (
+        LSTM(2, 128, 128, 32),
+        [STREAM_DIM, 128],
+        {"streaming_transform": [0]},
+    ),
+    "small_lstm": (
+        LSTM(3, 256, 256, 32),
+        [STREAM_DIM, 256],
+        {"streaming_transform": [0]},
+    ),
+    "med_lstm": (
+        LSTM(3, 480, 480, 32),
+        [STREAM_DIM, 480],
+        {"streaming_transform": [0]},
+    ),
+    "med_lstm_deep": (
+        LSTM(6, 320, 320, 32),
+        [STREAM_DIM, 320],
+        {"streaming_transform": [0]},
+    ),
 }
 
 
@@ -101,7 +149,7 @@ def cli():
     args = parser.parse_args()
 
     if args.list_models:
-        for model_name in all_configs.keys():
+        for model_name in all_models.keys():
             print(model_name)
         return 0
 

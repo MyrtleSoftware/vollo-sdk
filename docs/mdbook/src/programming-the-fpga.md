@@ -2,7 +2,7 @@
 
 ## Programming the FPGA via JTAG
 
-If your FPGA is not already programmed with the VOLLO accelerator then please
+If your FPGA is not already programmed with the Vollo accelerator then please
 follow these instructions to load the bitstream into the accelerator card's
 flash memory.
 
@@ -10,7 +10,7 @@ This requires a USB cable to be connected to the accelerator card and Quartus
 programmer to be installed on the system so that the device can be programmed
 over JTAG.
 
-If the FPGA card already has a VOLLO Accelerator Bitstream, it can be updated
+If the FPGA card already has a Vollo Accelerator Bitstream, it can be updated
 over PCIe. See the section [Program the FPGA via
 PCIe](#programming-the-fpga-via-pcie) below.
 Programming over PCIe is faster, and does not require a USB programming cable or
@@ -76,14 +76,14 @@ for Quartus Programmer to be installed.
 9. Power off the system and start it back up. The bitstream will now be loaded
     onto the FPGA.
 
-10. Check a VOLLO bitstream is loaded:
+10. Check a Vollo bitstream is loaded:
 
     ```sh
     $ lspci -d 1ed9:766f
     51:00.0 Processing accelerators: Myrtle.ai Device 766f (rev 01)
     ```
 
-    Check the correct VOLLO bitstream is loaded:
+    Check the correct Vollo bitstream is loaded:
 
     ```sh
     cd <vollo-sdk>
@@ -92,7 +92,7 @@ for Quartus Programmer to be installed.
 
 ## Programming the FPGA via PCIe
 
-NOTE: this can only be done with an FPGA that is already programmed with a VOLLO bitstream.
+NOTE: this can only be done with an FPGA that is already programmed with a Vollo bitstream.
 
 1. Load the kernel driver:
 
@@ -132,7 +132,7 @@ NOTE: this can only be done with an FPGA that is already programmed with a VOLLO
    of the `rsu-status` command should show all zeroes for the `error_code` and
    `failing_image_address` fields.
 
-8. Check the correct VOLLO bitstream is loaded:
+8. Check the correct Vollo bitstream is loaded:
 
    ```sh
    bin/vollo-tool bitstream-check bitstream/<bitstream-name>.json

@@ -1,6 +1,6 @@
 # ONNX Support
 
-VOLLO also provides a tool for compiling ML models defined in ONNX.
+Vollo also provides a tool for compiling ML models defined in ONNX.
 
 `vollo-onnx` is a command line tool which allows the user to specify an input ONNX file and produces a `.vollo` program as output. The user specifies a path to the input `.onnx` file:
 
@@ -42,14 +42,13 @@ The user can specify:
         Perform the unweaving transform
   ```
 
-- The input shape of the model. This is required if the ONNX model has dynamic input shapes. VOLLO requires that the shape of the input be known at compile-time:
+- The input shape of the model. This is required if the ONNX model has dynamic input shapes. Vollo requires that the shape of the input be known at compile-time:
 
   ```text
   --override-input-shape <SHAPE>
-        --override-input-shape <SHAPE>
-          If the model has dynamic input shapes, the user must pass a fixed input shape
+        If the model has dynamic input shapes, the user must pass a fixed input shape
 
-          Example: 10,100,250
+        Example: 10,100,250
   ```
 
 ## Simplifying ONNX Models
@@ -69,3 +68,25 @@ ONNX models can also be imported and translated to NNIR models directly in pytho
 ```python
 onnx_nnir = vollo_compiler.NNIR.from_onnx(onnx_path, input_shape)
 ```
+
+## Supported Nodes
+
+Tensors are expected to be in `float32` format, unless they are used as indices / axes (in which case they should be `int64`s).
+
+`vollo-onnx` supports models with the following nodes:
+
+| Operator                 | Support Notes                                                        |
+| ------------------------ | -------------------------------------------------------------------- |
+| Pointwise arithmetic ops | `Add`, `Sub`, `Mul`; `Div` by constant                               |
+| Inequality               | `>`, `<`, `>=`, `<=` (when followed by a `Where`)                    |
+| `Max` and `Min`          |                                                                      |
+| `Neg`                    |                                                                      |
+| Clamp ops                | `Clip`, `Relu`                                                       |
+| Matrix multiplication    | `MatMul` / `Gemm` where one input is a constant                      |
+| `Conv`                   | 1d with left-padding such that input and output seq dimensions match |
+| `Gather`                 | With a 1d tensor of indices                                          |
+| `ReduceSum`              | With constant axes                                                   |
+| `Where`                  | If the `Where` condition is an inequality comparison                 |
+| `Concat`                 | On outer dimension or at start or end of model                       |
+| `Transpose`              | See [tensor memory format](supported-models.md#tensor-memory-format) |
+| `Identity`               |                                                                      |

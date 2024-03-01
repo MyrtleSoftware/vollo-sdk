@@ -1,6 +1,6 @@
 # Supported Models
 
-The VOLLO compiler supports PyTorch models that use the following operations:
+The Vollo compiler supports PyTorch models that use the following operations:
 
 | Operation                | Support Notes                                                  |
 | ------------------------ | -------------------------------------------------------------- |
@@ -10,6 +10,7 @@ The VOLLO compiler supports PyTorch models that use the following operations:
 | Clamp ops                | `clamp`, `relu`                                                |
 | Matrix multiplication    | `Linear`; `matmul` / `@` where one side is a constant          |
 | Convolution              | Via `vollo_torch.nn.PaddedConv1d`                              |
+| LSTM                     | Via `vollo_torch.nn.LSTM`                                      |
 | Indexing / slicing       | Partial square bracket `[]` support; `index_select`            |
 | `sum`                    | With `keepdim=True`                                            |
 | `where`                  | If the `where` condition is an inequality comparison           |
@@ -18,7 +19,7 @@ The VOLLO compiler supports PyTorch models that use the following operations:
 
 ## Tensor Memory Format
 
-VOLLO supports operations on tensors in channels-last memory format, and does
+Vollo supports operations on tensors in channels-last memory format, and does
 not currently support changing the memory format on the accelerator (e.g.
 transpose operations).
 
@@ -31,5 +32,5 @@ channels last.
 
 ## TorchScript
 
-The VOLLO compiler supports standard PyTorch modules (`torch.nn.Module`); it
+The Vollo compiler supports standard PyTorch modules (`torch.nn.Module`); it
 does not support TorchScript modules (`torch.jit.ScriptModule`).

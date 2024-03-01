@@ -1,6 +1,6 @@
 # Key Features
 
-VOLLO accelerates machine learning inference for low latency streaming models
+Vollo accelerates machine learning inference for low latency streaming models
 typically found in financial trading or fraud detection systems such as:
 
 - Market predictions
@@ -8,10 +8,10 @@ typically found in financial trading or fraud detection systems such as:
 - Anomaly detection
 - Portfolio optimisation
 
-VOLLO is able to process of range of models, including models which maintain
+Vollo is able to process of range of models, including models which maintain
 state while streaming such as convolutional models.
 
-Key characteristics of VOLLO are:
+Key characteristics of Vollo are:
 
 - Low latency inference of machine learning models, typically between 5-10μs.
 - High accuracy inference through use of Brain Floating Point 16 (bfloat16)

@@ -2,7 +2,7 @@
 
 1. Load the kernel driver `sudo ./load-kernel-driver.sh`
 
-2. Run `vollo-tool device-ids`, this will enumerate all VOLLO accelerators and
+2. Run `vollo-tool device-ids`, this will enumerate all Vollo accelerators and
    and output their device IDs.
 
    ```sh
