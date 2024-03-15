@@ -32,7 +32,7 @@ pip3 install "$VOLLO_SDK"/python/vollo_compiler-*.whl
 pip3 install "$VOLLO_SDK"/python/vollo_torch-*.whl  --extra-index-url https://download.pytorch.org/whl/cpu
 
 info "building example application"
-mkdir example
+mkdir -p example
 cp "$VOLLO_SDK"/example/{example.c,npy.h,Makefile} example/
 chmod +w example
 ( cd example; make vollo-example)
@@ -59,3 +59,29 @@ for m in $(python3 "$VOLLO_SDK"/example/programs.py --list-models); do
     echo
   fi
 done
+
+if [[ -n "$RUN_IO_TEST" ]]; then
+  echo "------------------------------------------------------------------"
+  echo "-- COMPILING AND RUNNING IO ONLY TEST PROGRAMS -------------------"
+  echo "------------------------------------------------------------------"
+  echo
+
+  echo "input values, output values, mean latency (us), 99th percentile latency (us)" > io-test-metrics.csv
+
+  for input_size_pow in $(seq 5 1 13); do
+    input_size=$((2 ** input_size_pow))
+    for output_size_pow in $(seq 5 1 13); do
+      output_size=$((2 ** output_size_pow))
+      info "Compiling program for IO only test: input_size=$input_size, output_size=$output_size"
+      m=$(python3 "$VOLLO_SDK"/example/io-test-programs.py -c hw_config.json "$input_size" "$output_size")
+
+      info "Program compiled $m, now running inference"
+      echo -n "$input_size,$output_size," >> io-test-metrics.csv
+      $cmd --num-inferences=100000 --json "$m" | tee /dev/stderr | jq -r '.metrics.latency_us | [.mean, .p99] | join(",")' >> io-test-metrics.csv
+      echo
+
+      # cleanup
+      rm "$m"
+    done
+  done
+fi

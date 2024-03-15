@@ -41,7 +41,7 @@ Add an accelerator by using the `vollo_rt_add_accelerator` function.
  * Logging level can be configured by setting the environment variable `VOLLO_RT_LOG` to one of:
  * "error", "warn", "info", "debug", or "trace"
  */
-error_t vollo_rt_init(vollo_rt_context_t* context_ptr);
+vollo_rt_error_t vollo_rt_init(vollo_rt_context_t* context_ptr);
 
 /**
  * Destroy vollo-rt context, releasing its associated resources.
@@ -53,7 +53,7 @@ void vollo_rt_destroy(vollo_rt_context_t vollo);
  * The accelerator is specified by its index. The index refers to an accelerator in the sorted list
  * of PCI addresses. This should be called after `vollo_rt_init` but before `vollo_rt_load_program`
  */
-error_t vollo_rt_add_accelerator(vollo_rt_context_t vollo, size_t accelerator_index);
+vollo_rt_error_t vollo_rt_add_accelerator(vollo_rt_context_t vollo, size_t accelerator_index);
 ```
 
 ## Loading a program
@@ -76,7 +76,7 @@ A program is loaded onto the Vollo accelerator using the `vollo_rt_load_program`
  * a program needs to be changed or reset, first `vollo_rt_destroy` the current
  * context, then start a new context with `vollo_rt_init`.
  */
-error_t vollo_rt_load_program(vollo_rt_context_t vollo, const char* program_path);
+vollo_rt_error_t vollo_rt_load_program(vollo_rt_context_t vollo, const char* program_path);
 ```
 
 ## Model metadata
@@ -265,14 +265,14 @@ while copying to/from DMA buffers, avoiding an extra copy.
  *       - The output buffers need to live until `vollo_rt_poll` returns with the completion for
  *         this job
  */
-error_t vollo_rt_add_job_bf16(
+vollo_rt_error_t vollo_rt_add_job_bf16(
   vollo_rt_context_t vollo,
   size_t model_index,
   uint64_t user_ctx,
   const bf16* const* input_data,
   bf16* const* output_data);
 
-error_t vollo_rt_add_job_fp32(
+vollo_rt_error_t vollo_rt_add_job_fp32(
   vollo_rt_context_t vollo,
   size_t model_index,
   uint64_t user_ctx,
@@ -295,6 +295,6 @@ are completed.
  *   returned_user_ctx: buffer for the returned user_ctx of completed jobs, this will only be
  *                      valid until the next call to vollo_rt_poll.
  */
-error_t vollo_rt_poll(
+vollo_rt_error_t vollo_rt_poll(
   vollo_rt_context_t vollo, size_t* num_completed, const uint64_t** returned_user_ctx);
 ```

@@ -11,10 +11,12 @@ programmer to be installed on the system so that the device can be programmed
 over JTAG.
 
 If the FPGA card already has a Vollo Accelerator Bitstream, it can be updated
-over PCIe. See the section [Program the FPGA via
+over PCIe by following the steps in the section [Program the FPGA via
 PCIe](#programming-the-fpga-via-pcie) below.
-Programming over PCIe is faster, and does not require a USB programming cable or
-for Quartus Programmer to be installed.
+Note that you only need to update the bitstream if updating to an [incompatible
+version](versions.md#version-compatibility) of the Vollo SDK.
+Programming over PCIe is faster than programming over JTAG, and does not
+require a USB programming cable or for Quartus Programmer to be installed.
 
 1. Download and install the latest Quartus Programmer:
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.12.1
+
+- `vollo-torch` fix type hints being incompatible with Python 3.7/3.8
+- `vollo-rt.h` fix namespacing issue (`error_t` -> `vollo_rt_error_t`)
+- Runtime optimisations
+- Added IO only benchmarks
+
 ## 0.12.0
 
 - Initial support for ONNX models in compiler

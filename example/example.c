@@ -11,7 +11,7 @@
 // Helper to exit when an error is encountered
 #define EXIT_ON_ERROR(expr)                 \
   do {                                      \
-    const char* _err = (expr);              \
+    vollo_rt_error_t _err = (expr);         \
     if (_err != NULL) {                     \
       fprintf(stderr, "error: %s\n", _err); \
       exit(EXIT_FAILURE);                   \
@@ -249,20 +249,23 @@ static void vollo_example(ExampleOptions options) {
     const uint64_t* completed_buffer = NULL;
 
     EXIT_ON_ERROR(vollo_rt_poll(ctx, &num_completed, &completed_buffer));
-    outstanding_jobs -= num_completed;
 
-    struct timespec job_completed_time;
-    clock_gettime(CLOCK_MONOTONIC, &job_completed_time);
+    if (num_completed > 0) {
+      outstanding_jobs -= num_completed;
 
-    for (size_t i = 0; i < num_completed; i++) {
-      // if it is not warmup
-      if (inf_completed >= options.num_warmup_inferences) {
-        size_t ix = inf_completed - options.num_warmup_inferences;
+      struct timespec job_completed_time;
+      clock_gettime(CLOCK_MONOTONIC, &job_completed_time);
 
-        latencies[ix] = diff_timespec_ns(start_times[ix], job_completed_time);
+      for (size_t i = 0; i < num_completed; i++) {
+        // if it is not warmup
+        if (inf_completed >= options.num_warmup_inferences) {
+          size_t ix = inf_completed - options.num_warmup_inferences;
+
+          latencies[ix] = diff_timespec_ns(start_times[ix], job_completed_time);
+        }
+
+        inf_completed++;
       }
-
-      inf_completed++;
     }
   }
 

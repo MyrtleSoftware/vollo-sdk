@@ -25,4 +25,5 @@
 - [Vollo Runtime](vollo-runtime.md)
   - [C API](c-api.md)
   - [Example](vollo-rt-example.md)
-- [Release Notes](release-notes.md)
+- [Versions](versions.md)
+  - [Release Notes](release-notes.md)
