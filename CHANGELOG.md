@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.12.2
+
+- Support for LSTM nodes in ONNX frontend
+- Support for squeezing, unsqueezing, reduce sum, using `unweave`
+  transformation
+- Improved error reporting in `vollo_torch` lowering to NNIR
+
 ## 0.12.1
 
 - `vollo-torch` fix type hints being incompatible with Python 3.7/3.8
