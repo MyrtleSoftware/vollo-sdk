@@ -321,10 +321,10 @@ function playground_text(playground) {
 
         let newLogo;
         if(theme === 'light'){
-            newLogo = "url('../assets/vollo-logo-dark.png')";
+            newLogo = "url('./assets/vollo-logo-dark.png')";
         }
         else {
-            newLogo = "url('../assets/vollo-logo-white.png')";
+            newLogo = "url('./assets/vollo-logo-white.png')";
         }
         let logoElement = document.querySelector(".sidebar .sidebar-scrollbox .sidebar-logo");
         logoElement.style.backgroundImage= newLogo;

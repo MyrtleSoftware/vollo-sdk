@@ -12,10 +12,11 @@ The Vollo compiler supports PyTorch models that use the following operations:
 | Convolution              | Via `vollo_torch.nn.PaddedConv1d`                              |
 | LSTM                     | Via `vollo_torch.nn.LSTM`                                      |
 | Indexing / slicing       | Partial square bracket `[]` support; `index_select`            |
-| `sum`                    | With `keepdim=True`                                            |
+| `sum`                    |                                                                |
 | `where`                  | If the `where` condition is an inequality comparison           |
 | Concatenation            | `cat`, `concat` on outer dimension or at start or end of model |
 | `transpose`              | See [section below](#tensor-memory-format)                     |
+| `squeeze`, `unsqueeze`   |                                                                |
 
 ## Tensor Memory Format
 

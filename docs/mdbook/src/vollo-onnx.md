@@ -84,9 +84,11 @@ Tensors are expected to be in `float32` format, unless they are used as indices 
 | Clamp ops                | `Clip`, `Relu`                                                       |
 | Matrix multiplication    | `MatMul` / `Gemm` where one input is a constant                      |
 | `Conv`                   | 1d with left-padding such that input and output seq dimensions match |
+| `LSTM`                   | Forward LSTM without explicit hidden or cell state initialisation    |
 | `Gather`                 | With a 1d tensor of indices                                          |
 | `ReduceSum`              | With constant axes                                                   |
 | `Where`                  | If the `Where` condition is an inequality comparison                 |
 | `Concat`                 | On outer dimension or at start or end of model                       |
 | `Transpose`              | See [tensor memory format](supported-models.md#tensor-memory-format) |
+| `Squeeze`, `Unsqueeze`   |                                                                      |
 | `Identity`               |                                                                      |
