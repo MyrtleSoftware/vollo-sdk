@@ -1,0 +1,318 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>C Example - Vollo SDK User Guide</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="assets/vollo-favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <a href="./">
+                  <div class="sidebar-logo">
+                  </div>
+                </a>
+
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="key-features.html"><strong aria-hidden="true">2.</strong> Key Features</a></li><li class="chapter-item expanded "><a href="product-overview.html"><strong aria-hidden="true">3.</strong> Product Overview</a></li><li class="chapter-item expanded "><a href="vollo-compiler.html"><strong aria-hidden="true">4.</strong> Vollo Compiler</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="supported-models.html"><strong aria-hidden="true">4.1.</strong> Supported Models</a></li><li class="chapter-item expanded "><a href="example-1-mlp.html"><strong aria-hidden="true">4.2.</strong> Example 1: MLP</a></li><li class="chapter-item expanded "><a href="example-2-cnn.html"><strong aria-hidden="true">4.3.</strong> Example 2: CNN</a></li><li class="chapter-item expanded "><a href="example-3-multi-model.html"><strong aria-hidden="true">4.4.</strong> Example 3: Multiple Models in a Vollo Program</a></li><li class="chapter-item expanded "><a href="vollo-onnx.html"><strong aria-hidden="true">4.5.</strong> ONNX Support</a></li></ol></li><li class="chapter-item expanded "><a href="benchmark.html"><strong aria-hidden="true">5.</strong> Benchmarks</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="benchmark-mlp.html"><strong aria-hidden="true">5.1.</strong> MLP</a></li><li class="chapter-item expanded "><a href="benchmark-cnn.html"><strong aria-hidden="true">5.2.</strong> CNN</a></li><li class="chapter-item expanded "><a href="benchmark-lstm.html"><strong aria-hidden="true">5.3.</strong> LSTM</a></li><li class="chapter-item expanded "><a href="benchmark-io.html"><strong aria-hidden="true">5.4.</strong> IO round trip</a></li></ol></li><li class="chapter-item expanded "><a href="accelerator-setup.html"><strong aria-hidden="true">6.</strong> Accelerator Setup</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="system-requirements.html"><strong aria-hidden="true">6.1.</strong> System Requirements</a></li><li class="chapter-item expanded "><a href="programming-the-fpga.html"><strong aria-hidden="true">6.2.</strong> Programming the FPGA</a></li><li class="chapter-item expanded "><a href="installing-a-license.html"><strong aria-hidden="true">6.3.</strong> Installing a License</a></li><li class="chapter-item expanded "><a href="running-an-example.html"><strong aria-hidden="true">6.4.</strong> Running an Example</a></li><li class="chapter-item expanded "><a href="running-the-benchmark.html"><strong aria-hidden="true">6.5.</strong> Running the Benchmark</a></li></ol></li><li class="chapter-item expanded "><a href="vollo-runtime.html"><strong aria-hidden="true">7.</strong> Vollo Runtime</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="c-api.html"><strong aria-hidden="true">7.1.</strong> C API</a></li><li class="chapter-item expanded "><a href="vollo-rt-example.html" class="active"><strong aria-hidden="true">7.2.</strong> C Example</a></li><li class="chapter-item expanded "><a href="vollo-rt-python-example.html"><strong aria-hidden="true">7.3.</strong> Python Example</a></li></ol></li><li class="chapter-item expanded "><a href="versions.html"><strong aria-hidden="true">8.</strong> Versions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="release-notes.html"><strong aria-hidden="true">8.1.</strong> Release Notes</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Vollo SDK User Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="vollo-rt-example"><a class="header" href="#vollo-rt-example">Vollo RT Example</a></h1>
+<p>The full code for this example can be found in <code>example/identity.c</code>.</p>
+<p>Here we will work through it step by step.</p>
+<hr />
+<p>First we need to get hold of a Vollo RT context:</p>
+<pre><code class="language-c">//////////////////////////////////////////////////
+// Init
+vollo_rt_context_t ctx;
+EXIT_ON_ERROR(vollo_rt_init(&amp;ctx));
+</code></pre>
+<p>Note: throughout this example we use <code>EXIT_ON_ERROR</code>, it is just a convenient way to handle errors</p>
+<hr />
+<p>Then we need to add accelerators, the <code>accelerator_index</code> refers to the index of
+the Vollo accelerator in the sorted list of PCI addresses, simply use <code>0</code> if you
+have a single accelerator, or just want to use the first one.</p>
+<pre><code class="language-c">//////////////////////////////////////////////////
+// Add accelerators
+size_t accelerator_index = 0;
+EXIT_ON_ERROR(vollo_rt_add_accelerator(ctx, accelerator_index));
+</code></pre>
+<p>This step will check the accelerator license and make sure the bitstream is the
+correct version and compatible with this version of the runtime.</p>
+<hr />
+<p>Then we load a program:</p>
+<pre><code class="language-c">//////////////////////////////////////////////////
+// Load program
+
+// Program for a block_size 64 accelerator
+const char* vollo_program_path = &quot;./identity_b64.vollo&quot;;
+EXIT_ON_ERROR(vollo_rt_load_program(ctx, vollo_program_path));
+</code></pre>
+<p>Here we're using a relative path (in the <code>example</code> directory) to one of the
+example Vollo program, a program that computes the identity function for a tensor of size 128. The program
+is specifically for a block_size 64 version of the accelerator such as the
+default configuration for the <code>IA840F</code> FPGA.</p>
+<hr />
+<p>Then we setup some inputs and outputs for a single inference:</p>
+<pre><code class="language-c">//////////////////////////////////////////////////
+// Setup inputs and outputs
+
+size_t model_index = 0;
+
+// Assert model only has a single input and a single output tensor
+assert(vollo_rt_model_num_inputs(ctx, model_index) == 1);
+assert(vollo_rt_model_num_outputs(ctx, model_index) == 1);
+
+assert(vollo_rt_model_input_num_elements(ctx, model_index, 0) == 128);
+assert(vollo_rt_model_output_num_elements(ctx, model_index, 0) == 128);
+
+float input_tensor[128];
+float output_tensor[128];
+
+for (size_t i = 0; i &lt; 128; i++) {
+  input_tensor[i] = 42.0;
+}
+</code></pre>
+<p>We check that the program metadata matches our expectations and we setup an input and output buffer.</p>
+<hr />
+<p>Then we run a single inference:</p>
+<pre><code class="language-c">//////////////////////////////////////////////////
+// Run an inference
+
+single_shot_inference(ctx, input_tensor, output_tensor);
+</code></pre>
+<p>Where we define a convenience function to run this type of simple synchronous
+inference on top of the asynchronous Vollo RT API:</p>
+<pre><code class="language-c">// A small wrapper around the asynchronous Vollo RT API to block on a single inference
+// This assume a single model with a single input and output tensor
+static void single_shot_inference(vollo_rt_context_t ctx, const float* input, float* output) {
+  size_t model_index = 0;
+
+  const float* inputs[1] = {input};
+  float* outputs[1] = {output};
+
+  // user_ctx is not needed when doing single shot inferences
+  // it can be used when doing multiple jobs concurrently to keep track of which jobs completed
+  uint64_t user_ctx = 0;
+
+  // Register a new job
+  EXIT_ON_ERROR(vollo_rt_add_job_fp32(ctx, model_index, user_ctx, inputs, outputs));
+
+  // Poll until completion
+  size_t num_completed = 0;
+  const uint64_t* completed_buffer = NULL;
+  size_t poll_count = 0;
+
+  while (num_completed == 0) {
+    EXIT_ON_ERROR(vollo_rt_poll(ctx, &amp;num_completed, &amp;completed_buffer));
+
+    poll_count++;
+    if (poll_count &gt; 1000000) {
+      EXIT_ON_ERROR(&quot;Timed out while polling&quot;);
+    }
+  }
+}
+</code></pre>
+<p>This function does 2 things. First it registers a new job with the Vollo RT
+context and then it polls in a loop until that job is complete.</p>
+<p>For a more thorough overview of how to use this asynchronous API to run multiple
+jobs concurrently take a look at <code>example/example.c</code></p>
+<hr />
+<p>And finally we print out the newly obtained results and cleanup the Vollo RT context:</p>
+<pre><code class="language-c">//////////////////////////////////////////////////
+// Print outputs
+
+printf(&quot;Output values: [&quot;);
+for (size_t i = 0; i &lt; 128; i++) {
+  if (i % 8 == 0) {
+    printf(&quot;\n  &quot;);
+  }
+
+  printf(&quot;%.1f, &quot;, output_tensor[i]);
+}
+printf(&quot;\n]\n&quot;);
+
+//////////////////////////////////////////////////
+// Release resources / Cleanup
+vollo_rt_destroy(ctx);
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="c-api.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="vollo-rt-python-example.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="c-api.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="vollo-rt-python-example.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>
