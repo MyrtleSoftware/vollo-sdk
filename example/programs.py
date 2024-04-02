@@ -1,5 +1,5 @@
 """
-    CLI to generate and compile VOLLO reference models.
+    CLI to generate and compile Vollo reference models.
 """
 
 import torch
@@ -75,35 +75,35 @@ all_configs = {
 # NOTE: as the models are using a streaming transformation, this dimension will be streamed over:
 # the timesteps are computed sequentially, and we are interested in the latency per timestep.
 # the value of STREAM_DIM is not important.
-STREAM_DIM = 32
+STREAM_DIM = 1
 
 all_models = {
     "identity-128": (Identity(), [128], {}),
     # mlp models
-    "mlp_b1": (MLP(256, 384, 128), [1, 256], {"unweave": []}),
-    "mlp_b4": (MLP(256, 384, 128), [4, 256], {"unweave": []}),
-    "mlp_b8": (MLP(256, 384, 128), [8, 256], {"unweave": []}),
+    "mlp_b1": (MLP(256, 384, 128), [1, 256], {}),
+    "mlp_b4": (MLP(256, 384, 128), [4, 256], {}),
+    "mlp_b8": (MLP(256, 384, 128), [8, 256], {}),
     # cnn models
-    "tiny_cnn": (CNN(3, 8, 128), [128, STREAM_DIM], {"streaming_transform": [1]}),
-    "small_cnn": (CNN(3, 8, 256), [256, STREAM_DIM], {"streaming_transform": [1]}),
-    "med_cnn": (CNN(6, 8, 256), [256, STREAM_DIM], {"streaming_transform": [1]}),
+    "cnn_tiny": (CNN(3, 8, 128), [128, STREAM_DIM], {"streaming_transform": [1]}),
+    "cnn_small": (CNN(3, 8, 256), [256, STREAM_DIM], {"streaming_transform": [1]}),
+    "cnn_med": (CNN(6, 8, 256), [256, STREAM_DIM], {"streaming_transform": [1]}),
     # lstm models
-    "tiny_lstm": (
+    "lstm_tiny": (
         LSTM(2, 128, 128, 32),
         [STREAM_DIM, 128],
         {"streaming_transform": [0]},
     ),
-    "small_lstm": (
+    "lstm_small": (
         LSTM(3, 256, 256, 32),
         [STREAM_DIM, 256],
         {"streaming_transform": [0]},
     ),
-    "med_lstm": (
+    "lstm_med": (
         LSTM(3, 480, 480, 32),
         [STREAM_DIM, 480],
         {"streaming_transform": [0]},
     ),
-    "med_lstm_deep": (
+    "lstm_med_deep": (
         LSTM(6, 320, 320, 32),
         [STREAM_DIM, 320],
         {"streaming_transform": [0]},
@@ -116,7 +116,7 @@ def cli():
 
     parser = argparse.ArgumentParser(
         prog=__name__,
-        description="Generate and compile a VOLLO reference model",
+        description="Generate and compile a Vollo reference model",
     )
     parser.add_argument(
         "-l",
@@ -176,8 +176,6 @@ def cli():
 
     nnir_graph = vollo_torch.fx.nnir.to_nnir(model)
 
-    if "unweave" in transforms:
-        nnir_graph = nnir_graph.unweave()
     if "streaming_transform" in transforms:
         input_streaming_axis = transforms["streaming_transform"][0]
         (nnir_graph, output_streaming_axis) = nnir_graph.streaming_transform(

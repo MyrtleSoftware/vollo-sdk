@@ -54,6 +54,13 @@ config = vollo_compiler.Config.ia_420f_c6b32()
 program = nnir.to_program(config)
 ```
 
+Vollo programs have all their memory allocated statically.
+You can print the static resource usage of a program like this:
+
+```python
+print(program.metrics())
+```
+
 Save the program to a file so that it can be used for inference by the [Vollo
 runtime](vollo-runtime.md).
 
@@ -75,7 +82,7 @@ used to:
   quantisation.
   Note the output of the VM is not bit accurate to the Vollo accelerator.
 
-Construct a VM instance with the program for your NNIR graph loaded.
+Construct a VM instance with your program loaded.
 Run the VM by passing it a numpy array of the input.
 It should produce the same result as the source PyTorch model, within some
 range of floating point error.

@@ -1,6 +1,10 @@
 # Installing a License
 
-1. Load the kernel driver `sudo ./load-kernel-driver.sh`
+1. Load the kernel driver if you haven't already done so:
+
+   ```sh
+   sudo ./load-kernel-driver.sh`
+   ```
 
 2. Run `vollo-tool device-ids`, this will enumerate all Vollo accelerators and
    and output their device IDs.

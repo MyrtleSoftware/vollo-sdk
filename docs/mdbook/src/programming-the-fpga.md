@@ -11,10 +11,12 @@ programmer to be installed on the system so that the device can be programmed
 over JTAG.
 
 If the FPGA card already has a Vollo Accelerator Bitstream, it can be updated
-over PCIe. See the section [Program the FPGA via
+over PCIe by following the steps in the section [Program the FPGA via
 PCIe](#programming-the-fpga-via-pcie) below.
-Programming over PCIe is faster, and does not require a USB programming cable or
-for Quartus Programmer to be installed.
+Note that you only need to update the bitstream if updating to an [incompatible
+version](versions.md#version-compatibility) of the Vollo SDK.
+Programming over PCIe is faster than programming over JTAG, and does not
+require a USB programming cable or for Quartus Programmer to be installed.
 
 1. Download and install the latest Quartus Programmer:
 
@@ -76,6 +78,10 @@ for Quartus Programmer to be installed.
 9. Power off the system and start it back up. The bitstream will now be loaded
     onto the FPGA.
 
+    > :warning: For the configuration process to be triggered the board has to register
+    > the power being off. It is recommended to turn the power off and then wait
+    > a few seconds before turning the power back on to ensure this happens.
+
 10. Check a Vollo bitstream is loaded:
 
     ```sh
@@ -120,12 +126,17 @@ NOTE: this can only be done with an FPGA that is already programmed with a Vollo
    interrupt this process until it completes.
 
    ```sh
+   sudo ./load-kernel-driver.sh
    bin/vollo-tool fpga-config overwrite-partition <device index> <.rpd.tar.gz file> USER_IMAGE
    ```
 
 5. Repeat step 4 for any other devices you wish to update.
 
 6. Power off the system and start it back up.
+
+    > :warning: For the configuration process to be triggered the board has to register
+    > the power being off. It is recommended to turn the power off and then wait
+    > a few seconds before turning the power back on to ensure this happens.
 
 7. Repeat steps 1, 2 and 3. The `bitstream-info` command should show that the
    updated bitstream has been loaded (e.g. a newer release date), and the output
@@ -135,5 +146,6 @@ NOTE: this can only be done with an FPGA that is already programmed with a Vollo
 8. Check the correct Vollo bitstream is loaded:
 
    ```sh
+   sudo ./load-kernel-driver.sh
    bin/vollo-tool bitstream-check bitstream/<bitstream-name>.json
    ```

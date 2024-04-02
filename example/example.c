@@ -11,7 +11,7 @@
 // Helper to exit when an error is encountered
 #define EXIT_ON_ERROR(expr)                 \
   do {                                      \
-    const char* _err = (expr);              \
+    vollo_rt_error_t _err = (expr);         \
     if (_err != NULL) {                     \
       fprintf(stderr, "error: %s\n", _err); \
       exit(EXIT_FAILURE);                   \
@@ -31,6 +31,8 @@ static double diff_timespec_ns(struct timespec from, struct timespec to);
 typedef struct ExampleOptions {
   // Path to program.vollo
   const char* program_path;
+  // Index of the model to do inference with (defaults to 0)
+  size_t model_index;
   // Number of inferences to compute
   size_t num_inferences;
   // Maximum number of jobs running concurrently (pipelined)
@@ -50,7 +52,7 @@ typedef struct ExampleOptions {
   const char* output_path;
 } ExampleOptions;
 
-// A small example of the VOLLO API
+// A small example of the Vollo API
 //
 // The steps are:
 //
@@ -94,14 +96,14 @@ static void vollo_example(ExampleOptions options) {
   //////////////////////////////////////////////////
   // Get model metadata
   size_t num_models = vollo_rt_num_models(ctx);
-  assert(num_models == 1);
 
-  size_t model_index = 0;
+  size_t model_index = options.model_index;
+  assert(model_index < num_models);
 
   size_t model_num_inputs = vollo_rt_model_num_inputs(ctx, model_index);
   assert(model_num_inputs == 1);
 
-  size_t model_num_outputs = vollo_rt_model_num_inputs(ctx, model_index);
+  size_t model_num_outputs = vollo_rt_model_num_outputs(ctx, model_index);
   assert(model_num_outputs == 1);
 
   fprintf(stderr, "Program metadata:\n");
@@ -249,20 +251,23 @@ static void vollo_example(ExampleOptions options) {
     const uint64_t* completed_buffer = NULL;
 
     EXIT_ON_ERROR(vollo_rt_poll(ctx, &num_completed, &completed_buffer));
-    outstanding_jobs -= num_completed;
 
-    struct timespec job_completed_time;
-    clock_gettime(CLOCK_MONOTONIC, &job_completed_time);
+    if (num_completed > 0) {
+      outstanding_jobs -= num_completed;
 
-    for (size_t i = 0; i < num_completed; i++) {
-      // if it is not warmup
-      if (inf_completed >= options.num_warmup_inferences) {
-        size_t ix = inf_completed - options.num_warmup_inferences;
+      struct timespec job_completed_time;
+      clock_gettime(CLOCK_MONOTONIC, &job_completed_time);
 
-        latencies[ix] = diff_timespec_ns(start_times[ix], job_completed_time);
+      for (size_t i = 0; i < num_completed; i++) {
+        // if it is not warmup
+        if (inf_completed >= options.num_warmup_inferences) {
+          size_t ix = inf_completed - options.num_warmup_inferences;
+
+          latencies[ix] = diff_timespec_ns(start_times[ix], job_completed_time);
+        }
+
+        inf_completed++;
       }
-
-      inf_completed++;
     }
   }
 
@@ -381,6 +386,11 @@ void print_help(const char* example_program) {
     "\n"
 
     "OPTIONS:\n"
+    "    -m, --model-index\n"
+    "        Index of the model to do inference with\n"
+    "        Defaults to 0\n"
+    "\n"
+
     "    -i, --num-inferences\n"
     "        Number of inferences to compute\n"
     "        Defaults to 10_000\n"
@@ -427,6 +437,7 @@ void print_help(const char* example_program) {
 int main(int argc, char** argv) {
   ExampleOptions options;
   options.program_path = "";
+  options.model_index = 0;
   options.fp32_api = false;
   options.random_input = false;
   options.max_concurrent_jobs = 1;
@@ -441,6 +452,7 @@ int main(int argc, char** argv) {
 
   // Parse example options
   static struct option long_options[] = {
+    {"model-index", required_argument, 0, 'm'},
     {"num-inferences", required_argument, 0, 'i'},
     {"fp32-api", no_argument, 0, 'F'},
     {"random", no_argument, 0, 'r'},
@@ -457,6 +469,7 @@ int main(int argc, char** argv) {
   int long_index = 0;
   while ((opt = getopt_long(argc, argv, "i:rc:w:jf:o:h", long_options, &long_index)) != -1) {
     switch (opt) {
+    case 'm': options.model_index = (size_t)strtoul(optarg, NULL, 10); break;
     case 'i': options.num_inferences = (size_t)strtoul(optarg, NULL, 10); break;
     case 'F': options.fp32_api = true; break;
     case 'r': options.random_input = true; break;

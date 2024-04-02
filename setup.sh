@@ -1,4 +1,4 @@
-# sets up the environment for the VOLLO SDK
+# sets up the environment for the Vollo SDK
 
 if [ -n "$BASH_SOURCE" ]; then
   script_location=$BASH_SOURCE

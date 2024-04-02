@@ -24,14 +24,14 @@ We demonstrate the model at a variety of batch sizes. The model has 295K paramet
 
 | Model  | Batch size | Mean latency (μs) | 99th Percentile latency (μs) |
 | ------ | ---------- | ----------------- | ---------------------------- |
-| mlp_b1 | 1.0        | 4.2               | 5.0                          |
-| mlp_b4 | 4.0        | 4.7               | 5.6                          |
-| mlp_b8 | 8.0        | 5.3               | 6.0                          |
+| mlp_b1 | 1          | 4.0               | 4.7                          |
+| mlp_b4 | 4          | 4.4               | 5.2                          |
+| mlp_b8 | 8          | 5.0               | 5.8                          |
 
 ### IA-420F: 6 small cores
 
 | Model  | Batch size | Mean latency (μs) | 99th Percentile latency (μs) |
 | ------ | ---------- | ----------------- | ---------------------------- |
-| mlp_b1 | 1.0        | 4.9               | 5.7                          |
-| mlp_b4 | 4.0        | 5.2               | 6.0                          |
-| mlp_b8 | 8.0        | 6.1               | 6.8                          |
+| mlp_b1 | 1          | 4.6               | 5.4                          |
+| mlp_b4 | 4          | 4.9               | 5.6                          |
+| mlp_b8 | 8          | 5.7               | 6.5                          |

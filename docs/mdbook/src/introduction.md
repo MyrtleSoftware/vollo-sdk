@@ -1,7 +1,8 @@
 # Introduction
 
-The Vollo SDK is designed for low latency streaming inference of machine
-learning (ML) models on FPGA platforms.
+The [Vollo SDK](https://github.com/MyrtleSoftware/vollo-sdk) is designed for
+low latency streaming inference of machine learning (ML) models on FPGA
+platforms.
 
 This document outlines the following:
 

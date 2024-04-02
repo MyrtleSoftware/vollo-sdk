@@ -178,7 +178,7 @@ function playground_text(playground) {
     // even if highlighting doesn't apply
     code_nodes.forEach(function (block) { block.classList.add('hljs'); });
 
-    Array.from(document.querySelectorAll("code.language-rust")).forEach(function (block) {
+    Array.from(document.querySelectorAll("code.language-rust, code.language-python")).forEach(function (block) {
 
         var lines = Array.from(block.querySelectorAll('.boring'));
         // If no lines were hidden, return
@@ -321,10 +321,10 @@ function playground_text(playground) {
 
         let newLogo;
         if(theme === 'light'){
-            newLogo = "url('../assets/vollo-logo-dark.png')";
+            newLogo = "url('./assets/vollo-logo-dark.png')";
         }
         else {
-            newLogo = "url('../assets/vollo-logo-white.png')";
+            newLogo = "url('./assets/vollo-logo-white.png')";
         }
         let logoElement = document.querySelector(".sidebar .sidebar-scrollbox .sidebar-logo");
         logoElement.style.backgroundImage= newLogo;

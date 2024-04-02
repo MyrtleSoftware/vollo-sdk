@@ -5,7 +5,7 @@
 // Helper to exit when an error is encountered
 #define EXIT_ON_ERROR(expr)                 \
   do {                                      \
-    error_t _err = (expr);                  \
+    vollo_rt_error_t _err = (expr);         \
     if (_err != NULL) {                     \
       fprintf(stderr, "error: %s\n", _err); \
       exit(EXIT_FAILURE);                   \
@@ -56,9 +56,19 @@ int main(void) {
   //////////////////////////////////////////////////
   // Load program
 
-  // Program for a block_size 64 accelerator
-  const char* vollo_program_path = "./identity_b64.vollo";
-  EXIT_ON_ERROR(vollo_rt_load_program(ctx, vollo_program_path));
+  {
+    printf("Trying to load the block_size 32 identity Vollo program\n");
+    vollo_rt_error_t err = vollo_rt_load_program(ctx, "./identity_b32.vollo");
+
+    if (err != NULL) {
+      vollo_rt_destroy_err(err);
+
+      printf("It didn't work, trying to load the block_size 64 identity Vollo program instead\n");
+      EXIT_ON_ERROR(vollo_rt_load_program(ctx, "./identity_b64.vollo"));
+    }
+
+    printf("Success");
+  }
 
   //////////////////////////////////////////////////
   // Setup inputs and outputs

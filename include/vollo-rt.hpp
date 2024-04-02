@@ -7,12 +7,12 @@
 #include <new>
 #include <ostream>
 
-/// Functions in vollo-rt that can return an error return `error_t`.
+/// Functions in vollo-rt that can return an error return `vollo_rt_error_t`.
 /// NULL is returned where there are no errors, otherwise it is a null-terminated string containing
 /// an error message.
 ///
 /// Error messages are owned by vollo-rt and can be freed with `vollo_rt_destroy_err`
-using error_t = const char*;
+using vollo_rt_error_t = const char*;
 
 /// A context for performing computation on a vollo. The context is constructed with `vollo_rt_init`
 /// and destroyed with `vollo_rt_destroy`.
@@ -31,13 +31,13 @@ extern "C" {
 const char* vollo_rt_version();
 
 /// All APIs return the error as a c string. To prevent leaking the memory, destroy it afterwards.
-void vollo_rt_destroy_err(error_t err);
+void vollo_rt_destroy_err(vollo_rt_error_t err);
 
 /// Initialise the vollo-rt context. This must be called before any other vollo-rt functions.
 ///
 /// Logging level can be configured by setting the environment variable `VOLLO_RT_LOG` to one of:
 /// "error", "warn", "info", "debug", or "trace"
-error_t vollo_rt_init(vollo_rt_context_t* context_ptr);
+vollo_rt_error_t vollo_rt_init(vollo_rt_context_t* context_ptr);
 
 /// Destroy vollo-rt context, releasing its associated resources.
 void vollo_rt_destroy(vollo_rt_context_t vollo);
@@ -45,7 +45,7 @@ void vollo_rt_destroy(vollo_rt_context_t vollo);
 /// Add an accelerator.
 /// The accelerator is specified by its index. The index refers to an accelerator in the sorted list
 /// of PCI addresses. This should be called after `vollo_rt_init` but before `vollo_rt_load_program`
-error_t vollo_rt_add_accelerator(vollo_rt_context_t vollo, size_t accelerator_index);
+vollo_rt_error_t vollo_rt_add_accelerator(vollo_rt_context_t vollo, size_t accelerator_index);
 
 /// Load a program onto the Vollo accelerators.
 /// This should be called after `vollo_rt_add_accelerator`
@@ -60,7 +60,7 @@ error_t vollo_rt_add_accelerator(vollo_rt_context_t vollo, size_t accelerator_in
 /// Note: This should only be called once per `vollo_rt_context_t`, as such if
 /// a program needs to be changed or reset, first `vollo_rt_destroy` the current
 /// context, then start a new context with `vollo_rt_init`.
-error_t vollo_rt_load_program(vollo_rt_context_t vollo, const char* program_path);
+vollo_rt_error_t vollo_rt_load_program(vollo_rt_context_t vollo, const char* program_path);
 
 /// Inspect the number of models in the program loaded onto the vollo.
 ///
@@ -195,7 +195,7 @@ int vollo_rt_model_output_streaming_dim(
 ///       - The outer array only needs to live until `vollo_rt_add_job_bf16` returns
 ///       - The output buffers need to live until `vollo_rt_poll` returns with the completion for
 ///         this job
-error_t vollo_rt_add_job_bf16(
+vollo_rt_error_t vollo_rt_add_job_bf16(
   vollo_rt_context_t vollo,
   size_t model_index,
   uint64_t user_ctx,
@@ -236,7 +236,7 @@ error_t vollo_rt_add_job_bf16(
 ///       - The outer array only needs to live until `vollo_rt_add_job_fp32` returns
 ///       - The output buffers need to live until `vollo_rt_poll` returns with the completion for
 ///         this job
-error_t vollo_rt_add_job_fp32(
+vollo_rt_error_t vollo_rt_add_job_fp32(
   vollo_rt_context_t vollo,
   size_t model_index,
   uint64_t user_ctx,
@@ -251,7 +251,12 @@ error_t vollo_rt_add_job_fp32(
 ///   num_completed: out: the number of completed user_ctx returned
 ///   returned_user_ctx: buffer for the returned user_ctx of completed jobs, this will only be
 ///                      valid until the next call to vollo_rt_poll.
-error_t vollo_rt_poll(
+///
+/// Larger IO might be split over multiple calls to `vollo_rt_poll`. Since the optimal chunking
+/// size depends on the program and the system Vollo is running on, the maximum chunk size is
+/// configurable when loading a program with environment variables `VOLLO_IN_MAX_CHUNK_SIZE`
+/// and `VOLLO_OUT_MAX_CHUNK_SIZE` (both default to 8192 values)
+vollo_rt_error_t vollo_rt_poll(
   vollo_rt_context_t vollo, size_t* num_completed, const uint64_t** returned_user_ctx);
 
 }  // extern "C"

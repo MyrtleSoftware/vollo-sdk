@@ -1,4 +1,4 @@
-# Example 3: CNN
+# Example 2: CNN
 
 Vollo supports streaming 1D convolutional neural networks (CNNs), which might
 require you to make some changes to your model if you are currently using a
