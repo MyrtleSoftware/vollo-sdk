@@ -3,7 +3,9 @@ authors = ["Myrtle.ai"]
 language = "en"
 multilingual = false
 src = "src"
-title = "VOLLO SDK User Guide"
+title = "Vollo SDK User Guide"
+
+[preprocessor.emojicodes]
 
 # Enable the markdown backend so that a build of the docs includes the original
 # markdown sources, which can be read in a terminal/text editor
@@ -12,3 +14,6 @@ title = "VOLLO SDK User Guide"
 # This is the default backend but enabling the markdown backend disables the
 # html backend unless you explicitly enable it
 [output.html]
+
+[output.html.code.hidelines]
+python = "!"

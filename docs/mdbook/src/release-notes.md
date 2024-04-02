@@ -1,5 +1,26 @@
 # Release Notes
 
+## 0.13.0
+
+- Support for multi-model programs
+- Provide Python bindings to Vollo RT: `vollo_rt`
+- Improved support and error messages for tensor indexing in compiler
+- The unweave transform is now automatic
+
+## 0.12.2
+
+- Support for LSTM nodes in ONNX frontend
+- Support for squeezing, unsqueezing, reduce sum, using `unweave`
+  transformation
+- Improved error reporting in `vollo_torch` lowering to NNIR
+
+## 0.12.1
+
+- `vollo-torch` fix type hints being incompatible with Python 3.7/3.8
+- `vollo-rt.h` fix namespacing issue (`error_t` -> `vollo_rt_error_t`)
+- Runtime optimisations
+- Added IO only benchmarks
+
 ## 0.12.0
 
 - Initial support for ONNX models in compiler

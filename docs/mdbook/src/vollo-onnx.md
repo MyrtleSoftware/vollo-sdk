@@ -30,16 +30,13 @@ The user can specify:
         If unspecified, defaults to the 6 core block size 32 IA_420F configuration
   ```
 
-- Which transformations to perform on the model (see [Example 2: Batched MLP](example-2-batched-mlp.md) for the unweaving transform and [Example 3: CNN](example-3-cnn.md) for the streaming transform):
+- Which transformations to perform on the model. Currently the only available transformation is the streaming transform [Example 2: CNN](example-2-cnn.md):
 
   ```text
   --streaming-transform <STREAMING_AXIS>
         Axis on which to perform the streaming transform in the NNIR graph
 
         If unspecified, no streaming transform is performed
-
-  --unweave
-        Perform the unweaving transform
   ```
 
 - The input shape of the model. This is required if the ONNX model has dynamic input shapes. Vollo requires that the shape of the input be known at compile-time:
@@ -84,9 +81,11 @@ Tensors are expected to be in `float32` format, unless they are used as indices 
 | Clamp ops                | `Clip`, `Relu`                                                       |
 | Matrix multiplication    | `MatMul` / `Gemm` where one input is a constant                      |
 | `Conv`                   | 1d with left-padding such that input and output seq dimensions match |
+| `LSTM`                   | Forward LSTM without explicit hidden or cell state initialisation    |
 | `Gather`                 | With a 1d tensor of indices                                          |
 | `ReduceSum`              | With constant axes                                                   |
 | `Where`                  | If the `Where` condition is an inequality comparison                 |
 | `Concat`                 | On outer dimension or at start or end of model                       |
 | `Transpose`              | See [tensor memory format](supported-models.md#tensor-memory-format) |
+| `Squeeze`, `Unsqueeze`   |                                                                      |
 | `Identity`               |                                                                      |

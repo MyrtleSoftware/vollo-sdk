@@ -1,11 +1,11 @@
 ## c example
 
 This simple example runs generated data on the given model and collects the results. It is a minimal
-usage of the VOLLO API.
+usage of the Vollo API.
 
 ### Building
 
-Make sure the `VOLLO_SDK` environment variable is set by sourcing setup.sh from the VOLLO SDK.
+Make sure the `VOLLO_SDK` environment variable is set by sourcing setup.sh from the Vollo SDK.
 
 ```bash
 source setup.sh

@@ -12,23 +12,31 @@ The Vollo compiler supports PyTorch models that use the following operations:
 | Convolution              | Via `vollo_torch.nn.PaddedConv1d`                              |
 | LSTM                     | Via `vollo_torch.nn.LSTM`                                      |
 | Indexing / slicing       | Partial square bracket `[]` support; `index_select`            |
-| `sum`                    | With `keepdim=True`                                            |
+| `sum`                    |                                                                |
 | `where`                  | If the `where` condition is an inequality comparison           |
 | Concatenation            | `cat`, `concat` on outer dimension or at start or end of model |
 | `transpose`              | See [section below](#tensor-memory-format)                     |
+| `squeeze`, `unsqueeze`   |                                                                |
 
 ## Tensor Memory Format
 
-Vollo supports operations on tensors in channels-last memory format, and does
-not currently support changing the memory format on the accelerator (e.g.
-transpose operations).
+Vollo supports operations on tensors in *data-* or *channels-* last memory
+format, i.e. the innermost dimension of the tensors should be the *data* or
+*channels* dimension rather than the *batch* or *sequence* dimension if there is
+one.
+This is because the Vollo accelerator's compute units operate on contiguous
+vectors (1D tensors) and has limited support for rearranging tensor data,
+particularly transposing them.
 
-The compiler *is* able to support many common cases of models where the PyTorch
-memory format is not channels-last, or that include transposes.
-In particular, [PyTorch's 1D convolutions](https://pytorch.org/docs/stable/generated/torch.nn.Conv1d.html)
-have sequence length last rather than channels last but the compiler can
-[transform](example-3-cnn.md#using-the-streaming-transform) them to use
-channels last.
+There are some notable exceptions that *do not* require channels-last tensors:
+
+- Layers that operate on sequences: `Conv1d`, `LSTM`.
+  Vollo supports the same (*batch*, *channels*, *sequence*) memory format that
+  PyTorch uses for these layers, but requires applying the [streaming
+  transform](example-2-cnn.md#using-the-streaming-transform) to models that
+  contain them.
+- General matrix multiplication (as opposed to the more restrictive `Linear`):
+  `matmul`, `@`.
 
 ## TorchScript
 

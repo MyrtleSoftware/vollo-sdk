@@ -1,4 +1,4 @@
-# VOLLO SDK
+# Vollo SDK
 
 The Vollo SDK is designed for low latency streaming inference of machine
 learning (ML) models on FPGA platforms.
@@ -39,15 +39,17 @@ The FPGA images (bitstreams) are prebuilt and included in the product.
 Vollo consists of the following elements:
 
 - Vollo Accelerator Bitstream. Programming file for the FPGA on the PCIe
-  accelerator card. See the [Accelerator Setup](https://vollo.myrtle.ai/accelerator-setup.html) section for
+  accelerator card. See the [Accelerator
+  Setup](https://vollo.myrtle.ai/latest/accelerator-setup.html) section for
   instructions on programming your FPGA with the bitstream.
 
-- [Vollo Compiler](https://vollo.myrtle.ai/vollo-compiler.html). Compiles ML models defined in PyTorch
-  or ONNX to Vollo programs.
+- [Vollo Compiler](https://vollo.myrtle.ai/latest/vollo-compiler.html).
+  Compiles ML models defined in PyTorch or ONNX to Vollo programs.
 
-- [Vollo Runtime](https://vollo.myrtle.ai/vollo-runtime.html). The runtime library for Vollo. It
-  sets up the the Vollo accelerator with a program and provides an asynchronous inference interface
-  for handling input and output for the accelerated model.
+- [Vollo Runtime](https://vollo.myrtle.ai/latest/vollo-runtime.html). The
+  runtime library for Vollo. It sets up the the Vollo accelerator with a
+  program and provides an asynchronous inference interface for handling input
+  and output for the accelerated model.
 
 ## Vollo Compiler
 
@@ -55,7 +57,7 @@ The Vollo compiler is available to use without an accelerator card or license.
 Along with compiling machine learning models for the Vollo accelerator,
 it also provides a simulation of the accelerator which can be used to provide a performance estimate.
 
-Refer to the [Vollo Compiler](https://vollo.myrtle.ai/vollo-compiler.html)
+Refer to the [Vollo Compiler](https://vollo.myrtle.ai/latest/vollo-compiler.html)
 section in the user guide and its example walkthroughs to get started with the
 compiler.
 
