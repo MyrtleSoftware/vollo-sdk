@@ -192,7 +192,7 @@ model using <a class="reference internal" href="vollo_torch.fx.nnir.html#vollo_t
 
 <dl class="py method">
 <dt class="sig sig-object py" id="vollo_compiler.NNIR.to_program">
-<span class="sig-name descname"><span class="pre">to_program</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#vollo_compiler.Config" title="vollo_compiler.Config"><span class="pre">Config</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#vollo_compiler.Program" title="vollo_compiler.Program"><span class="pre">Program</span></a></span></span><a class="headerlink" href="#vollo_compiler.NNIR.to_program" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">to_program</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#vollo_compiler.Config" title="vollo_compiler.Config"><span class="pre">Config</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#vollo_compiler.Program" title="vollo_compiler.Program"><span class="pre">Program</span></a></span></span><a class="headerlink" href="#vollo_compiler.NNIR.to_program" title="Permalink to this definition"></a></dt>
 <dd><p>Compile a NNIR graph to a <a class="reference internal" href="#vollo_compiler.Program" title="vollo_compiler.Program"><code class="xref py py-class docutils literal notranslate"><span class="pre">Program</span></code></a>.</p>
 <p>Performs the same operation as <code class="xref py py-meth docutils literal notranslate"><span class="pre">Program.compile()</span></code></p>
 <p>Note that the NNIR model given must be a streaming model.</p>
@@ -319,6 +319,12 @@ accelerator more accurately. Defaults to False.</p>
 <dt class="sig sig-object py" id="vollo_compiler.Metrics.input_bytes">
 <span class="sig-name descname"><span class="pre">input_bytes</span></span><a class="headerlink" href="#vollo_compiler.Metrics.input_bytes" title="Permalink to this definition"></a></dt>
 <dd><p>Number of bytes input per-inference for each model</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vollo_compiler.Metrics.model_names">
+<span class="sig-name descname"><span class="pre">model_names</span></span><a class="headerlink" href="#vollo_compiler.Metrics.model_names" title="Permalink to this definition"></a></dt>
+<dd><p>The name of each model if specified</p>
 </dd></dl>
 
 <dl class="py attribute">
