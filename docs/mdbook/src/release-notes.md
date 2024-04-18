@@ -1,5 +1,9 @@
 # Release Notes
 
+## 0.13.1
+
+- Fixed a bug in long running Vollo RT
+
 ## 0.13.0
 
 - Support for multi-model programs

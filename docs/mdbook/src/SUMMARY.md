@@ -19,7 +19,7 @@
 - [Accelerator Setup](accelerator-setup.md)
   - [System Requirements](system-requirements.md)
   - [Programming the FPGA](programming-the-fpga.md)
-  - [Installing a License](installing-a-license.md)
+  - [Licensing](licensing.md)
   - [Running an Example](running-an-example.md)
   - [Running the Benchmark](running-the-benchmark.md)
 - [Vollo Runtime](vollo-runtime.md)
