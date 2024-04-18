@@ -17,12 +17,5 @@ minor or major version numbers have changed.
 Documentation for previous versions of the Vollo SDK can be found in this
 listing:
 
-<!-- markdown-link-check-disable -->
-<iframe
-  id="volloVersionListing"
-  title="Vollo Version Listing"
-  style="width:100%;"
-  src="/version_listing.html"
-  >
-</iframe>
-<!-- markdown-link-check-enable -->
+<!-- version-listing-anchor-start -->
+<!-- version-listing-anchor-end -->
