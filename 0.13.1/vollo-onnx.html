@@ -1,0 +1,270 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>ONNX Support - Vollo SDK User Guide</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="assets/vollo-favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <a href="./">
+                  <div class="sidebar-logo">
+                  </div>
+                </a>
+
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="key-features.html"><strong aria-hidden="true">2.</strong> Key Features</a></li><li class="chapter-item expanded "><a href="product-overview.html"><strong aria-hidden="true">3.</strong> Product Overview</a></li><li class="chapter-item expanded "><a href="vollo-compiler.html"><strong aria-hidden="true">4.</strong> Vollo Compiler</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="supported-models.html"><strong aria-hidden="true">4.1.</strong> Supported Models</a></li><li class="chapter-item expanded "><a href="example-1-mlp.html"><strong aria-hidden="true">4.2.</strong> Example 1: MLP</a></li><li class="chapter-item expanded "><a href="example-2-cnn.html"><strong aria-hidden="true">4.3.</strong> Example 2: CNN</a></li><li class="chapter-item expanded "><a href="example-3-multi-model.html"><strong aria-hidden="true">4.4.</strong> Example 3: Multiple Models in a Vollo Program</a></li><li class="chapter-item expanded "><a href="vollo-onnx.html" class="active"><strong aria-hidden="true">4.5.</strong> ONNX Support</a></li></ol></li><li class="chapter-item expanded "><a href="benchmark.html"><strong aria-hidden="true">5.</strong> Benchmarks</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="benchmark-mlp.html"><strong aria-hidden="true">5.1.</strong> MLP</a></li><li class="chapter-item expanded "><a href="benchmark-cnn.html"><strong aria-hidden="true">5.2.</strong> CNN</a></li><li class="chapter-item expanded "><a href="benchmark-lstm.html"><strong aria-hidden="true">5.3.</strong> LSTM</a></li><li class="chapter-item expanded "><a href="benchmark-io.html"><strong aria-hidden="true">5.4.</strong> IO round trip</a></li></ol></li><li class="chapter-item expanded "><a href="accelerator-setup.html"><strong aria-hidden="true">6.</strong> Accelerator Setup</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="system-requirements.html"><strong aria-hidden="true">6.1.</strong> System Requirements</a></li><li class="chapter-item expanded "><a href="programming-the-fpga.html"><strong aria-hidden="true">6.2.</strong> Programming the FPGA</a></li><li class="chapter-item expanded "><a href="licensing.html"><strong aria-hidden="true">6.3.</strong> Licensing</a></li><li class="chapter-item expanded "><a href="running-an-example.html"><strong aria-hidden="true">6.4.</strong> Running an Example</a></li><li class="chapter-item expanded "><a href="running-the-benchmark.html"><strong aria-hidden="true">6.5.</strong> Running the Benchmark</a></li></ol></li><li class="chapter-item expanded "><a href="vollo-runtime.html"><strong aria-hidden="true">7.</strong> Vollo Runtime</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="c-api.html"><strong aria-hidden="true">7.1.</strong> C API</a></li><li class="chapter-item expanded "><a href="vollo-rt-example.html"><strong aria-hidden="true">7.2.</strong> C Example</a></li><li class="chapter-item expanded "><a href="vollo-rt-python-example.html"><strong aria-hidden="true">7.3.</strong> Python Example</a></li></ol></li><li class="chapter-item expanded "><a href="versions.html"><strong aria-hidden="true">8.</strong> Versions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="release-notes.html"><strong aria-hidden="true">8.1.</strong> Release Notes</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Vollo SDK User Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="onnx-support"><a class="header" href="#onnx-support">ONNX Support</a></h1>
+<p>Vollo also provides a tool for compiling ML models defined in ONNX.</p>
+<p><code>vollo-onnx</code> is a command line tool which allows the user to specify an input ONNX file and produces a <code>.vollo</code> program as output. The user specifies a path to the input <code>.onnx</code> file:</p>
+<pre><code class="language-text">Arguments:
+  &lt;INPUT&gt;
+          Path to the input .onnx file
+</code></pre>
+<p>The user can specify:</p>
+<ul>
+<li>
+<p>The output path:</p>
+<pre><code class="language-text">-o, --output &lt;OUTPUT&gt;
+      Output path for the compiled program file
+
+      [default: program.vollo]
+</code></pre>
+</li>
+<li>
+<p>The hardware configuration to use (this JSON file can be generated using the <code>Config</code> method <code>save</code> in <code>vollo_compiler</code>):</p>
+<pre><code class="language-text">    --hw-config &lt;HW_CONFIG_JSON&gt;
+      Path to the hardware config JSON file
+
+      If unspecified, defaults to the 6 core block size 32 IA_420F configuration
+</code></pre>
+</li>
+<li>
+<p>Which transformations to perform on the model. Currently the only available transformation is the streaming transform <a href="example-2-cnn.html">Example 2: CNN</a>:</p>
+<pre><code class="language-text">--streaming-transform &lt;STREAMING_AXIS&gt;
+      Axis on which to perform the streaming transform in the NNIR graph
+
+      If unspecified, no streaming transform is performed
+</code></pre>
+</li>
+<li>
+<p>The input shape of the model. This is required if the ONNX model has dynamic input shapes. Vollo requires that the shape of the input be known at compile-time:</p>
+<pre><code class="language-text">--override-input-shape &lt;SHAPE&gt;
+      If the model has dynamic input shapes, the user must pass a fixed input shape
+
+      Example: 10,100,250
+</code></pre>
+</li>
+</ul>
+<h2 id="simplifying-onnx-models"><a class="header" href="#simplifying-onnx-models">Simplifying ONNX Models</a></h2>
+<p><code>vollo-onnx</code> has a limited list of supported ONNX nodes. Often ONNX models can be over-complicated, and contain unnecessary shaping operations. It is recommended that <a href="https://github.com/daquexian/onnx-simplifier">onnx-simplifier</a> be used before calling <code>vollo-onnx</code> on an ONNX model to remove these unnecessary shaping operations which aren't supported by <code>vollo-onnx</code>:</p>
+<pre><code class="language-sh">onnx-sim &lt;model.onnx&gt; &lt;model-sim.onnx&gt; --overwrite-input-shape &lt;model-input-shape&gt;
+</code></pre>
+<p>It is also recommended to use the <code>--overwrite-input-shape</code> with <code>onnx-simplifier</code>, as this can enable further simplifications and better constant folding.</p>
+<h2 id="using-onnx-from-python"><a class="header" href="#using-onnx-from-python">Using ONNX from Python</a></h2>
+<p>ONNX models can also be imported and translated to NNIR models directly in python using the static <code>NNIR</code> method <code>from_onnx</code>. This also requires that the input shape be specified if the ONNX model has dynamic input shapes, otherwise it can be <code>None</code>.</p>
+<pre><code class="language-python">onnx_nnir = vollo_compiler.NNIR.from_onnx(onnx_path, input_shape)
+</code></pre>
+<h2 id="supported-nodes"><a class="header" href="#supported-nodes">Supported Nodes</a></h2>
+<p>Tensors are expected to be in <code>float32</code> format, unless they are used as indices / axes (in which case they should be <code>int64</code>s).</p>
+<p><code>vollo-onnx</code> supports models with the following nodes:</p>
+<div class="table-wrapper"><table><thead><tr><th>Operator</th><th>Support Notes</th></tr></thead><tbody>
+<tr><td>Pointwise arithmetic ops</td><td><code>Add</code>, <code>Sub</code>, <code>Mul</code>; <code>Div</code> by constant</td></tr>
+<tr><td>Inequality</td><td><code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code> (when followed by a <code>Where</code>)</td></tr>
+<tr><td><code>Max</code> and <code>Min</code></td><td></td></tr>
+<tr><td><code>Neg</code></td><td></td></tr>
+<tr><td>Clamp ops</td><td><code>Clip</code>, <code>Relu</code></td></tr>
+<tr><td>Matrix multiplication</td><td><code>MatMul</code> / <code>Gemm</code> where one input is a constant</td></tr>
+<tr><td><code>Conv</code></td><td>1d with left-padding such that input and output seq dimensions match</td></tr>
+<tr><td><code>LSTM</code></td><td>Forward LSTM without explicit hidden or cell state initialisation</td></tr>
+<tr><td><code>Gather</code></td><td>With a 1d tensor of indices</td></tr>
+<tr><td><code>ReduceSum</code></td><td>With constant axes</td></tr>
+<tr><td><code>Where</code></td><td>If the <code>Where</code> condition is an inequality comparison</td></tr>
+<tr><td><code>Concat</code></td><td>On outer dimension or at start or end of model</td></tr>
+<tr><td><code>Transpose</code></td><td>See <a href="supported-models.html#tensor-memory-format">tensor memory format</a></td></tr>
+<tr><td><code>Squeeze</code>, <code>Unsqueeze</code></td><td></td></tr>
+<tr><td><code>Identity</code></td><td></td></tr>
+</tbody></table>
+</div>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="example-3-multi-model.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="benchmark.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="example-3-multi-model.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="benchmark.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>
