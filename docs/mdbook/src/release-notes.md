@@ -1,5 +1,9 @@
 # Release Notes
 
+## 0.12.3
+
+- Fixed a bug in long running Vollo RT
+
 ## 0.12.2
 
 - Support for LSTM nodes in ONNX frontend
