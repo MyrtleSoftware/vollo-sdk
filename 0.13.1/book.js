@@ -321,13 +321,13 @@ function playground_text(playground) {
 
         let newLogo;
         if(theme === 'light'){
-            newLogo = "url('./assets/vollo-logo-dark.png')";
+            newLogo = "./assets/vollo-logo-dark.svg";
         }
         else {
-            newLogo = "url('./assets/vollo-logo-white.png')";
+            newLogo = "./assets/vollo-logo-white.svg";
         }
         let logoElement = document.querySelector(".sidebar .sidebar-scrollbox .sidebar-logo");
-        logoElement.style.backgroundImage= newLogo;
+        logoElement.src = newLogo;
 
         if (theme == 'coal' || theme == 'navy') {
             stylesheets.ayuHighlight.disabled = true;

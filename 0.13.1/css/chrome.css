@@ -386,8 +386,6 @@ ul#searchresults span.teaser em {
 .sidebar .sidebar-scrollbox .sidebar-logo {
     width: 180px;
     height: 80px;
-    background-repeat: no-repeat;
-    background-size: cover;
 }
 .sidebar .sidebar-resize-handle {
     position: absolute;
