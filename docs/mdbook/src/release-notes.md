@@ -1,5 +1,12 @@
 # Release Notes
 
+## 0.14.0
+
+- Support for filtering dropout layers
+- Instruction packing improvements
+- LSTM performance improvement
+- Improvements to weight sharing
+
 ## 0.13.0
 
 - Support for multi-model programs

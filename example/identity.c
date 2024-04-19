@@ -56,18 +56,10 @@ int main(void) {
   //////////////////////////////////////////////////
   // Load program
 
-  {
-    printf("Trying to load the block_size 32 identity Vollo program\n");
-    vollo_rt_error_t err = vollo_rt_load_program(ctx, "./identity_b32.vollo");
-
-    if (err != NULL) {
-      vollo_rt_destroy_err(err);
-
-      printf("It didn't work, trying to load the block_size 64 identity Vollo program instead\n");
-      EXIT_ON_ERROR(vollo_rt_load_program(ctx, "./identity_b64.vollo"));
-    }
-
-    printf("Success");
+  if (vollo_rt_accelerator_block_size(ctx, accelerator_index) == 32) {
+    EXIT_ON_ERROR(vollo_rt_load_program(ctx, "./identity_b32.vollo"));
+  } else {
+    EXIT_ON_ERROR(vollo_rt_load_program(ctx, "./identity_b64.vollo"));
   }
 
   //////////////////////////////////////////////////

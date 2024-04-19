@@ -172,6 +172,7 @@ def cli():
 
     x = torch.randn(input_shape).bfloat16().to(torch.float32)
 
+    model.eval()
     model, expected_y = vollo_torch.fx.prepare_shape(model, x)
 
     nnir_graph = vollo_torch.fx.nnir.to_nnir(model)

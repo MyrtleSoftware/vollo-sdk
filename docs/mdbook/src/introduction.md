@@ -8,6 +8,7 @@ This document outlines the following:
 
 - [Installation](installation.md)
 - [Key features of Vollo](key-features.md)
+- [Steps to get started with Vollo](getting-started.md)
 - The [Vollo Compiler API](vollo-compiler.md)
 - The [Vollo Runtime API](vollo-runtime.md)
 - [Hardware requirements and setup](accelerator-setup.md)

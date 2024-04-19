@@ -4,7 +4,7 @@
 
 - [Installation](installation.md)
 - [Key Features](key-features.md)
-- [Product Overview](product-overview.md)
+- [Getting Started](getting-started.md)
 - [Vollo Compiler](vollo-compiler.md)
   - [Supported Models](supported-models.md)
   - [Example 1: MLP](example-1-mlp.md)
@@ -19,7 +19,7 @@
 - [Accelerator Setup](accelerator-setup.md)
   - [System Requirements](system-requirements.md)
   - [Programming the FPGA](programming-the-fpga.md)
-  - [Installing a License](installing-a-license.md)
+  - [Licensing](licensing.md)
   - [Running an Example](running-an-example.md)
   - [Running the Benchmark](running-the-benchmark.md)
 - [Vollo Runtime](vollo-runtime.md)

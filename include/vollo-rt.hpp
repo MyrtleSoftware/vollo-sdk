@@ -47,6 +47,20 @@ void vollo_rt_destroy(vollo_rt_context_t vollo);
 /// of PCI addresses. This should be called after `vollo_rt_init` but before `vollo_rt_load_program`
 vollo_rt_error_t vollo_rt_add_accelerator(vollo_rt_context_t vollo, size_t accelerator_index);
 
+/// Get the number of cores of a Vollo accelerator
+///
+/// Requirements (panics otherwise):
+/// - The accelerator at `accelerator_index` has already been added to context
+///   with `vollo_rt_add_accelerator`
+size_t vollo_rt_accelerator_num_cores(vollo_rt_context_t vollo, size_t accelerator_index);
+
+/// Get the block size of a Vollo accelerator
+///
+/// Requirements (panics otherwise):
+/// - The accelerator at `accelerator_index` has already been added to context
+///   with `vollo_rt_add_accelerator`
+size_t vollo_rt_accelerator_block_size(vollo_rt_context_t vollo, size_t accelerator_index);
+
 /// Load a program onto the Vollo accelerators.
 /// This should be called after `vollo_rt_add_accelerator`
 ///
@@ -67,6 +81,16 @@ vollo_rt_error_t vollo_rt_load_program(vollo_rt_context_t vollo, const char* pro
 /// Programs can contain multiple models, a `model_index` is used to select a
 /// specific model
 size_t vollo_rt_num_models(vollo_rt_context_t vollo);
+
+/// Get the name of a model (or NULL if no name was set)
+///
+/// The returned string is owned by the `vollo_rt_context_t` and lives for as
+/// long as the loaded program.
+///
+/// Requirements (panics otherwise):
+/// - a program was loaded with `vollo_rt_load_program`
+/// - `model_index < vollo_rt_num_models`
+const char* vollo_rt_model_name(vollo_rt_context_t vollo, size_t model_index);
 
 /// Get the number of inputs of a model
 ///
