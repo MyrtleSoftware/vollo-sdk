@@ -88,6 +88,11 @@ static void vollo_example(ExampleOptions options) {
   // Add accelerators
   size_t accelerator_index = 0;
   EXIT_ON_ERROR(vollo_rt_add_accelerator(ctx, accelerator_index));
+  fprintf(
+    stderr,
+    "Using Vollo accelerator with %ld core(s) and block_size %ld\n",
+    vollo_rt_accelerator_num_cores(ctx, accelerator_index),
+    vollo_rt_accelerator_block_size(ctx, accelerator_index));
 
   //////////////////////////////////////////////////
   // Load program
@@ -106,7 +111,14 @@ static void vollo_example(ExampleOptions options) {
   size_t model_num_outputs = vollo_rt_model_num_outputs(ctx, model_index);
   assert(model_num_outputs == 1);
 
-  fprintf(stderr, "Program metadata:\n");
+  const char* model_name = vollo_rt_model_name(ctx, model_index);
+
+  fprintf(stderr, "Program metadata for model ");
+  if (model_name != NULL) {
+    fprintf(stderr, "%s (model index %ld):\n", model_name, model_index);
+  } else {
+    fprintf(stderr, "%ld:\n", model_index);
+  }
   fprintf(stderr, "  %ld input with shape: [", model_num_inputs);
 
   // Initialised to 1 to get the product of the shape dims

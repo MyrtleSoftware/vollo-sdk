@@ -21,6 +21,13 @@ The user can specify:
         [default: program.vollo]
   ```
 
+- A name for the model:
+
+  ```text
+      --model-name <MODEL_NAME>
+        Name of the model
+  ```
+
 - The hardware configuration to use (this JSON file can be generated using the `Config` method `save` in `vollo_compiler`):
 
   ```text

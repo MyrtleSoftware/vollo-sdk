@@ -18,6 +18,8 @@ The Vollo compiler supports PyTorch models that use the following operations:
 | `transpose`              | See [section below](#tensor-memory-format)                     |
 | `squeeze`, `unsqueeze`   |                                                                |
 
+Note that for operations like `Dropout` (which changes behaviour at inference time) to be handled correctly, the model should be in `eval` mode.
+
 ## Tensor Memory Format
 
 Vollo supports operations on tensors in *data-* or *channels-* last memory
