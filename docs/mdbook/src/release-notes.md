@@ -1,5 +1,9 @@
 # Release Notes
 
+## 0.15.0
+
+- Accelerator bug fix
+
 ## 0.14.0
 
 - Support for filtering dropout layers
