@@ -7,6 +7,8 @@
 - Support for slicing/concatenation in the middle of models
 - Support for BatchNorm nodes
 - Support for Scan/LSTMCell nodes
+- Add `--io-only` option to `vollo-onnx`
+- Add `program-metadata` command to `vollo-tool`
 - Fix compiler bug with transposing streaming dimension
 - Fix accelerator bug in initial state of streaming models
 
