@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.16.0
+
+- Vollo IP Core now available on request
+- Add C library for configuring IP Core: `vollo-cfg`
+- Support for slicing/concatenation in the middle of models
+- Support for BatchNorm nodes
+- Support for Scan/LSTMCell nodes
+- Fix compiler bug with transposing streaming dimension
+- Fix accelerator bug in initial state of streaming models
+
 ## 0.15.0
 
 - Accelerator bug fix

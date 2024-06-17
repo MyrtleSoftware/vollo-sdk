@@ -6,7 +6,7 @@ elif [ -n "$ZSH_VERSION" ]; then
   setopt function_argzero
   script_location=$0
 else
-  echo 1>&2 "Unsupported shell. Please use bash or zsh, or manually set VOLLO_SDK, PATH, and LD_LIBRARY"
+  echo 1>&2 "Unsupported shell. Please use bash or zsh or manually set VOLLO_SDK, PATH, and LD_LIBRARY_PATH"
   exit 2
 fi
 
