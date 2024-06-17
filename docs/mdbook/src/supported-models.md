@@ -14,11 +14,12 @@ The Vollo compiler supports PyTorch models that use the following operations:
 | Indexing / slicing       | Partial square bracket `[]` support; `index_select`            |
 | `sum`                    |                                                                |
 | `where`                  | If the `where` condition is an inequality comparison           |
-| Concatenation            | `cat`, `concat` on outer dimension or at start or end of model |
+| Concatenation            | `cat`, `concat`                                                |
+| Batch Normalization      | `BatchNorm1d`, `BatchNorm2d`, `BatchNorm3d`                    |
 | `transpose`              | See [section below](#tensor-memory-format)                     |
 | `squeeze`, `unsqueeze`   |                                                                |
 
-Note that for operations like `Dropout` (which changes behaviour at inference time) to be handled correctly, the model should be in `eval` mode.
+Note that for operations like `Dropout` and `BatchNorm1d` (which change behaviour at inference time) to be handled correctly, the model should be in `eval` mode.
 
 ## Tensor Memory Format
 

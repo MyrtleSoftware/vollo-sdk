@@ -55,6 +55,12 @@ The user can specify:
         Example: 10,100,250
   ```
 
+- Whether to elide all compute logic and generate a program with only IO logic. This is useful for determining IO latencies.
+  ```text
+  --io-only
+        Generate a program with IO only - useful for testing IO latencies
+  ```
+
 ## Simplifying ONNX Models
 
 `vollo-onnx` has a limited list of supported ONNX nodes. Often ONNX models can be over-complicated, and contain unnecessary shaping operations. It is recommended that [onnx-simplifier](https://github.com/daquexian/onnx-simplifier) be used before calling `vollo-onnx` on an ONNX model to remove these unnecessary shaping operations which aren't supported by `vollo-onnx`:
@@ -89,10 +95,12 @@ Tensors are expected to be in `float32` format, unless they are used as indices 
 | Matrix multiplication    | `MatMul` / `Gemm` where one input is a constant                      |
 | `Conv`                   | 1d with left-padding such that input and output seq dimensions match |
 | `LSTM`                   | Forward LSTM without explicit hidden or cell state initialisation    |
-| `Gather`                 | With a 1d tensor of indices                                          |
+| `Gather`                 | With a 0d/1d tensor of indices                                       |
+| `Slice`                  | `step` size 1 with constant `starts`, `ends` and `axes`.             |
 | `ReduceSum`              | With constant axes                                                   |
 | `Where`                  | If the `Where` condition is an inequality comparison                 |
 | `Concat`                 | On outer dimension or at start or end of model                       |
 | `Transpose`              | See [tensor memory format](supported-models.md#tensor-memory-format) |
+| `BatchNormalization`     | Where input scale, bias, mean and var are constants                  |
 | `Squeeze`, `Unsqueeze`   |                                                                      |
 | `Identity`               |                                                                      |
