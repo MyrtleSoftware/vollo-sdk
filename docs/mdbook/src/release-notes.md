@@ -1,5 +1,9 @@
 # Release Notes
 
+## 0.17.0
+
+- New DMA engine that reduces IO latencies by ~1.3us
+
 ## 0.16.0
 
 - Vollo IP Core now available on request
