@@ -3,7 +3,7 @@
 ## 0.17.0
 
 - New DMA engine that reduces IO latencies by ~1.3us
-- Support for non-streaming LSTM
+- Initial support for non-streaming LSTM
 
 ## 0.16.0
 
