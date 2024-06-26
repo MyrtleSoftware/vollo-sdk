@@ -726,16 +726,16 @@ mlp = MLP(256.0, 384.0, 128.0)
 <p>We demonstrate the model at a variety of batch sizes. The model has 295K parameters.</p>
 <h3 id="ia-840f-3-big-cores"><a class="header" href="#ia-840f-3-big-cores">IA-840F: 3 big cores</a></h3>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Batch size</th><th>Mean latency (μs)</th><th>99th Percentile latency (μs)</th></tr></thead><tbody>
-<tr><td>mlp_b1</td><td>1</td><td>4.0</td><td>4.7</td></tr>
-<tr><td>mlp_b4</td><td>4</td><td>4.4</td><td>5.2</td></tr>
-<tr><td>mlp_b8</td><td>8</td><td>5.0</td><td>5.8</td></tr>
+<tr><td>mlp_b1</td><td>1</td><td>2.9</td><td>3.5</td></tr>
+<tr><td>mlp_b4</td><td>4</td><td>3.1</td><td>3.7</td></tr>
+<tr><td>mlp_b8</td><td>8</td><td>3.6</td><td>4.1</td></tr>
 </tbody></table>
 </div>
 <h3 id="ia-420f-6-small-cores"><a class="header" href="#ia-420f-6-small-cores">IA-420F: 6 small cores</a></h3>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Batch size</th><th>Mean latency (μs)</th><th>99th Percentile latency (μs)</th></tr></thead><tbody>
-<tr><td>mlp_b1</td><td>1</td><td>4.6</td><td>5.4</td></tr>
-<tr><td>mlp_b4</td><td>4</td><td>4.9</td><td>5.6</td></tr>
-<tr><td>mlp_b8</td><td>8</td><td>5.7</td><td>6.5</td></tr>
+<tr><td>mlp_b1</td><td>1</td><td>3.4</td><td>3.7</td></tr>
+<tr><td>mlp_b4</td><td>4</td><td>3.7</td><td>4.0</td></tr>
+<tr><td>mlp_b8</td><td>8</td><td>4.2</td><td>4.6</td></tr>
 </tbody></table>
 </div><div style="break-before: page; page-break-before: always;"></div><h1 id="1d-convolutional-neural-networks-cnn"><a class="header" href="#1d-convolutional-neural-networks-cnn">1D Convolutional neural networks (CNN)</a></h1>
 <p>We benchmark a simple 1-D convolutional model with a residual connection after every layer.</p>
@@ -764,17 +764,17 @@ class CNN(nn.Module):
 </code></pre>
 <h3 id="ia-840f-3-big-cores-1"><a class="header" href="#ia-840f-3-big-cores-1">IA-840F: 3 big cores</a></h3>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Layers</th><th>Channels</th><th>Parameters</th><th>Mean latency (μs)</th><th>99th Percentile latency (μs)</th></tr></thead><tbody>
-<tr><td>cnn_tiny</td><td>3</td><td>128</td><td>393K</td><td>4.0</td><td>4.8</td></tr>
-<tr><td>cnn_small</td><td>3</td><td>256</td><td>1.6M</td><td>4.7</td><td>5.4</td></tr>
-<tr><td>cnn_med</td><td>6</td><td>256</td><td>3.1M</td><td>6.0</td><td>6.7</td></tr>
+<tr><td>cnn_tiny</td><td>3</td><td>128</td><td>393K</td><td>2.9</td><td>3.3</td></tr>
+<tr><td>cnn_small</td><td>3</td><td>256</td><td>1.6M</td><td>3.1</td><td>3.5</td></tr>
+<tr><td>cnn_med</td><td>6</td><td>256</td><td>3.1M</td><td>3.7</td><td>4.0</td></tr>
 </tbody></table>
 </div>
 <p>The kernel size for all models is 8.</p>
 <h3 id="ia-420f-6-small-cores-1"><a class="header" href="#ia-420f-6-small-cores-1">IA-420F: 6 small cores</a></h3>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Layers</th><th>Channels</th><th>Parameters</th><th>Mean latency (μs)</th><th>99th Percentile latency (μs)</th></tr></thead><tbody>
-<tr><td>cnn_tiny</td><td>3</td><td>128</td><td>393K</td><td>4.7</td><td>5.4</td></tr>
-<tr><td>cnn_small</td><td>3</td><td>256</td><td>1.6M</td><td>4.6</td><td>5.4</td></tr>
-<tr><td>cnn_med</td><td>6</td><td>256</td><td>3.1M</td><td>5.8</td><td>6.5</td></tr>
+<tr><td>cnn_tiny</td><td>3</td><td>128</td><td>393K</td><td>3.0</td><td>3.4</td></tr>
+<tr><td>cnn_small</td><td>3</td><td>256</td><td>1.6M</td><td>3.4</td><td>3.9</td></tr>
+<tr><td>cnn_med</td><td>6</td><td>256</td><td>3.1M</td><td>4.5</td><td>4.8</td></tr>
 </tbody></table>
 </div>
 <p>The kernel size for all models is 8.</p>
@@ -805,18 +805,18 @@ class CNN(nn.Module):
 </ul>
 <h3 id="ia-840f-3-big-cores-2"><a class="header" href="#ia-840f-3-big-cores-2">IA-840F: 3 big cores</a></h3>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Layers</th><th>Hidden size</th><th>Parameters</th><th>Mean latency (μs)</th><th>99th Percentile latency (μs)</th></tr></thead><tbody>
-<tr><td>lstm_tiny</td><td>2</td><td>128</td><td>266K</td><td>3.9</td><td>4.7</td></tr>
-<tr><td>lstm_small</td><td>3</td><td>256</td><td>1.6M</td><td>4.7</td><td>5.4</td></tr>
-<tr><td>lstm_med</td><td>3</td><td>480</td><td>5.5M</td><td>6.0</td><td>6.7</td></tr>
-<tr><td>lstm_med_deep</td><td>6</td><td>320</td><td>4.9M</td><td>6.8</td><td>7.5</td></tr>
+<tr><td>lstm_tiny</td><td>2</td><td>128</td><td>266K</td><td>2.8</td><td>3.2</td></tr>
+<tr><td>lstm_small</td><td>3</td><td>256</td><td>1.6M</td><td>3.4</td><td>3.7</td></tr>
+<tr><td>lstm_med</td><td>3</td><td>480</td><td>5.5M</td><td>4.7</td><td>4.9</td></tr>
+<tr><td>lstm_med_deep</td><td>6</td><td>320</td><td>4.9M</td><td>4.8</td><td>5.1</td></tr>
 </tbody></table>
 </div>
 <p>The input size is the same as the hidden size for all models and the output size is set to 32. The layers refers to the number of
 LSTM layers in the stack.</p>
 <h3 id="ia-420f-6-small-cores-2"><a class="header" href="#ia-420f-6-small-cores-2">IA-420F: 6 small cores</a></h3>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Layers</th><th>Hidden size</th><th>Parameters</th><th>Mean latency (μs)</th><th>99th Percentile latency (μs)</th></tr></thead><tbody>
-<tr><td>lstm_tiny</td><td>2</td><td>128</td><td>266K</td><td>4.3</td><td>5.0</td></tr>
-<tr><td>lstm_small</td><td>3</td><td>256</td><td>1.6M</td><td>6.0</td><td>6.8</td></tr>
+<tr><td>lstm_tiny</td><td>2</td><td>128</td><td>266K</td><td>3.0</td><td>3.5</td></tr>
+<tr><td>lstm_small</td><td>3</td><td>256</td><td>1.6M</td><td>4.7</td><td>5.0</td></tr>
 </tbody></table>
 </div>
 <p>The input size is the same as the hidden size and the output size is set to 32.</p>
