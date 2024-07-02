@@ -1,5 +1,9 @@
 # Release Notes
 
+## 0.17.1
+
+- Fix vollo-tool compatibility with older bitstreams
+
 ## 0.17.0
 
 - New DMA engine that reduces IO latencies by ~1.3us
