@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>vollo_torch.nn &mdash; Vollo Compiler 0.17.1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="vollo_rt" href="vollo_rt.html" />
+    <link rel="prev" title="vollo_torch.fx.nnir" href="vollo_torch.fx.nnir.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Vollo Compiler
+            <img src="_static/vollo_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="vollo_compiler.html">vollo_compiler</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="vollo_torch.html">vollo_torch</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="vollo_torch.fx.html">vollo_torch.fx</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.fx.nnir.html">vollo_torch.fx.nnir</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">vollo_torch.nn</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vollo_rt.html">vollo_rt</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Vollo Compiler</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="vollo_torch.html">vollo_torch</a> &raquo;</li>
+      <li>vollo_torch.nn</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-vollo_torch.nn">
+<span id="vollo-torch-nn"></span><h1>vollo_torch.nn<a class="headerlink" href="#module-vollo_torch.nn" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="vollo_torch.nn.PaddedConv1d">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vollo_torch.nn.</span></span><span class="sig-name descname"><span class="pre">PaddedConv1d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kernel_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dilation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_into</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vollo_torch.nn.PaddedConv1d" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">torch.nn.Conv1d</span></code> with left-padding such that the output sequence length
+is the same as the input sequence length</p>
+<p>Can be split into multiple nodes in the compiler by setting <code class="docutils literal notranslate"><span class="pre">split_into</span></code> &gt; 1</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="vollo_torch.nn.LSTM">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vollo_torch.nn.</span></span><span class="sig-name descname"><span class="pre">LSTM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bias</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vollo_torch.nn.LSTM" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">torch.nn.LSTM</span></code> with zeros as the h_0 and c_0 initial states,
+and which discards the output h_n and c_n states.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="vollo_torch.nn.LSTMCell">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vollo_torch.nn.</span></span><span class="sig-name descname"><span class="pre">LSTMCell</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vollo_torch.nn.LSTMCell" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">torch.nn.LSTMCell</span></code> but only takes the hidden state as an explicit input/output.</p>
+<p>The cell state is initialised as zeros, kept internal, and updated each time this
+module is called.
+Since the cell state is kept internal and may have a batch size, this module needs
+to be instantiated with a batch size argument if using a batch.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This class is experimental and is likely to change in future versions.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_torch.nn.LSTMCell.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vollo_torch.nn.LSTMCell.forward" title="Permalink to this definition"></a></dt>
+<dd><p>Applies <code class="docutils literal notranslate"><span class="pre">torch.nn.LSTMCell</span></code> to the input and hidden state, returning the
+updated hidden state and internally updating its cell state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>torch.Tensor</em>) – of shape (batch_size, input_size) or (input_size).</p></li>
+<li><p><strong>hidden_state</strong> (<em>torch.Tensor</em>) – of shape (batch_size, hidden_size) or
+(hidden_size).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Hidden state of shape (batch_size, hidden_size) or
+(hidden_size).</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_torch.nn.LSTMCell.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vollo_torch.nn.LSTMCell.reset" title="Permalink to this definition"></a></dt>
+<dd><p>Reset the cell state back to the initial state (zeros).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="vollo_torch.nn.Ones">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vollo_torch.nn.</span></span><span class="sig-name descname"><span class="pre">Ones</span></span><a class="headerlink" href="#vollo_torch.nn.Ones" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Instances of this class behaves similarly to <cite>torch.ones</cite>, but with the
+ability to make <cite>torch.fx</cite> not trace through it.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="vollo_torch.nn.Zeros">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vollo_torch.nn.</span></span><span class="sig-name descname"><span class="pre">Zeros</span></span><a class="headerlink" href="#vollo_torch.nn.Zeros" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>Instances of this class behaves similarly to <cite>torch.zeros</cite>, but with the
+ability to make <cite>torch.fx</cite> not trace through it.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="vollo_torch.nn.Scan">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vollo_torch.nn.</span></span><span class="sig-name descname"><span class="pre">Scan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">step</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vollo_torch.nn.Scan" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">torch.nn.modules.module.Module</span></code></p>
+<p>A <a class="reference external" href="https://en.wikipedia.org/wiki/Prefix_sum#Scan_higher_order_function">scan</a>
+operator that can express a subset of <code class="docutils literal notranslate"><span class="pre">for</span></code> loops.</p>
+<p>Unlike <code class="docutils literal notranslate"><span class="pre">for</span></code> loops, the Vollo compiler recognises Scans as being the repeated
+application of some function, and furthermore it can Streaming Transform a Scan
+along its axis.</p>
+<p>This module needs to be Streaming Transformed to be compiled to a Vollo program.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>step</strong> (<em>nn.Module</em>) – The PyTorch module to call for each subtensor (along the
+specified axis) of the Scan operator’s input tensor. The step module’s
+<code class="docutils literal notranslate"><span class="pre">forward</span></code> method should take an input tensor and an input “state” tensor,
+and return an updated “state” tensor.</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">torch</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">vollo_compiler</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">vollo_torch</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">_</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ScannerLSTMStep</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">cell</span> <span class="o">=</span> <span class="n">vollo_torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">LSTMCell</span><span class="p">(</span><span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cell</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">ScannerLSTM</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">step</span> <span class="o">=</span> <span class="n">ScannerLSTMStep</span><span class="p">(</span><span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">h_0</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">))</span>
+<span class="gp">...</span>
+<span class="gp">... </span>        <span class="bp">self</span><span class="o">.</span><span class="n">scan</span> <span class="o">=</span> <span class="n">vollo_torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Scan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_0</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">sequence_length</span> <span class="o">=</span> <span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">ScannerLSTM</span><span class="p">(</span><span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">test_input</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">sequence_length</span><span class="p">,</span> <span class="n">input_size</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="p">,</span> <span class="n">torch_output</span> <span class="o">=</span> <span class="n">vollo_torch</span><span class="o">.</span><span class="n">fx</span><span class="o">.</span><span class="n">prepare_shape</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">test_input</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nnir</span> <span class="o">=</span> <span class="n">vollo_torch</span><span class="o">.</span><span class="n">fx</span><span class="o">.</span><span class="n">nnir</span><span class="o">.</span><span class="n">to_nnir</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">input_streaming_dimension</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nnir</span><span class="p">,</span> <span class="n">output_streaming_dimension</span> <span class="o">=</span> <span class="n">nnir</span><span class="o">.</span><span class="n">streaming_transform</span><span class="p">(</span><span class="n">input_streaming_dimension</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">program</span> <span class="o">=</span> <span class="n">nnir</span><span class="o">.</span><span class="n">to_program</span><span class="p">(</span><span class="n">vollo_compiler</span><span class="o">.</span><span class="n">Config</span><span class="p">(</span><span class="n">num_cores</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">block_size</span><span class="o">=</span><span class="mi">32</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vm</span> <span class="o">=</span> <span class="n">program</span><span class="o">.</span><span class="n">to_vm</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">vm_output</span> <span class="o">=</span> <span class="n">vm</span><span class="o">.</span><span class="n">run_timesteps</span><span class="p">(</span><span class="n">test_input</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">input_streaming_dimension</span><span class="p">,</span> <span class="n">output_streaming_dimension</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_allclose</span><span class="p">(</span><span class="n">torch_output</span><span class="p">,</span> <span class="n">vm_output</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This class is experimental and is likely to change in future versions.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_torch.nn.Scan.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vollo_torch.nn.Scan.forward" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xs</strong> (<em>torch.Tensor</em>) – Input tensor where one of its axes is the sequence axis.</p></li>
+<li><p><strong>state</strong> (<em>torch.Tensor</em>) – Initial state tensor of the Scan.</p></li>
+<li><p><strong>axis</strong> (<em>int</em>) – Sequence axis along which xs should be sliced and sequentially passed
+as inputs to the step module.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Concatenation of the sequence of output state tensors along
+the Sequence axis.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>torch.Tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="vollo_torch.fx.nnir.html" class="btn btn-neutral float-left" title="vollo_torch.fx.nnir" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="vollo_rt.html" class="btn btn-neutral float-right" title="vollo_rt" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Myrtle.ai.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
