@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.17.2
+
+- Fix various issues around DMA buffer handling
+
 ## 0.17.1
 
 - Fix vollo-tool compatibility with older bitstreams
