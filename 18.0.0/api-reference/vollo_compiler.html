@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>vollo_compiler &mdash; Vollo Compiler 18.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="vollo_torch" href="vollo_torch.html" />
+    <link rel="prev" title="Vollo Compiler API Reference" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Vollo Compiler
+            <img src="_static/vollo_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">vollo_compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vollo_torch.html">vollo_torch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vollo_torch.fx.html">vollo_torch.fx</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.fx.nnir.html">vollo_torch.fx.nnir</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_torch.nn.html">vollo_torch.nn</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vollo_rt.html">vollo_rt</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Vollo Compiler</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>vollo_compiler</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-vollo_compiler">
+<span id="vollo-compiler"></span><h1>vollo_compiler<a class="headerlink" href="#module-vollo_compiler" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="vollo_compiler.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vollo_compiler.</span></span><span class="sig-name descname"><span class="pre">Config</span></span><a class="headerlink" href="#vollo_compiler.Config" title="Permalink to this definition"></a></dt>
+<dd><p>A Vollo accelerator configuration.</p>
+<p>Each Vollo bitstream contains a specific configuration of the Vollo accelerator, e.g. number of
+cores, size of each core, etc. <a class="reference internal" href="#vollo_compiler.Program" title="vollo_compiler.Program"><code class="xref py py-class docutils literal notranslate"><span class="pre">Program</span></code></a> s need to be compiled for the accelerator
+configuration that they will be run on.</p>
+<p>For the bitstreams included in the Vollo SDK, use the preset configs <a class="reference internal" href="#vollo_compiler.Config.ia_420f_c6b32" title="vollo_compiler.Config.ia_420f_c6b32"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ia_420f_c6b32()</span></code></a>,
+<a class="reference internal" href="#vollo_compiler.Config.ia_840f_c3b64" title="vollo_compiler.Config.ia_840f_c3b64"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ia_840f_c3b64()</span></code></a>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.Config.ia_420f_c6b32">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ia_420f_c6b32</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vollo_compiler.Config.ia_420f_c6b32" title="Permalink to this definition"></a></dt>
+<dd><p>IA-420f configuration with 6 cores and block size 32</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.Config.ia_840f_c3b64">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ia_840f_c3b64</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vollo_compiler.Config.ia_840f_c3b64" title="Permalink to this definition"></a></dt>
+<dd><p>IA-840f configuration with 3 cores and block size 64</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.Config.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#vollo_compiler.Config.save" title="Permalink to this definition"></a></dt>
+<dd><p>Save a hardware configuration to a JSON file</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.Config.load">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_version_matches</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#vollo_compiler.Config" title="vollo_compiler.Config"><span class="pre">Config</span></a></span></span><a class="headerlink" href="#vollo_compiler.Config.load" title="Permalink to this definition"></a></dt>
+<dd><p>Load a hardware configuration from a JSON file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>json_path</strong> – Path to the JSON file</p></li>
+<li><p><strong>check_version_matches</strong> – if the provided JSON file is versioned, check that the version matches the current version</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vollo_compiler.Config.block_size">
+<span class="sig-name descname"><span class="pre">block_size</span></span><a class="headerlink" href="#vollo_compiler.Config.block_size" title="Permalink to this definition"></a></dt>
+<dd><p>Size of the tensor blocks</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vollo_compiler.Config.num_cores">
+<span class="sig-name descname"><span class="pre">num_cores</span></span><a class="headerlink" href="#vollo_compiler.Config.num_cores" title="Permalink to this definition"></a></dt>
+<dd><p>Number of cores</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vollo_compiler.Config.tensor_ram_depth">
+<span class="sig-name descname"><span class="pre">tensor_ram_depth</span></span><a class="headerlink" href="#vollo_compiler.Config.tensor_ram_depth" title="Permalink to this definition"></a></dt>
+<dd><p>Amount of tensor RAM per-core (in blocks)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vollo_compiler.Config.tensor_descriptor_count">
+<span class="sig-name descname"><span class="pre">tensor_descriptor_count</span></span><a class="headerlink" href="#vollo_compiler.Config.tensor_descriptor_count" title="Permalink to this definition"></a></dt>
+<dd><p>Maximum number of tensors per core</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vollo_compiler.Config.weight_store_depth">
+<span class="sig-name descname"><span class="pre">weight_store_depth</span></span><a class="headerlink" href="#vollo_compiler.Config.weight_store_depth" title="Permalink to this definition"></a></dt>
+<dd><p>Amount of weight store per-core (in blocks)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vollo_compiler.Config.accum_store_depth">
+<span class="sig-name descname"><span class="pre">accum_store_depth</span></span><a class="headerlink" href="#vollo_compiler.Config.accum_store_depth" title="Permalink to this definition"></a></dt>
+<dd><p>Amount of accumulator store per-core (in blocks)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vollo_compiler.Config.cell_state_depth">
+<span class="sig-name descname"><span class="pre">cell_state_depth</span></span><a class="headerlink" href="#vollo_compiler.Config.cell_state_depth" title="Permalink to this definition"></a></dt>
+<dd><p>Amount of LSTM cell state per-core (in blocks)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vollo_compiler.Config.clamp_store_depth">
+<span class="sig-name descname"><span class="pre">clamp_store_depth</span></span><a class="headerlink" href="#vollo_compiler.Config.clamp_store_depth" title="Permalink to this definition"></a></dt>
+<dd><p>Amount of clamp store per-core (i.e. the maximum number of different clamp configurations that can be used on a single core)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vollo_compiler.Config.max_read_size">
+<span class="sig-name descname"><span class="pre">max_read_size</span></span><a class="headerlink" href="#vollo_compiler.Config.max_read_size" title="Permalink to this definition"></a></dt>
+<dd><p>Maximum size of data that instructions can perform operations on (in blocks)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vollo_compiler.Config.io_size">
+<span class="sig-name descname"><span class="pre">io_size</span></span><a class="headerlink" href="#vollo_compiler.Config.io_size" title="Permalink to this definition"></a></dt>
+<dd><p>Minimum size of IO packet (in values)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="vollo_compiler.NNIR">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vollo_compiler.</span></span><span class="sig-name descname"><span class="pre">NNIR</span></span><a class="headerlink" href="#vollo_compiler.NNIR" title="Permalink to this definition"></a></dt>
+<dd><p>Neural Network Intermediate Representation</p>
+<p>The representation of neural networks in the Vollo compiler. It can be built from a PyTorch
+model using <a class="reference internal" href="vollo_torch.fx.nnir.html#vollo_torch.fx.nnir.to_nnir" title="vollo_torch.fx.nnir.to_nnir"><code class="xref py py-func docutils literal notranslate"><span class="pre">vollo_torch.fx.nnir.to_nnir()</span></code></a>, or from an ONNX model.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.NNIR.from_onnx">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_onnx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">onnx_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite_input_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#vollo_compiler.NNIR" title="vollo_compiler.NNIR"><span class="pre">NNIR</span></a></span></span><a class="headerlink" href="#vollo_compiler.NNIR.from_onnx" title="Permalink to this definition"></a></dt>
+<dd><p>Load an ONNX model from a file and convert it to an NNIR graph</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.NNIR.streaming_transform">
+<span class="sig-name descname"><span class="pre">streaming_transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">streaming_axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#vollo_compiler.NNIR" title="vollo_compiler.NNIR"><span class="pre">NNIR</span></a></span></span><a class="headerlink" href="#vollo_compiler.NNIR.streaming_transform" title="Permalink to this definition"></a></dt>
+<dd><p>Performs the streaming transform, converting the NNIR to a streaming model</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.NNIR.to_program">
+<span class="sig-name descname"><span class="pre">to_program</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#vollo_compiler.Config" title="vollo_compiler.Config"><span class="pre">Config</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#vollo_compiler.Program" title="vollo_compiler.Program"><span class="pre">Program</span></a></span></span><a class="headerlink" href="#vollo_compiler.NNIR.to_program" title="Permalink to this definition"></a></dt>
+<dd><p>Compile a NNIR graph to a <a class="reference internal" href="#vollo_compiler.Program" title="vollo_compiler.Program"><code class="xref py py-class docutils literal notranslate"><span class="pre">Program</span></code></a>.</p>
+<p>Performs the same operation as <code class="xref py py-meth docutils literal notranslate"><span class="pre">Program.compile()</span></code></p>
+<p>Note that the NNIR model given must be a streaming model.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.NNIR.__new__">
+<span class="sig-name descname"><span class="pre">__new__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vollo_compiler.NNIR.__new__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="vollo_compiler.Program">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vollo_compiler.</span></span><span class="sig-name descname"><span class="pre">Program</span></span><a class="headerlink" href="#vollo_compiler.Program" title="Permalink to this definition"></a></dt>
+<dd><p>A program which can be run on a <a class="reference internal" href="#vollo_compiler.VM" title="vollo_compiler.VM"><code class="xref py py-class docutils literal notranslate"><span class="pre">VM</span></code></a>, or can be used with the Vollo Runtime to put the program onto hardware.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.Program.hw_config">
+<span class="sig-name descname"><span class="pre">hw_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#vollo_compiler.Config" title="vollo_compiler.Config"><span class="pre">Config</span></a></span></span><a class="headerlink" href="#vollo_compiler.Program.hw_config" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.Program.io_only_test">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">io_only_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#vollo_compiler.Config" title="vollo_compiler.Config"><span class="pre">Config</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#vollo_compiler.Program" title="vollo_compiler.Program"><span class="pre">Program</span></a></span></span><a class="headerlink" href="#vollo_compiler.Program.io_only_test" title="Permalink to this definition"></a></dt>
+<dd><p>Make a new program that does no compute and aranges IO such that output
+only starts when all the input is available on the accelerator</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.Program.load">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#vollo_compiler.Program" title="vollo_compiler.Program"><span class="pre">Program</span></a></span></span><a class="headerlink" href="#vollo_compiler.Program.load" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.Program.metrics">
+<span class="sig-name descname"><span class="pre">metrics</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#vollo_compiler.Metrics" title="vollo_compiler.Metrics"><span class="pre">Metrics</span></a></span></span><a class="headerlink" href="#vollo_compiler.Program.metrics" title="Permalink to this definition"></a></dt>
+<dd><p>Static Metrics</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.Program.model_input_shape">
+<span class="sig-name descname"><span class="pre">model_input_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#vollo_compiler.Program.model_input_shape" title="Permalink to this definition"></a></dt>
+<dd><p>Get the shape of the input at <cite>input_index</cite> in model at <cite>model_index</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.Program.model_input_streaming_dim">
+<span class="sig-name descname"><span class="pre">model_input_streaming_dim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#vollo_compiler.Program.model_input_streaming_dim" title="Permalink to this definition"></a></dt>
+<dd><p>Get the shape of the input at <cite>input_index</cite> in model at <cite>model_index</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.Program.model_num_inputs">
+<span class="sig-name descname"><span class="pre">model_num_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#vollo_compiler.Program.model_num_inputs" title="Permalink to this definition"></a></dt>
+<dd><p>Get the number of inputs model at <cite>model_index</cite> uses.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.Program.model_num_outputs">
+<span class="sig-name descname"><span class="pre">model_num_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#vollo_compiler.Program.model_num_outputs" title="Permalink to this definition"></a></dt>
+<dd><p>Get the number of outputs model at <cite>model_index</cite> uses.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.Program.model_output_shape">
+<span class="sig-name descname"><span class="pre">model_output_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#vollo_compiler.Program.model_output_shape" title="Permalink to this definition"></a></dt>
+<dd><p>Get the shape of the output at <cite>output_index</cite> in model at <cite>model_index</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.Program.model_output_streaming_dim">
+<span class="sig-name descname"><span class="pre">model_output_streaming_dim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#vollo_compiler.Program.model_output_streaming_dim" title="Permalink to this definition"></a></dt>
+<dd><p>Get the shape of the output at <cite>output_index</cite> in model at <cite>model_index</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.Program.num_models">
+<span class="sig-name descname"><span class="pre">num_models</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#vollo_compiler.Program.num_models" title="Permalink to this definition"></a></dt>
+<dd><p>The number of models in the program.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.Program.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vollo_compiler.Program.save" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.Program.to_vm">
+<span class="sig-name descname"><span class="pre">to_vm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">write_queue_capacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_buffer_capacity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bf16_precision</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#vollo_compiler.VM" title="vollo_compiler.VM"><span class="pre">VM</span></a></span></span><a class="headerlink" href="#vollo_compiler.Program.to_vm" title="Permalink to this definition"></a></dt>
+<dd><p>Construct a stateful Virtual Machine for simulating a Vollo Program</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>bf16_precision</strong> (<em>bool</em>) – Use bf16 precision instead of fp32 to simulate the VOLLO
+accelerator more accurately. Defaults to False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.Program.transform_to_io_only_test">
+<span class="sig-name descname"><span class="pre">transform_to_io_only_test</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#vollo_compiler.Program" title="vollo_compiler.Program"><span class="pre">Program</span></a></span></span><a class="headerlink" href="#vollo_compiler.Program.transform_to_io_only_test" title="Permalink to this definition"></a></dt>
+<dd><p>Make a new program that is IO compatible but does no compute, an IO only test</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="vollo_compiler.Metrics">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vollo_compiler.</span></span><span class="sig-name descname"><span class="pre">Metrics</span></span><a class="headerlink" href="#vollo_compiler.Metrics" title="Permalink to this definition"></a></dt>
+<dd><p>Static metrics of a program.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vollo_compiler.Metrics.clamp_store_depth">
+<span class="sig-name descname"><span class="pre">clamp_store_depth</span></span><a class="headerlink" href="#vollo_compiler.Metrics.clamp_store_depth" title="Permalink to this definition"></a></dt>
+<dd><p>Total amount of clamp store available on each core</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vollo_compiler.Metrics.clamp_store_used">
+<span class="sig-name descname"><span class="pre">clamp_store_used</span></span><a class="headerlink" href="#vollo_compiler.Metrics.clamp_store_used" title="Permalink to this definition"></a></dt>
+<dd><p>Amount of clamp store used by the program on each core</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vollo_compiler.Metrics.input_bytes">
+<span class="sig-name descname"><span class="pre">input_bytes</span></span><a class="headerlink" href="#vollo_compiler.Metrics.input_bytes" title="Permalink to this definition"></a></dt>
+<dd><p>Number of bytes input per-inference for each model</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vollo_compiler.Metrics.model_names">
+<span class="sig-name descname"><span class="pre">model_names</span></span><a class="headerlink" href="#vollo_compiler.Metrics.model_names" title="Permalink to this definition"></a></dt>
+<dd><p>The name of each model if specified</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vollo_compiler.Metrics.num_instrs">
+<span class="sig-name descname"><span class="pre">num_instrs</span></span><a class="headerlink" href="#vollo_compiler.Metrics.num_instrs" title="Permalink to this definition"></a></dt>
+<dd><p>Number of instructions on each core</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vollo_compiler.Metrics.output_bytes">
+<span class="sig-name descname"><span class="pre">output_bytes</span></span><a class="headerlink" href="#vollo_compiler.Metrics.output_bytes" title="Permalink to this definition"></a></dt>
+<dd><p>Number of bytes output per-inference for each model</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vollo_compiler.Metrics.tensor_ram_depth">
+<span class="sig-name descname"><span class="pre">tensor_ram_depth</span></span><a class="headerlink" href="#vollo_compiler.Metrics.tensor_ram_depth" title="Permalink to this definition"></a></dt>
+<dd><p>Total amount of tensor ram available on each core</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vollo_compiler.Metrics.tensor_ram_used">
+<span class="sig-name descname"><span class="pre">tensor_ram_used</span></span><a class="headerlink" href="#vollo_compiler.Metrics.tensor_ram_used" title="Permalink to this definition"></a></dt>
+<dd><p>Tensor ram used by the program on each core</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vollo_compiler.Metrics.weight_store_depth">
+<span class="sig-name descname"><span class="pre">weight_store_depth</span></span><a class="headerlink" href="#vollo_compiler.Metrics.weight_store_depth" title="Permalink to this definition"></a></dt>
+<dd><p>Total amount of weight store available on each core</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="vollo_compiler.Metrics.weight_store_used">
+<span class="sig-name descname"><span class="pre">weight_store_used</span></span><a class="headerlink" href="#vollo_compiler.Metrics.weight_store_used" title="Permalink to this definition"></a></dt>
+<dd><p>Amount of weight store used by the program on each core</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="vollo_compiler.VM">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vollo_compiler.</span></span><span class="sig-name descname"><span class="pre">VM</span></span><a class="headerlink" href="#vollo_compiler.VM" title="Permalink to this definition"></a></dt>
+<dd><p>A wrapper around a <a class="reference internal" href="#vollo_compiler.Program" title="vollo_compiler.Program"><code class="xref py py-class docutils literal notranslate"><span class="pre">Program</span></code></a> and the state of a VM</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.VM.compute_duration_us">
+<span class="sig-name descname"><span class="pre">compute_duration_us</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clock_mhz</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">320</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#vollo_compiler.VM.compute_duration_us" title="Permalink to this definition"></a></dt>
+<dd><p>Translate the VM’s cycle count to a figure in microseconds by dividing it by the clock
+speed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>clock_mhz</strong> – Clock speed of the Vollo frequency in MHz.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.VM.cycle_count">
+<span class="sig-name descname"><span class="pre">cycle_count</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#vollo_compiler.VM.cycle_count" title="Permalink to this definition"></a></dt>
+<dd><p>The number of cycles performed on the VM.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.VM.metrics">
+<span class="sig-name descname"><span class="pre">metrics</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#vollo_compiler.Metrics" title="vollo_compiler.Metrics"><span class="pre">Metrics</span></a></span></span><a class="headerlink" href="#vollo_compiler.VM.metrics" title="Permalink to this definition"></a></dt>
+<dd><p>Get the static metrics of the program held by the VM</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.VM.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#vollo_compiler.VM.run" title="Permalink to this definition"></a></dt>
+<dd><p>Run the VM on a shaped input.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.VM.run_flat">
+<span class="sig-name descname"><span class="pre">run_flat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#vollo_compiler.VM.run_flat" title="Permalink to this definition"></a></dt>
+<dd><p>Run the VM on a 1D input.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.VM.run_flat_timesteps">
+<span class="sig-name descname"><span class="pre">run_flat_timesteps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_timestep_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_timestep_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#vollo_compiler.VM.run_flat_timesteps" title="Permalink to this definition"></a></dt>
+<dd><p>Run the VM on multiple timesteps of input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_timestep_dim</strong> (<em>int</em>) – The dimension over which to split the input into timesteps.</p></li>
+<li><p><strong>output_timestep_dim</strong> (<em>int</em>) – The dimension over which to build up the output timesteps,
+i.e. the timesteps are stacked along this dimension.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.VM.run_timesteps">
+<span class="sig-name descname"><span class="pre">run_timesteps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_timestep_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_timestep_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="headerlink" href="#vollo_compiler.VM.run_timesteps" title="Permalink to this definition"></a></dt>
+<dd><p>Run the VM on multiple timesteps with a shaped input.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="vollo_compiler.AllocationError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vollo_compiler.</span></span><span class="sig-name descname"><span class="pre">AllocationError</span></span><a class="headerlink" href="#vollo_compiler.AllocationError" title="Permalink to this definition"></a></dt>
+<dd><p>Failed to allocate memory during compilation.</p>
+<p>This can happen if a model requires more space to store weights/activations,
+etc. than is available for the accelerator configuration.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="vollo_compiler.SaveError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vollo_compiler.</span></span><span class="sig-name descname"><span class="pre">SaveError</span></span><a class="headerlink" href="#vollo_compiler.SaveError" title="Permalink to this definition"></a></dt>
+<dd><p>Failed to save program.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="vollo_compiler.LoadError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vollo_compiler.</span></span><span class="sig-name descname"><span class="pre">LoadError</span></span><a class="headerlink" href="#vollo_compiler.LoadError" title="Permalink to this definition"></a></dt>
+<dd><p>Failed to load program.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Vollo Compiler API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="vollo_torch.html" class="btn btn-neutral float-right" title="vollo_torch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Myrtle.ai.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
