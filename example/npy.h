@@ -264,6 +264,11 @@ static void write_npy(const char* file_path, NpyArray array) {
     WRITE_NPY_CHUNK("%ld", array.shape[0]);
     num_elems *= array.shape[0];
 
+    if (array.shape_len == 1) {
+      // Add trailing comma for singleton tuples
+      WRITE_NPY_CHUNK(",");
+    }
+
     for (int i = 1; i < array.shape_len; i++) {
       WRITE_NPY_CHUNK(", %ld", array.shape[i]);
       num_elems *= array.shape[i];

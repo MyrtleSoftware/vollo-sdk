@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.17.2
+## 18.0.0
 
-- Fix various issues around DMA buffer handling
+- Vollo RT support for using raw DMA buffers to skip IO copy
+- Vollo RT remove redundant/noisy warnings on error: it is the user's responsibility to check returned errors
+- Compiler optimization for Where nodes
+- Compiler scheduling optimizations
+- Vollo IP Core public documentation
 
 ## 0.17.1
 
