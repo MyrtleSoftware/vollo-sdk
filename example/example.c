@@ -18,7 +18,7 @@
     }                                       \
   } while (0)
 
-#define NUM_RANDOM_INPUT_VECTORS 1024
+#define NUM_RANDOM_INPUT_VECTORS 32
 #define NANOSECONDS (1000 * 1000 * 1000)
 
 static float rand_float();
@@ -41,6 +41,8 @@ typedef struct ExampleOptions {
   size_t num_warmup_inferences;
   // Use the fp32 version of the API (compute is still done in bf16)
   bool fp32_api;
+  // Use raw DMA buffers and skip input/output data copy
+  bool raw_buffer_api;
   // The input is random numbers (as opposed to all 1.0), only when input_path is not set
   bool random_input;
   // Output detailed measurements in JSON
@@ -69,11 +71,6 @@ static void vollo_example(ExampleOptions options) {
   struct timespec start_setup_time, start_warmup_time, start_compute_time, end_time;
 
   clock_gettime(CLOCK_MONOTONIC, &start_setup_time);
-
-  NpyArray input_array = {0};
-  if (options.input_path != NULL) {
-    input_array = read_npy(options.input_path);
-  }
 
   // Print vollo-rt version
   const char* version = vollo_rt_version();
@@ -165,7 +162,13 @@ static void vollo_example(ExampleOptions options) {
   assert(vollo_rt_model_input_num_elements(ctx, model_index, 0) == num_input_elems);
   assert(vollo_rt_model_output_num_elements(ctx, model_index, 0) == num_output_elems);
 
+  //////////////////////////////////////////////////
+  // Setup input/output files
+
+  NpyArray input_array = {0};
   if (options.input_path != NULL) {
+    input_array = read_npy(options.input_path);
+
     // Check that the input has the number of input elements that the model expects
     assert(input_array.buffer_len == num_input_elems);
     const size_t* input_shape = vollo_rt_model_input_shape(ctx, model_index, 0);
@@ -174,6 +177,22 @@ static void vollo_example(ExampleOptions options) {
     for (size_t i = 0; i < input_array.shape_len; i++) {
       assert(input_array.shape[i] == *input_shape);
       input_shape++;
+    }
+  }
+
+  NpyArray output_array = {0};
+  if (options.output_path != NULL) {
+    output_array.buffer = (float*)malloc(sizeof(float) * num_output_elems);
+    output_array.buffer_len = num_output_elems;
+    {
+      const size_t* output_shape = vollo_rt_model_output_shape(ctx, model_index, 0);
+
+      output_array.shape_len = 0;
+      while (*output_shape != 0) {
+        output_array.shape[output_array.shape_len] = *output_shape;
+        output_array.shape_len++;
+        output_shape++;
+      }
     }
   }
 
@@ -187,7 +206,8 @@ static void vollo_example(ExampleOptions options) {
   float** inputs_fp32 = (float**)malloc(sizeof(float*) * num_inputs);
 
   for (size_t i = 0; i < num_inputs; i++) {
-    inputs[i] = (bf16*)malloc(sizeof(bf16) * num_input_elems);
+    inputs[i] = options.raw_buffer_api ? vollo_rt_get_raw_buffer(ctx, num_input_elems)
+                                       : (bf16*)malloc(sizeof(bf16) * num_input_elems);
     inputs_fp32[i] = (float*)malloc(sizeof(float) * num_input_elems);
 
     for (size_t j = 0; j < num_input_elems; j++) {
@@ -201,7 +221,8 @@ static void vollo_example(ExampleOptions options) {
     }
   }
 
-  bf16* output = (bf16*)malloc(sizeof(bf16) * num_output_elems);
+  bf16* output = options.raw_buffer_api ? vollo_rt_get_raw_buffer(ctx, num_output_elems)
+                                        : (bf16*)malloc(sizeof(bf16) * num_output_elems);
   float* output_fp32 = (float*)malloc(sizeof(float) * num_output_elems);
 
   struct timespec* start_times
@@ -271,6 +292,19 @@ static void vollo_example(ExampleOptions options) {
       clock_gettime(CLOCK_MONOTONIC, &job_completed_time);
 
       for (size_t i = 0; i < num_completed; i++) {
+        // Serialize first output if output path is set
+        if (inf_completed == 0 && options.output_path != NULL) {
+          for (size_t i = 0; i < num_output_elems; i++) {
+            if (options.fp32_api) {
+              output_array.buffer[i] = output_fp32[i];
+            } else {
+              output_array.buffer[i] = bf16_to_float(output[i]);
+            }
+          }
+
+          write_npy(options.output_path, output_array);
+        }
+
         // if it is not warmup
         if (inf_completed >= options.num_warmup_inferences) {
           size_t ix = inf_completed - options.num_warmup_inferences;
@@ -312,7 +346,8 @@ static void vollo_example(ExampleOptions options) {
     printf("{\n");
     printf("  \"options\": {\n");
     printf("    \"max_concurrent_jobs\": %ld,\n", options.max_concurrent_jobs);
-    printf("    \"num_inferences\": %ld\n", options.num_inferences);
+    printf("    \"num_inferences\": %ld,\n", options.num_inferences);
+    printf("    \"raw_buffer_api\": %d\n", options.raw_buffer_api);
     printf("  },\n");
     printf("  \"metrics\": {\n");
     printf("    \"time\": {\n");
@@ -337,45 +372,18 @@ static void vollo_example(ExampleOptions options) {
   }
 
   //////////////////////////////////////////////////
-  // Serialize output
-
-  if (options.output_path != NULL) {
-    NpyArray output_array;
-    output_array.buffer = (float*)malloc(sizeof(float) * num_output_elems);
-    output_array.buffer_len = num_output_elems;
-    {
-      const size_t* output_shape = vollo_rt_model_output_shape(ctx, model_index, 0);
-
-      output_array.shape_len = 0;
-      while (*output_shape != 0) {
-        output_array.shape[output_array.shape_len] = *output_shape;
-        output_array.shape_len++;
-        output_shape++;
-      }
-    }
-
-    for (size_t i = 0; i < num_output_elems; i++) {
-      if (options.fp32_api) {
-        output_array.buffer[i] = output_fp32[i];
-      } else {
-        output_array.buffer[i] = bf16_to_float(output[i]);
-      }
-    }
-
-    write_npy(options.output_path, output_array);
-
-    free_npy(output_array);
-  }
-
-  //////////////////////////////////////////////////
   // Teardown/Cleanup
 
   free(latencies);
   free(start_times);
-  free(output);
+  if (!options.raw_buffer_api) {
+    free(output);
+  }
   free(output_fp32);
   for (size_t i = 0; i < num_inputs; i++) {
-    free(inputs[i]);
+    if (!options.raw_buffer_api) {
+      free(inputs[i]);
+    }
     free(inputs_fp32[i]);
   }
   free(inputs);
@@ -385,6 +393,9 @@ static void vollo_example(ExampleOptions options) {
 
   if (options.input_path != NULL) {
     free_npy(input_array);
+  }
+  if (options.output_path != NULL) {
+    free_npy(output_array);
   }
 }
 
@@ -410,6 +421,10 @@ void print_help(const char* example_program) {
 
     "    -F, --fp32-api\n"
     "        Use the fp32 version of the API (compute is still done in bf16)\n"
+    "\n"
+
+    "    -R, --raw-buffer-api\n"
+    "        Use raw DMA buffers and skip input/output data copy\n"
     "\n"
 
     "    -r, --random\n"
@@ -451,6 +466,7 @@ int main(int argc, char** argv) {
   options.program_path = "";
   options.model_index = 0;
   options.fp32_api = false;
+  options.raw_buffer_api = false;
   options.random_input = false;
   options.max_concurrent_jobs = 1;
   options.num_inferences = 10000;
@@ -467,6 +483,7 @@ int main(int argc, char** argv) {
     {"model-index", required_argument, 0, 'm'},
     {"num-inferences", required_argument, 0, 'i'},
     {"fp32-api", no_argument, 0, 'F'},
+    {"raw-buffer-api", no_argument, 0, 'R'},
     {"random", no_argument, 0, 'r'},
     {"max-concurrent-jobs", required_argument, 0, 'c'},
     {"num-warmup-inferences", required_argument, 0, 'w'},
@@ -479,11 +496,12 @@ int main(int argc, char** argv) {
 
   int opt = 0;
   int long_index = 0;
-  while ((opt = getopt_long(argc, argv, "i:rc:w:jf:o:h", long_options, &long_index)) != -1) {
+  while ((opt = getopt_long(argc, argv, "i:FRrc:w:jf:o:h", long_options, &long_index)) != -1) {
     switch (opt) {
     case 'm': options.model_index = (size_t)strtoul(optarg, NULL, 10); break;
     case 'i': options.num_inferences = (size_t)strtoul(optarg, NULL, 10); break;
     case 'F': options.fp32_api = true; break;
+    case 'R': options.raw_buffer_api = true; break;
     case 'r': options.random_input = true; break;
     case 'c': options.max_concurrent_jobs = (size_t)strtoul(optarg, NULL, 10); break;
     case 'w': options.num_warmup_inferences = (size_t)strtoul(optarg, NULL, 10); break;
@@ -507,6 +525,20 @@ int main(int argc, char** argv) {
 
   if (options.random_input && options.input_path != NULL) {
     fprintf(stderr, "Options -r,--random and -f,--input are not compatible\n");
+    exit(EXIT_FAILURE);
+  }
+
+  if (options.fp32_api && options.raw_buffer_api) {
+    fprintf(stderr, "Options -F,--fp32-api and -R,--raw-buffer-api are not compatible\n");
+    exit(EXIT_FAILURE);
+  }
+
+  if (options.raw_buffer_api && (options.max_concurrent_jobs > 1)) {
+    fprintf(
+      stderr,
+      "Combination of -R,--raw-buffer-api and -c,--max-concurrent-jobs > 1 is not supported in "
+      "this simple example\n");
+    fprintf(stderr, "NOTE: output raw buffers cannot be reused for concurrent inferences\n");
     exit(EXIT_FAILURE);
   }
 

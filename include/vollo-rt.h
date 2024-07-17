@@ -272,6 +272,8 @@ vollo_rt_error_t vollo_rt_add_job_bf16(
  *
  * Note:
  * - The computation will still be performed in bf16 but the driver will perform the conversion.
+ * - The environment variable `VOLLO_FP32_ROUND` can be used to round input when converting
+ *   instead of truncating (which is faster).
  * - The computation is only started on the next call to vollo_rt_poll. This way it is possible
  *   to set up several computations that are kicked off at the same time.
  *
@@ -327,3 +329,26 @@ vollo_rt_error_t vollo_rt_add_job_fp32(
  */
 vollo_rt_error_t vollo_rt_poll(
   vollo_rt_context_t vollo, size_t* num_completed, const uint64_t** returned_user_ctx);
+
+/**
+ * Get access to a raw DMA buffer for a number of bf16 elements
+ *
+ * This buffer can be used as either an input or an output buffer in `vollo_rt_add_job_bf16`.
+ * When such a buffer is used, the DMA will use the buffer directly without first copying the data.
+ * Raw buffers can be reused for multiple inferences.
+ *
+ * Note:
+ * - A job using a raw buffer MUST use the exact base pointer returned by `vollo_rt_get_raw_buffer`
+ *   (not an offset within the allocation, because the allocation has specific alignment and
+ *   padding requirements for the DMA engine)
+ * - Once submitted, a raw buffer MUST NOT be read from or written to until after the completion of
+ *   the job it is used in
+ * - An output raw buffer MUST NOT be used concurrently from multiple jobs or the same job
+ *   (multiple outputs reusing the same buffer)
+ * - A raw buffer MAY be allocated for more elements than needed
+ *   For example if the buffer is to be reused for different jobs with different requirements
+ * - The amount of memory that can be allocated with `vollo_rt_get_raw_buffer` is limited
+ * - All allocated raw buffers are freed when destroying the `vollo_rt_context_t` with
+ * `vollo_rt_destroy`
+ */
+bf16* vollo_rt_get_raw_buffer(vollo_rt_context_t vollo, size_t num_elements);
