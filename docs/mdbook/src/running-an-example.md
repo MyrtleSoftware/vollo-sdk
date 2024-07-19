@@ -35,14 +35,15 @@ The Vollo SDK contains a trivial program for each accelerator to check if the ac
 
    ```sh
    Using program: "example/identity_b64.vollo"
-   Using vollo-rt version: 0.12.0
-   Program metadata:
+   Using vollo-rt version: 18.0.0
+   Using Vollo accelerator with 3 core(s) and block_size 64
+   Program metadata for model 0:
      1 input with shape: [128]
      1 output with shape: [128]
    Starting 10000 inferences
    Done
-   Ran 10000 inferences in 0.039822 s with:
-     mean latency of 3.961121 us
-     99% latency of 4.698000 us
-     throughput of 251116.318761 inf/s
+   Ran 10000 inferences in 0.020185 s with:
+     mean latency of 2.004259 us
+     99% latency of 2.176000 us
+     throughput of 495411.228723 inf/s
    ```

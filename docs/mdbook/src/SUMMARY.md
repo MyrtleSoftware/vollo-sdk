@@ -15,7 +15,7 @@
   - [MLP](benchmark-mlp.md)
   - [CNN](benchmark-cnn.md)
   - [LSTM](benchmark-lstm.md)
-  - [IO round trip](benchmark-io.md)
+  - [IO Round Trip](benchmark-io.md)
 - [Accelerator Setup](accelerator-setup.md)
   - [System Requirements](system-requirements.md)
   - [Programming the FPGA](programming-the-fpga.md)

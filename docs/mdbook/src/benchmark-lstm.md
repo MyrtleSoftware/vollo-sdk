@@ -28,10 +28,10 @@ We have also had LSTM models benchmarked and audited as part of a STAC-ML submis
 
 | Model         | Layers | Hidden size | Parameters | Mean latency (μs) | 99th Percentile latency (μs) |
 | ------------- | ------ | ----------- | ---------- | ----------------- | ---------------------------- |
-| lstm_tiny     | 2      | 128         | 266K       | 2.8               | 3.2                          |
-| lstm_small    | 3      | 256         | 1.6M       | 3.4               | 3.7                          |
-| lstm_med      | 3      | 480         | 5.5M       | 4.7               | 4.9                          |
-| lstm_med_deep | 6      | 320         | 4.9M       | 4.8               | 5.1                          |
+| lstm_tiny     | 2      | 128         | 266K       | 2.5               | 2.7                          |
+| lstm_small    | 3      | 256         | 1.6M       | 3.2               | 3.4                          |
+| lstm_med      | 3      | 480         | 5.5M       | 4.5               | 4.6                          |
+| lstm_med_deep | 6      | 320         | 4.9M       | 4.7               | 4.7                          |
 
 The input size is the same as the hidden size for all models and the output size is set to 32. The layers refers to the number of
 LSTM layers in the stack.
@@ -40,8 +40,8 @@ LSTM layers in the stack.
 
 | Model      | Layers | Hidden size | Parameters | Mean latency (μs) | 99th Percentile latency (μs) |
 | ---------- | ------ | ----------- | ---------- | ----------------- | ---------------------------- |
-| lstm_tiny  | 2      | 128         | 266K       | 3.0               | 3.5                          |
-| lstm_small | 3      | 256         | 1.6M       | 4.7               | 5.0                          |
+| lstm_tiny  | 2      | 128         | 266K       | 2.9               | 3.0                          |
+| lstm_small | 3      | 256         | 1.6M       | 4.7               | 4.8                          |
 
 The input size is the same as the hidden size and the output size is set to 32.
 
