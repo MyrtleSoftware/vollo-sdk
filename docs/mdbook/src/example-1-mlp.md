@@ -101,4 +101,5 @@ The VM records the number of cycles the program took to execute.
 Note there will be some discrepancy between the VM's cycle count and the true
 cycle count, so the VM's cycle count should be treated as an estimate.
 Also note that the VM does not model the latency of the communication between
-the host and the Vollo accelerator.
+the host and the Vollo accelerator. This communication latency can be estimated
+using our [`IO Round Trip`](benchmark-io.md) benchmarks.
