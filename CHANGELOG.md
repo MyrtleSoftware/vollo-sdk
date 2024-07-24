@@ -1,5 +1,9 @@
 # Changelog
 
+## 18.0.1
+
+- Add fallback to Vollo RT and vollo-tool for when AVX is not available
+
 ## 18.0.0
 
 - Vollo RT support for using raw DMA buffers to skip IO copy
