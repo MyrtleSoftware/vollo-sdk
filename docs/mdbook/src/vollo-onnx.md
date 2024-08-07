@@ -61,6 +61,12 @@ The user can specify:
         Generate a program with IO only - useful for testing IO latencies
   ```
 
+- Whether to use the VM to decide whether certain optimizations should be applied. Note: this is experimental and likely to change.
+  ```text
+  --optimize-transforms
+          Runs the VM to decide whether to apply certain transformations or not
+  ```
+
 ## Simplifying ONNX Models
 
 `vollo-onnx` has a limited list of supported ONNX nodes. Often ONNX models can be over-complicated, and contain unnecessary shaping operations. It is recommended that [onnx-simplifier](https://github.com/daquexian/onnx-simplifier) be used before calling `vollo-onnx` on an ONNX model to remove these unnecessary shaping operations which aren't supported by `vollo-onnx`:
