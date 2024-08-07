@@ -1,5 +1,9 @@
 # Release Notes
 
+## 18.0.2
+
+- Add `optimize_transforms` option to the compiler to improve program schedule in some cases
+
 ## 18.0.1
 
 - Add fallback to Vollo RT and vollo-tool for when AVX is not available
