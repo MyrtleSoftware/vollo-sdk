@@ -24,7 +24,7 @@ typedef struct {
   uint8_t shape_len;
 } NpyArray;
 
-static void free_npy(NpyArray array) {
+__attribute__((unused)) static void free_npy(NpyArray array) {
   if (array.buffer_len > 0 && array.buffer != NULL) {
     free(array.buffer);
   }
@@ -32,7 +32,7 @@ static void free_npy(NpyArray array) {
 
 // Read a NPY file
 // Only dtype float32 supported
-static NpyArray read_npy(const char* file_path) {
+__attribute__((unused)) static NpyArray read_npy(const char* file_path) {
   NpyArray array;
   uint32_t num_elements = 1;
 
@@ -227,7 +227,7 @@ static NpyArray read_npy(const char* file_path) {
 }
 
 // Write a NPY file
-static void write_npy(const char* file_path, NpyArray array) {
+__attribute__((unused)) static void write_npy(const char* file_path, NpyArray array) {
   FILE* fptr = fopen(file_path, "w");
 
   if (fptr == NULL) {

@@ -24,24 +24,24 @@ We have also had LSTM models benchmarked and audited as part of a STAC-ML submis
 
 - [STAC ML Tacana](https://www.stacresearch.com/MRTL230426)
 
-### IA-840F: 3 big cores
+## IA-840F: 3 big cores
 
 | Model         | Layers | Hidden size | Parameters | Mean latency (μs) | 99th Percentile latency (μs) |
 | ------------- | ------ | ----------- | ---------- | ----------------- | ---------------------------- |
-| lstm_tiny     | 2      | 128         | 266K       | 2.5               | 2.7                          |
-| lstm_small    | 3      | 256         | 1.6M       | 3.2               | 3.4                          |
-| lstm_med      | 3      | 480         | 5.5M       | 4.5               | 4.6                          |
-| lstm_med_deep | 6      | 320         | 4.9M       | 4.7               | 4.7                          |
+| lstm_tiny     | 2      | 128         | 266K       | 2.4               | 2.6                          |
+| lstm_small    | 3      | 256         | 1.6M       | 3.1               | 3.2                          |
+| lstm_med      | 3      | 480         | 5.5M       | 4.4               | 4.5                          |
+| lstm_med_deep | 6      | 320         | 4.9M       | 4.5               | 4.7                          |
 
 The input size is the same as the hidden size for all models and the output size is set to 32. The layers refers to the number of
 LSTM layers in the stack.
 
-### IA-420F: 6 small cores
+## IA-420F: 6 small cores
 
 | Model      | Layers | Hidden size | Parameters | Mean latency (μs) | 99th Percentile latency (μs) |
 | ---------- | ------ | ----------- | ---------- | ----------------- | ---------------------------- |
-| lstm_tiny  | 2      | 128         | 266K       | 2.9               | 3.0                          |
-| lstm_small | 3      | 256         | 1.6M       | 4.7               | 4.8                          |
+| lstm_tiny  | 2      | 128         | 266K       | 2.6               | 2.8                          |
+| lstm_small | 3      | 256         | 1.6M       | 4.4               | 4.6                          |
 
 The input size is the same as the hidden size and the output size is set to 32.
 

@@ -31,10 +31,10 @@ To estimate performance of your model with the Vollo SDK:
    See Vollo compiler [Example 1](example-1-mlp.md) for a fully worked example
    of this including performance estimation.
 
-3. Add in [IO latency](benchmark-io.md) for your model characteristics in
+4. Add in [IO latency](benchmark-io.md) for your model characteristics in
    order to estimate end to end latency.
 
-4. Iterate on your model architecture to meet your combined latency and accuracy
+5. Iterate on your model architecture to meet your combined latency and accuracy
    requirements.
 
 ## Validating inference performance using the Vollo FPGA accelerator
@@ -51,6 +51,8 @@ Evaluation licenses can be provided free of charge by contacting
 
 To validate inference performance on Vollo:
 
+<!-- markdownlint-disable MD029 -->
+
 6. Follow the steps to [program](programming-the-fpga.md) and
    [license](licensing.md) the FPGA.
 
@@ -64,6 +66,8 @@ To validate inference performance on Vollo:
 
    Make sure to pass the example application the path to your saved `.vollo`
    program when you invoke it on the command line.
+
+<!-- markdownlint-enable MD029 -->
 
 Note that the Vollo SDK includes prebuilt FPGA bitstreams for selected PCIe
 accelerator cards so no FPGA compilation or configuration is required after

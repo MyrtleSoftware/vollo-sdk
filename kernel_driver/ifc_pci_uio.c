@@ -130,7 +130,8 @@ static int ifc_uio_pci_mmap(struct uio_info *info, struct vm_area_struct *vma)
 	vma->vm_ops = &myrtle_fpga_vm_ops;
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 3, 0)
-	vm_flags_set(vma, VM_PFNMAP | VM_DONTCOPY | VM_DONTEXPAND);
+	vm_flags_set(vma, VM_IO | VM_PFNMAP | VM_DONTEXPAND | VM_DONTDUMP |
+				  VM_DONTCOPY | VM_NORESERVE);
 #else
 	vma->vm_flags |= VM_PFNMAP | VM_DONTCOPY | VM_DONTEXPAND;
 #endif

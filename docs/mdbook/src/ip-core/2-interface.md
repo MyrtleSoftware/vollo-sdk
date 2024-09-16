@@ -11,7 +11,7 @@ The IP Core has the following interfaces:
   configuration and not for running the model.
 - Config bus. This is a 32-bit wide AXI4-Lite bus used to activate the device with a license key and to configure the IP Core. It is synchronous to the config clock.
 - Compute clock and reset signals. This is the clock used for running the model. In the example design this clock frequency is
-set to 320MHz.
+  set to 320MHz.
 - Input data bus. This a AXI4-Stream bus used to stream input data to the IP Core. It size varies depending on the size of the
   cores in the IP. For a 32-block size design, this is 512 wide (16 bits per value using brainfloat 16). It is synchronous to the compute clock.
 - Model selection bus. This is an AXI4-Stream interface for providing the model index to be run if the IP core has been configured

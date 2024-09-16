@@ -2,22 +2,22 @@
 
 The Vollo compiler supports PyTorch models that use the following operations:
 
-| Operation                | Support Notes                                                  |
-| ------------------------ | -------------------------------------------------------------- |
-| Pointwise arithmetic ops | `+`, `-`, `*`; `/` by constant                                 |
-| Inequality               | `>`, `<`, `>=`, `<=`                                           |
-| `max` and `min`          |                                                                |
-| Clamp ops                | `clamp`, `relu`                                                |
-| Matrix multiplication    | `Linear`; `matmul` / `@` where one side is a constant          |
-| Convolution              | Via `vollo_torch.nn.PaddedConv1d`                              |
-| LSTM                     | Via `vollo_torch.nn.LSTM`                                      |
-| Indexing / slicing       | Partial square bracket `[]` support; `index_select`            |
-| `sum`                    |                                                                |
-| `where`                  | If the `where` condition is an inequality comparison           |
-| Concatenation            | `cat`, `concat`                                                |
-| Batch Normalization      | `BatchNorm1d`, `BatchNorm2d`, `BatchNorm3d`                    |
-| `transpose`              | See [section below](#tensor-memory-format)                     |
-| `squeeze`, `unsqueeze`   |                                                                |
+| Operation                | Support Notes                                         |
+| ------------------------ | ----------------------------------------------------- |
+| Pointwise arithmetic ops | `+`, `-`, `*`; `/` by constant                        |
+| Inequality               | `>`, `<`, `>=`, `<=`                                  |
+| `max` and `min`          |                                                       |
+| Clamp ops                | `clamp`, `relu`                                       |
+| Matrix multiplication    | `Linear`; `matmul` / `@` where one side is a constant |
+| Convolution              | Via `vollo_torch.nn.PaddedConv1d`                     |
+| LSTM                     | Via `vollo_torch.nn.LSTM`                             |
+| Indexing / slicing       | Partial square bracket `[]` support; `index_select`   |
+| `sum`                    |                                                       |
+| `where`                  | If the `where` condition is an inequality comparison  |
+| Concatenation            | `cat`, `concat`                                       |
+| Batch Normalization      | `BatchNorm1d`, `BatchNorm2d`, `BatchNorm3d`           |
+| `transpose`              | See [section below](#tensor-memory-format)            |
+| `squeeze`, `unsqueeze`   |                                                       |
 
 Note that for operations like `Dropout` and `BatchNorm1d` (which change behaviour at inference time) to be handled correctly, the model should be in `eval` mode.
 

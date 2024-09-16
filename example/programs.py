@@ -192,7 +192,7 @@ def cli():
     program = nnir_graph.to_program(config)
 
     # run in the VM
-    vm = program.to_vm()
+    vm = program.to_vm(bit_accurate=False)
     actual_y = vm.run(x.detach().numpy())
     np.testing.assert_allclose(
         expected_y.detach().numpy(), actual_y, atol=1e-02, rtol=1e-02

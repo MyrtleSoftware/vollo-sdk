@@ -8,6 +8,7 @@ writing and reading to Vollo IP Core configuration bus. The library then has fun
 a license and configure the core with a program.
 
 The C API is provided as part of the `VOLLO_SDK`:
+
 - Header is `$VOLLO_SDK/include/vollo-cfg.h`
 - Library is `$VOLLO_SDK/lib/libvollo_cfg.so` (or `libvollo_cfg.a` for static linking)
 
@@ -31,6 +32,7 @@ The example runtime is written to work with the [example](./5-example-design.md)
 (the patched version of the kernel driver provided in `VOLLO_SDK` works just as well as the original Intel provided one for this example)
 
 These are the main steps of the configuration are:
+
 - Acquire and activate a license
 - Load a Vollo program onto the Vollo IP Core with `vollo_cfg_load_program`
 
