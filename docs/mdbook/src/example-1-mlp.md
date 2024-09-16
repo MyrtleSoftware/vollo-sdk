@@ -80,7 +80,6 @@ used to:
   model.
 - Verify the correctness of the compilation stages, including the effect of
   quantisation.
-  Note the output of the VM is not bit accurate to the Vollo accelerator.
 
 Construct a VM instance with your program loaded.
 Run the VM by passing it a numpy array of the input.
@@ -90,7 +89,7 @@ range of floating point error.
 ```python
 vm = program.to_vm()
 vm_output = vm.run(input.detach().numpy())
-torch.testing.assert_close(expected_output, torch.from_numpy(vm_output))
+torch.testing.assert_close(expected_output, torch.from_numpy(vm_output), atol = 5e-3, rtol = 1e-3)
 print("cycle count:", vm.cycle_count())
 # Translate the estimated cycle count to a duration for the compute (not
 # including IO) in microseconds, using the bitstream clock speed (320 MHz)

@@ -313,6 +313,65 @@ vollo_rt_error_t vollo_rt_add_job_fp32(
   float* const* output_data);
 
 /**
+ * Sets up a computation on the vollo accelerator where the inputs and outputs are in brain-float 16
+ * format.
+ *
+ * Takes the input from the previous job and updates individual values as provided and uses that as
+ * the new input. This can be more efficient due to smaller IO requirements.
+ *
+ * Limitations:
+ * - Only single model programs are supported
+ * - Only single input models are supported
+ * - Only inputs with up to 65536 elements supported (for now)
+ *
+ * Note: The computation is only started on the next call to vollo_rt_poll. This way it is possible
+ * to set up several computations that are kicked off at the same time.
+ *
+ * - vollo:
+ *     the context that the computation should be run on
+ * - model_index:
+ *     the model to run
+ * - user_ctx:
+ *     a user context that will be returned on completion
+ * - num_input_updates:
+ *     The number of elements in the input array to be updated
+ *     It MUST be at most the number of input elements (see `vollo_rt_model_input_num_elements`),
+ *     although using `vollo_rt_add_job_bf16` will be more efficient when updating many elements
+ * - input_update_indices:
+ *     An array of indices (with `num_input_updates` elements) of the elements to update
+ *     Each index MUST be less than the number of input elements
+ *     (see `vollo_rt_model_input_num_elements`)
+ *     Updating multiple times the same index in a given update has undefined semantics
+ *     lifetime:
+ *       - The input_update_indices array needs to live until `vollo_rt_poll` returns with the
+ *         completion for this job
+ * - input_update_values:
+ *     An array of values (with `num_input_updates` elements) with the new values of the
+ *     elements to update
+ *     Values may not be NaN
+ *     lifetime:
+ *       - The input_update_values array needs to live until `vollo_rt_poll` returns with the
+ *         completion for this job
+ * - output_data:
+ *     a pointer to the start of an array with pointers to the start of the data to each output
+ *     buffer the number of outputs is given by `vollo_rt_model_num_outputs` each output length is
+ *     the product of the shape given by `vollo_rt_model_output_shape`
+ *     (or more convenient: `vollo_rt_model_output_num_elements`)
+ *     lifetime:
+ *       - The outer array only needs to live until `vollo_rt_add_job_bf16_partial_update` returns
+ *       - The output buffers need to live until `vollo_rt_poll` returns with the completion for
+ *         this job
+ */
+vollo_rt_error_t vollo_rt_add_job_bf16_partial_update(
+  vollo_rt_context_t vollo,
+  size_t model_index,
+  uint64_t user_ctx,
+  uint32_t num_input_updates,
+  const uint32_t* input_update_indices,
+  const bf16* input_update_values,
+  bf16* const* output_data);
+
+/**
  * Poll the vollo accelerator for completion.
  *
  * Note: Polling also initiates transfers for new jobs, so poll must be called

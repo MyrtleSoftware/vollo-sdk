@@ -11,10 +11,10 @@ your application, we advise the following steps:
 Note, for initial integration and testing, it is recommended to start with a single core and a small block size. This will
 allow for quicker iteration and debugging of the system.
 
-
 ## Compiler support
 
 To test an IP Core configuration with the Vollo compiler, you can create the configuration in python as follows:
+
 ```python
 import vollo_compiler
 ip_core_config = vollo_compiler.Config.ip_core(num_cores = 1, block_size = 32)
@@ -23,6 +23,7 @@ ip_core_config = vollo_compiler.Config.ip_core(num_cores = 1, block_size = 32)
 Once you have received your Vollo IP core, it comes bundled with a Vollo accelerator configuration file in JSON format,
 in `vollo_ip_core/vollo-ip-core-config.json`.
 This can be loaded into an accelerator configuration in python as follows:
+
 ```python
 !import os
 !os.mkdir("vollo_ip_core")
@@ -69,12 +70,13 @@ nnir = vollo_torch.fx.nnir.to_nnir(model)
 program = nnir.to_program(ip_core_config)
 
 ```
+
 Run the VM to get the cycle count:
 
 ```python
 vm = program.to_vm()
 vm_output = vm.run(input.detach().numpy())
-torch.testing.assert_close(expected_output, torch.from_numpy(vm_output))
+torch.testing.assert_close(expected_output, torch.from_numpy(vm_output), atol = 5e-3, rtol=1e-3)
 print("cycle count:", vm.cycle_count())
 ```
 

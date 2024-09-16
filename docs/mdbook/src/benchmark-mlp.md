@@ -20,18 +20,18 @@ mlp = MLP(256.0, 384.0, 128.0)
 
 We demonstrate the model at a variety of batch sizes. The model has 295K parameters.
 
-### IA-840F: 3 big cores
+## IA-840F: 3 big cores
 
 | Model  | Batch size | Mean latency (μs) | 99th Percentile latency (μs) |
 | ------ | ---------- | ----------------- | ---------------------------- |
-| mlp_b1 | 1          | 2.6               | 2.8                          |
-| mlp_b4 | 4          | 2.9               | 3.1                          |
-| mlp_b8 | 8          | 3.6               | 3.8                          |
+| mlp_b1 | 1          | 2.5               | 2.6                          |
+| mlp_b4 | 4          | 2.8               | 2.9                          |
+| mlp_b8 | 8          | 3.4               | 3.7                          |
 
-### IA-420F: 6 small cores
+## IA-420F: 6 small cores
 
 | Model  | Batch size | Mean latency (μs) | 99th Percentile latency (μs) |
 | ------ | ---------- | ----------------- | ---------------------------- |
 | mlp_b1 | 1          | 3.1               | 3.3                          |
 | mlp_b4 | 4          | 3.4               | 3.6                          |
-| mlp_b8 | 8          | 4.2               | 4.4                          |
+| mlp_b8 | 8          | 4.1               | 4.4                          |

@@ -27,13 +27,13 @@ class CNN(nn.Module):
         return x
 ```
 
-### IA-840F: 3 big cores
+## IA-840F: 3 big cores
 
 | Model     | Layers | Channels | Parameters | Mean latency (μs) | 99th Percentile latency (μs) |
 | --------- | ------ | -------- | ---------- | ----------------- | ---------------------------- |
-| cnn_tiny  | 3      | 128      | 393K       | 2.6               | 2.8                          |
-| cnn_small | 3      | 256      | 1.6M       | 2.8               | 2.9                          |
-| cnn_med   | 6      | 256      | 3.1M       | 3.5               | 3.6                          |
+| cnn_tiny  | 3      | 128      | 393K       | 2.6               | 2.7                          |
+| cnn_small | 3      | 256      | 1.6M       | 2.7               | 2.9                          |
+| cnn_med   | 6      | 256      | 3.1M       | 3.4               | 3.6                          |
 
 The kernel size for all models is 8.
 
@@ -41,8 +41,8 @@ The kernel size for all models is 8.
 
 | Model     | Layers | Channels | Parameters | Mean latency (μs) | 99th Percentile latency (μs) |
 | --------- | ------ | -------- | ---------- | ----------------- | ---------------------------- |
-| cnn_tiny  | 3      | 128      | 393K       | 2.7               | 2.8                          |
+| cnn_tiny  | 3      | 128      | 393K       | 2.6               | 2.8                          |
 | cnn_small | 3      | 256      | 1.6M       | 3.1               | 3.2                          |
-| cnn_med   | 6      | 256      | 3.1M       | 4.2               | 4.4                          |
+| cnn_med   | 6      | 256      | 3.1M       | 4.2               | 4.3                          |
 
 The kernel size for all models is 8.

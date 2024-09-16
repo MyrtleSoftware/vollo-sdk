@@ -67,13 +67,13 @@ multi_model_program = program_builder.to_program()
 The `vollo_compiler.ProgramBuilder` allows you to create a multi-model program. Building a multi-model program may give an allocation error if
 the models can't fit on the given `Config`. Generally each individual model will only have a small latency overhead compared to running it as an individual program. This overhead comes from selecting which model to run.
 
-A `model_index` can be provided when running inferences on the accelerator or on the VM. The models appear in the order in which they were added to the `ProgramBuilder`. For example on the VM: 
+A `model_index` can be provided when running inferences on the accelerator or on the VM. The models appear in the order in which they were added to the `ProgramBuilder`. For example on the VM:
 
 ```python
 vm = multi_model_program.to_vm()
 
 mlp_vm_output = vm.run(mlp_input.detach().numpy(), model_index = 0)
-torch.testing.assert_close(mlp_expected_output, torch.from_numpy(mlp_vm_output))
+torch.testing.assert_close(mlp_expected_output, torch.from_numpy(mlp_vm_output), atol = 5e-3, rtol = 1e-3)
 
 cnn_vm_outputs = []
 for i in range(5):
@@ -85,5 +85,7 @@ torch.testing.assert_close(
         [torch.from_numpy(output) for output in cnn_vm_outputs],
         axis=output_axis,
     ),
+    atol = 5e-3,
+    rtol = 1e-3
 )
 ```

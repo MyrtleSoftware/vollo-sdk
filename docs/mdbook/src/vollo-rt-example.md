@@ -4,7 +4,7 @@ The full code for this example can be found in `example/identity.c`.
 
 Here we will work through it step by step.
 
---- 
+---
 
 First we need to get hold of a Vollo RT context:
 

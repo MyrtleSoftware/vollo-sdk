@@ -134,9 +134,9 @@ NOTE: this can only be done with an FPGA that is already programmed with a Vollo
 
 6. Power off the system and start it back up.
 
-    > :warning: For the configuration process to be triggered the board has to register
-    > the power being off. It is recommended to turn the power off and then wait
-    > a few seconds before turning the power back on to ensure this happens.
+   > :warning: For the configuration process to be triggered the board has to register
+   > the power being off. It is recommended to turn the power off and then wait
+   > a few seconds before turning the power back on to ensure this happens.
 
 7. Repeat steps 1, 2 and 3. The `bitstream-info` command should show that the
    updated bitstream has been loaded (e.g. a newer release date), and the output

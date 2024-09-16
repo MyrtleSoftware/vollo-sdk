@@ -28,19 +28,26 @@ The user can specify:
         Name of the model
   ```
 
-- The hardware configuration to use (this JSON file can be generated using the `Config` method `save` in `vollo_compiler`):
+- The hardware configuration to use based on a JSON file (this JSON file can be generated using the `Config` method `save` in the `vollo_compiler` python module):
 
   ```text
       --hw-config <HW_CONFIG_JSON>
         Path to the hardware config JSON file
+  ```
 
-        If unspecified, defaults to the 6 core block size 32 IA_420F configuration
+- A name for the hardware configuration to use (from a set of preset configs).
+
+  ```text
+      --hw-config-preset <PRESET_NAME>
+        Hardware configuration to use, chosen from a set of presets
+
+        [possible values: ia420f-c6b32, ia840f-c3b64]
   ```
 
 - Which transformations to perform on the model. Currently the only available transformation is the streaming transform [Example 2: CNN](example-2-cnn.md):
 
   ```text
-  --streaming-transform <STREAMING_AXIS>
+      --streaming-transform <STREAMING_AXIS>
         Axis on which to perform the streaming transform in the NNIR graph
 
         If unspecified, no streaming transform is performed
@@ -49,21 +56,23 @@ The user can specify:
 - The input shape of the model. This is required if the ONNX model has dynamic input shapes. Vollo requires that the shape of the input be known at compile-time:
 
   ```text
-  --override-input-shape <SHAPE>
+      --override-input-shape <SHAPE>
         If the model has dynamic input shapes, the user must pass a fixed input shape
 
         Example: 10,100,250
   ```
 
 - Whether to elide all compute logic and generate a program with only IO logic. This is useful for determining IO latencies.
+
   ```text
-  --io-only
+      --io-only
         Generate a program with IO only - useful for testing IO latencies
   ```
 
 - Whether to use the VM to decide whether certain optimizations should be applied. Note: this is experimental and likely to change.
+
   ```text
-  --optimize-transforms
+      --optimize-transforms
           Runs the VM to decide whether to apply certain transformations or not
   ```
 

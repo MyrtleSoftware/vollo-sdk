@@ -1,5 +1,13 @@
 # Release Notes
 
+## 19.0.0
+
+- Add support for partial updates of input data on the accelerator
+- VM simulates Vollo accelerator bit-accurately: `bf16_precision` argument
+  renamed to `bit_accurate` and enabled by default
+- `vollo-tool` includes license self-service
+- Performance improvements due to DMA optimization
+
 ## 18.0.2
 
 - Add `optimize_transforms` option to the compiler to improve program schedule in some cases
