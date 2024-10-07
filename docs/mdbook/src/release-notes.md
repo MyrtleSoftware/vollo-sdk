@@ -1,6 +1,10 @@
 # Release Notes
 
-## 19.0.0
+## 19.1.1
+
+- Fix compiler bug in constants folding
+
+## 19.1.0
 
 - Add support for partial updates of input data on the accelerator
 - VM simulates Vollo accelerator bit-accurately: `bf16_precision` argument
