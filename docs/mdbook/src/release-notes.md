@@ -2,7 +2,7 @@
 
 ## 19.1.1
 
-- Fix compiler bug in constants folding
+- Fix compiler bug in constant folding
 
 ## 19.1.0
 
