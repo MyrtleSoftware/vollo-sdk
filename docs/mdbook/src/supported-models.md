@@ -4,7 +4,7 @@ The Vollo compiler supports PyTorch models that use the following operations:
 
 | Operation                | Support Notes                                         |
 | ------------------------ | ----------------------------------------------------- |
-| Pointwise arithmetic ops | `+`, `-`, `*`; `/` by constant                        |
+| Pointwise arithmetic ops | `+`, `-`, `*`, `/`                                    |
 | Inequality               | `>`, `<`, `>=`, `<=`                                  |
 | `max` and `min`          |                                                       |
 | Clamp ops                | `clamp`, `relu`                                       |

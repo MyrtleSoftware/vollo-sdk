@@ -1,5 +1,10 @@
 # Release Notes
 
+## 19.2.0
+
+- Add support for division by non-constant tensors
+- Fix slicing in ONNX frontend
+
 ## 19.1.1
 
 - Fix compiler bug in constant folding

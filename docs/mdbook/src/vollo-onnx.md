@@ -102,7 +102,7 @@ Tensors are expected to be in `float32` format, unless they are used as indices 
 
 | Operator                 | Support Notes                                                        |
 | ------------------------ | -------------------------------------------------------------------- |
-| Pointwise arithmetic ops | `Add`, `Sub`, `Mul`; `Div` by constant                               |
+| Pointwise arithmetic ops | `Add`, `Sub`, `Mul`, `Div`                                           |
 | Inequality               | `>`, `<`, `>=`, `<=` (when followed by a `Where`)                    |
 | `Max` and `Min`          |                                                                      |
 | `Neg`                    |                                                                      |
