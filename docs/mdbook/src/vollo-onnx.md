@@ -118,4 +118,5 @@ Tensors are expected to be in `float32` format, unless they are used as indices 
 | `Transpose`              | See [tensor memory format](supported-models.md#tensor-memory-format) |
 | `BatchNormalization`     | Where input scale, bias, mean and var are constants                  |
 | `Squeeze`, `Unsqueeze`   |                                                                      |
+| `Reciprocal`             |                                                                      |
 | `Identity`               |                                                                      |
