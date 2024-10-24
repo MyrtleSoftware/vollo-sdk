@@ -1,5 +1,10 @@
 # Changelog
 
+## 19.2.1
+
+- Add support for scalars on the left of division
+- Add support for `Reciprocal` node in ONNX frontend
+
 ## 19.2.0
 
 - Add support for division by non-constant tensors
