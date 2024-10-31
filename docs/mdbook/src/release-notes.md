@@ -1,5 +1,10 @@
 # Release Notes
 
+## 19.2.2
+
+- Add support for `torch.div`, `torch.Tensor.div`
+- Fix compiler code generation bug for division
+
 ## 19.2.1
 
 - Add support for scalars on the left of division
