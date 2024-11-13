@@ -7,7 +7,7 @@ straight forward to use from any language with a C FFI.
 - Dynamic library: `$VOLLO_SDK/lib/libvollo_rt.so`
 - Static library: `$VOLLO_SDK/lib/libvollo_rt.a`
 
-It links against GLIBC (from version 2.27), contact us if you have other requirements.
+It was built against GLIBC version 2.17.
 
 To compile against Vollo RT with a standard C compiler, you can use the following flags:
 `-I $VOLLO_SDK/include -L $VOLLO_SDK/lib -lvollo_rt`
