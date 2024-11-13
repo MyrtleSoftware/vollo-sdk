@@ -1,0 +1,473 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>C API - Vollo SDK User Guide</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="assets/vollo-favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <a href="./">
+                  <img class="sidebar-logo">
+                  </img>
+                </a>
+
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="key-features.html"><strong aria-hidden="true">2.</strong> Key Features</a></li><li class="chapter-item expanded "><a href="getting-started.html"><strong aria-hidden="true">3.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="vollo-compiler.html"><strong aria-hidden="true">4.</strong> Vollo Compiler</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="supported-models.html"><strong aria-hidden="true">4.1.</strong> Supported Models</a></li><li class="chapter-item expanded "><a href="example-1-mlp.html"><strong aria-hidden="true">4.2.</strong> Example 1: MLP</a></li><li class="chapter-item expanded "><a href="example-2-cnn.html"><strong aria-hidden="true">4.3.</strong> Example 2: CNN</a></li><li class="chapter-item expanded "><a href="example-3-multi-model.html"><strong aria-hidden="true">4.4.</strong> Example 3: Multiple Models in a Vollo Program</a></li><li class="chapter-item expanded "><a href="vollo-onnx.html"><strong aria-hidden="true">4.5.</strong> ONNX Support</a></li></ol></li><li class="chapter-item expanded "><a href="benchmark.html"><strong aria-hidden="true">5.</strong> Benchmarks</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="benchmark-mlp.html"><strong aria-hidden="true">5.1.</strong> MLP</a></li><li class="chapter-item expanded "><a href="benchmark-cnn.html"><strong aria-hidden="true">5.2.</strong> CNN</a></li><li class="chapter-item expanded "><a href="benchmark-lstm.html"><strong aria-hidden="true">5.3.</strong> LSTM</a></li><li class="chapter-item expanded "><a href="benchmark-io.html"><strong aria-hidden="true">5.4.</strong> IO Round Trip</a></li></ol></li><li class="chapter-item expanded "><a href="accelerator-setup.html"><strong aria-hidden="true">6.</strong> Accelerator Setup</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="system-requirements.html"><strong aria-hidden="true">6.1.</strong> System Requirements</a></li><li class="chapter-item expanded "><a href="programming-the-fpga.html"><strong aria-hidden="true">6.2.</strong> Programming the FPGA</a></li><li class="chapter-item expanded "><a href="licensing.html"><strong aria-hidden="true">6.3.</strong> Licensing</a></li><li class="chapter-item expanded "><a href="running-an-example.html"><strong aria-hidden="true">6.4.</strong> Running an Example</a></li><li class="chapter-item expanded "><a href="running-the-benchmark.html"><strong aria-hidden="true">6.5.</strong> Running the Benchmark</a></li></ol></li><li class="chapter-item expanded "><a href="vollo-runtime.html"><strong aria-hidden="true">7.</strong> Vollo Runtime</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="c-api.html" class="active"><strong aria-hidden="true">7.1.</strong> C API</a></li><li class="chapter-item expanded "><a href="vollo-rt-example.html"><strong aria-hidden="true">7.2.</strong> C Example</a></li><li class="chapter-item expanded "><a href="vollo-rt-python-example.html"><strong aria-hidden="true">7.3.</strong> Python Example</a></li></ol></li><li class="chapter-item expanded "><a href="ip-core/0-intro.html"><strong aria-hidden="true">8.</strong> Vollo IP Core</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ip-core/1-selecting-an-ip-core.html"><strong aria-hidden="true">8.1.</strong> Selecting an IP Core</a></li><li class="chapter-item expanded "><a href="ip-core/2-interface.html"><strong aria-hidden="true">8.2.</strong> IP Core Interface</a></li><li class="chapter-item expanded "><a href="ip-core/3-quartus-integration.html"><strong aria-hidden="true">8.3.</strong> Quartus Integration</a></li><li class="chapter-item expanded "><a href="ip-core/4-config.html"><strong aria-hidden="true">8.4.</strong> Runtime configuration</a></li><li class="chapter-item expanded "><a href="ip-core/5-example-design.html"><strong aria-hidden="true">8.5.</strong> Example design</a></li></ol></li><li class="chapter-item expanded "><a href="versions.html"><strong aria-hidden="true">9.</strong> Versions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="release-notes.html"><strong aria-hidden="true">9.1.</strong> Release Notes</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Vollo SDK User Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="c-api"><a class="header" href="#c-api">C API</a></h1>
+<p>The Vollo runtime API is a C API with simple types and functions in order to be
+straight forward to use from any language with a C FFI.</p>
+<ul>
+<li>Header file: <code>$VOLLO_SDK/include/vollo-rt.h</code></li>
+<li>Dynamic library: <code>$VOLLO_SDK/lib/libvollo_rt.so</code></li>
+<li>Static library: <code>$VOLLO_SDK/lib/libvollo_rt.a</code></li>
+</ul>
+<p>It was built against GLIBC version 2.17.</p>
+<p>To compile against Vollo RT with a standard C compiler, you can use the following flags:
+<code>-I $VOLLO_SDK/include -L $VOLLO_SDK/lib -lvollo_rt</code></p>
+<p>These are the main steps (in order) a program using <code>vollo_rt</code> will follow:</p>
+<ol>
+<li>Initialise the Vollo runtime using <code>vollo_rt_init</code></li>
+<li>Add Vollo accelerators to the runtime using <code>vollo_rt_add_accelerator</code>
+(Note: the current release only supports one accelerator)</li>
+<li>Load a Vollo program onto the Vollo accelerators with <code>vollo_rt_load_program</code></li>
+<li>Optionally, inspect the metadata about the models in the program using API calls such as
+<code>vollo_rt_num_models</code> and <code>vollo_rt_model_num_inputs</code></li>
+<li>Queue and run inference jobs by first calling <code>vollo_rt_add_job_bf16</code> (or
+<code>vollo_rt_add_job_fp32</code>) and then polling in a loop for their completion using <code>vollo_rt_poll</code>.
+You can queue several jobs before calling <code>vollo_rt_poll</code> or add extra jobs at any point.</li>
+<li>Finally call <code>vollo_rt_destroy</code> to release resources.</li>
+</ol>
+<p>The API is designed to explicitly return errors when it can to let the user handle them as they see fit.
+The metadata functions will instead error out themselves if any of the documented pre-conditions they rely on aren't met.
+Any other crash is considered a bug and we would be very grateful if you could tell us about it.</p>
+<h2 id="initialisation"><a class="header" href="#initialisation">Initialisation</a></h2>
+<p>A vollo context is created by calling <code>vollo_rt_init</code>.
+Add an accelerator by using the <code>vollo_rt_add_accelerator</code> function.</p>
+<pre><code class="language-c">/**
+ * Initialise the vollo-rt context. This must be called before any other vollo-rt functions.
+ *
+ * Logging level can be configured by setting the environment variable `VOLLO_RT_LOG` to one of:
+ * "error", "warn", "info", "debug", or "trace"
+ */
+vollo_rt_error_t vollo_rt_init(vollo_rt_context_t* context_ptr);
+
+/**
+ * Destroy vollo-rt context, releasing its associated resources.
+ */
+void vollo_rt_destroy(vollo_rt_context_t vollo);
+
+/**
+ * Add an accelerator.
+ * The accelerator is specified by its index. The index refers to an accelerator in the sorted list
+ * of PCI addresses. This should be called after `vollo_rt_init` but before `vollo_rt_load_program`
+ */
+vollo_rt_error_t vollo_rt_add_accelerator(vollo_rt_context_t vollo, size_t accelerator_index);
+</code></pre>
+<h2 id="loading-a-program"><a class="header" href="#loading-a-program">Loading a program</a></h2>
+<p>A program is loaded onto the Vollo accelerator using the <code>vollo_rt_load_program</code> function.</p>
+<pre><code class="language-c">/**
+ * Load a program onto the Vollo accelerators.
+ * This should be called after `vollo_rt_add_accelerator`
+ *
+ * A Vollo program is generated by the Vollo compiler, it is typically named
+ * "&lt;program_name&gt;.vollo".
+ * The program is intended for a specific hardware config (number of accelerators,
+ * cores and other configuration options), this function will return an
+ * error if any accelerator configuration is incompatible with the program.
+ * Once loaded, the program provides inference for several models concurrently.
+ *
+ * Note: This should only be called once per `vollo_rt_context_t`, as such if
+ * a program needs to be changed or reset, first `vollo_rt_destroy` the current
+ * context, then start a new context with `vollo_rt_init`.
+ */
+vollo_rt_error_t vollo_rt_load_program(vollo_rt_context_t vollo, const char* program_path);
+</code></pre>
+<h2 id="model-metadata"><a class="header" href="#model-metadata">Model metadata</a></h2>
+<p>Once a program is loaded, it provides inference for one or more models. Metadata about
+a model is obtained with <code>vollo_rt_model_*</code> functions.</p>
+<p>Each model can have multiple distinct inputs and outputs. Each input and each output has
+a multi-dimensional shape associated with it. All of the metadata is defined by the program
+as supplied by the Vollo compiler. All the shapes are statically defined.</p>
+<p>Some models can be compiled as streaming statefully over a dimension, that dimension is then
+erased from the inference shape but its possition can be recovered in the model metadata.</p>
+<pre><code class="language-c">/**
+ * Inspect the number of models in the program loaded onto the vollo.
+ *
+ * Programs can contain multiple models, a `model_index` is used to select a
+ * specific model
+ */
+size_t vollo_rt_num_models(vollo_rt_context_t vollo);
+
+/**
+ * Get the number of inputs of a model
+ *
+ * Each input has its own distinct shape
+ *
+ * Requirements (panics otherwise):
+ * - a program was loaded with `vollo_rt_load_program`
+ * - `model_index &lt; vollo_rt_num_models`
+ */
+size_t vollo_rt_model_num_inputs(vollo_rt_context_t vollo, size_t model_index);
+
+/**
+ * Get the number of outputs of a model
+ *
+ * Each output has its own distinct shape
+ *
+ * Requirements (panics otherwise):
+ * - a program was loaded with `vollo_rt_load_program`
+ * - `model_index &lt; vollo_rt_num_models`
+ */
+size_t vollo_rt_model_num_outputs(vollo_rt_context_t vollo, size_t model_index);
+
+/**
+ * Get the shape for input at a given index
+ *
+ * The return value is a 0 terminated array of dims containing the input shape
+ * The value lives for as long as the model
+ *
+ * Requirements (panics otherwise):
+ * - a program was loaded with `vollo_rt_load_program`
+ * - `model_index &lt; vollo_rt_num_models`
+ * - `input_index &lt; vollo_rt_model_num_inputs`
+ */
+const size_t* vollo_rt_model_input_shape(
+  vollo_rt_context_t vollo, size_t model_index, size_t input_index);
+
+/**
+ * Get the shape for output at a given index
+ *
+ * The return value is a 0 terminated array of dims containing the output shape
+ * The value lives for as long as the model
+ *
+ * Requirements (panics otherwise):
+ * - a program was loaded with `vollo_rt_load_program`
+ * - `model_index &lt; vollo_rt_num_models`
+ * - `output_index &lt; vollo_rt_model_num_outputs`
+ */
+const size_t* vollo_rt_model_output_shape(
+  vollo_rt_context_t vollo, size_t model_index, size_t output_index);
+
+/**
+ * Get the number of elements for input at a given index
+ *
+ * This is simply the product of the dimensions returned by `vollo_rt_model_input_shape`,
+ * it is provided to make it easier to allocate the correct number of elements.
+ *
+ * Requirements (panics otherwise):
+ * - a program was loaded with `vollo_rt_load_program`
+ * - `model_index &lt; vollo_rt_num_models`
+ * - `input_index &lt; vollo_rt_model_num_inputs`
+ */
+size_t vollo_rt_model_input_num_elements(
+  vollo_rt_context_t vollo, size_t model_index, size_t input_index);
+
+/**
+ * Get the number of elements for output at a given index
+ *
+ * This is simply the product of the dimensions returned by `vollo_rt_model_output_shape`,
+ * it is provided to make it easier to allocate the correct number of elements.
+ *
+ * Requirements (panics otherwise):
+ * - a program was loaded with `vollo_rt_load_program`
+ * - `model_index &lt; vollo_rt_num_models`
+ * - `output_index &lt; vollo_rt_model_num_outputs`
+ */
+size_t vollo_rt_model_output_num_elements(
+  vollo_rt_context_t vollo, size_t model_index, size_t output_index);
+
+/**
+ * In a streaming model, the streaming dimension is not part of the shape.
+ *
+ * - It returns -1 when there is no streaming dimension
+ * - It otherwise returns the dim index
+ *   For example, for a shape `(a, b, c)` and streaming dim index 1, the full shape is:
+ *   `(a, streaming_dim, b, c)`
+ *
+ * Requirements (panics otherwise):
+ * - a program was loaded with `vollo_rt_load_program`
+ * - `model_index &lt; vollo_rt_num_models`
+ * - `input_index &lt; vollo_rt_model_num_inputs`
+ */
+int vollo_rt_model_input_streaming_dim(
+  vollo_rt_context_t vollo, size_t model_index, size_t input_index);
+
+/**
+ * In a streaming model, the streaming dimension is not part of the shape.
+ *
+ * - It returns -1 when there is no streaming dimension
+ * - It otherwise returns the dim index
+ *   For example, for a shape `(a, b, c)` and streaming dim index 1, the full shape is:
+ *   `(a, streaming_dim, b, c)`
+ *
+ * Requirements (panics otherwise):
+ * - a program was loaded with `vollo_rt_load_program`
+ * - `model_index &lt; vollo_rt_num_models`
+ * - `output_index &lt; vollo_rt_model_num_outputs`
+ */
+int vollo_rt_model_output_streaming_dim(
+  vollo_rt_context_t vollo, size_t model_index, size_t output_index);
+</code></pre>
+<h2 id="running-inference"><a class="header" href="#running-inference">Running inference</a></h2>
+<p>The interface returns results asynchronously so that inference requests can be made as fast
+as the system can support, without blocking on output data being returned. This way, it also
+supports running multiple requests concurrently.
+Before any compute is started a job with associated input and output buffers needs to be
+registered with the runtime using one of <code>vollo_rt_add_job_bf16</code> or <code>vollo_rt_add_job_fp32</code>.</p>
+<p>The <code>bf16</code> variant uses <a href="https://cloud.google.com/tpu/docs/bfloat16"><code>bfloat16</code></a>
+which is effectively a cropped version of single precision floating point format
+<code>fp32</code> (same exponent, smaller mantissa).
+Note: do NOT use C floating point literals for <code>bf16</code> as it is simply a <code>uint16_t</code> in the API</p>
+<p>A <code>fp32</code> variant is also provided despite the Vollo accelerator expecting its
+inputs and outputs to be in <code>fp16</code>. If you are working with <code>fp32</code>, prefer
+this version instead of the <code>bf16</code> variant as it is able to make the conversion
+while copying to/from DMA buffers, avoiding an extra copy.</p>
+<pre><code class="language-c">/**
+ * Sets up a computation on the vollo accelerator where the inputs and outputs are in brain-float 16
+ * format.
+ *
+ * Note: The computation is only started on the next call to vollo_rt_poll. This way it is possible
+ * to set up several computations that are kicked off at the same time.
+ *
+ * - vollo:
+ *     the context that the computation should be run on
+ * - model_index:
+ *     the model to run
+ * - user_ctx:
+ *     a user context that will be returned on completion. This can be used to disambiguate when
+ *     multiple models are running concurrently.
+ *     NOTE: the jobs for a single model are guaranteed to come back in order, but the jobs for
+ *     different models are not.
+ * - input_data:
+ *     a pointer to the start of an array with pointers to the start of the data to each input the
+ *     number of inputs is given by `vollo_rt_model_num_inputs` each input length is the product of
+ *     the shape given by `vollo_rt_model_input_shape`
+ *     (or more convenient: `vollo_rt_model_input_num_elements`)
+ *     lifetime:
+ *       - The outer array only needs to live until `vollo_rt_add_job_bf16` returns
+ *       - The input buffers need to live until `vollo_rt_poll` returns with the completion for
+ *         this job
+ * - output_data:
+ *     a pointer to the start of an array with pointers to the start of the data to each output
+ *     buffer the number of outputs is given by `vollo_rt_model_num_outputs` each output length is
+ *     the product of the shape given by `vollo_rt_model_output_shape`
+ *     (or more convenient: `vollo_rt_model_output_num_elements`)
+ *     lifetime:
+ *       - The outer array only needs to live until `vollo_rt_add_job_bf16` returns
+ *       - The output buffers need to live until `vollo_rt_poll` returns with the completion for
+ *         this job
+ */
+vollo_rt_error_t vollo_rt_add_job_bf16(
+  vollo_rt_context_t vollo,
+  size_t model_index,
+  uint64_t user_ctx,
+  const bf16* const* input_data,
+  bf16* const* output_data);
+
+vollo_rt_error_t vollo_rt_add_job_fp32(
+  vollo_rt_context_t vollo,
+  size_t model_index,
+  uint64_t user_ctx,
+  const float* const* input_data,
+  float* const* output_data);
+</code></pre>
+<p>To actually start and later complete an inference you must use the <code>vollo_rt_poll</code> function
+multiple times. It is typically called in a loop (with a timeout) until some or all of the jobs
+are completed.</p>
+<pre><code class="language-c">/**
+ * Poll the vollo accelerator for completion.
+ *
+ * Note: Polling also initiates transfers for new jobs, so poll must be called
+ * before any progress on these new jobs can be made.
+ *
+ *   num_completed: out: the number of completed user_ctx returned
+ *   returned_user_ctx: buffer for the returned user_ctx of completed jobs, this will only be
+ *                      valid until the next call to vollo_rt_poll.
+ */
+vollo_rt_error_t vollo_rt_poll(
+  vollo_rt_context_t vollo, size_t* num_completed, const uint64_t** returned_user_ctx);
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="vollo-runtime.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="vollo-rt-example.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="vollo-runtime.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="vollo-rt-example.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>
