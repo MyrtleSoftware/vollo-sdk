@@ -1,5 +1,9 @@
 # Release Notes
 
+## 19.2.3
+
+- Downgrade glibc dependency to support systems with glibc >=2.17
+
 ## 19.2.2
 
 - Add support for `torch.div`, `torch.Tensor.div`
