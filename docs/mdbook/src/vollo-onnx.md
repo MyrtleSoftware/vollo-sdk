@@ -112,11 +112,13 @@ Tensors are expected to be in `float32` format, unless they are used as indices 
 | `LSTM`                   | Forward LSTM without explicit hidden or cell state initialisation    |
 | `Gather`                 | With a 0d/1d tensor of indices                                       |
 | `Slice`                  | `step` size 1 with constant `starts`, `ends` and `axes`.             |
-| `ReduceSum`              | With constant axes                                                   |
+| `ReduceSum`              | With constant axes, `keepdims = 1` required on data dimension        |
 | `Where`                  | If the `Where` condition is an inequality comparison                 |
 | `Concat`                 | On outer dimension or at start or end of model                       |
 | `Transpose`              | See [tensor memory format](supported-models.md#tensor-memory-format) |
+| `LayerNormalization`     | With `axis = -1`. Supported in onnx opset versions >= 17             |
 | `BatchNormalization`     | Where input scale, bias, mean and var are constants                  |
 | `Squeeze`, `Unsqueeze`   |                                                                      |
 | `Reciprocal`             |                                                                      |
 | `Identity`               |                                                                      |
+| `Sqrt`                   |                                                                      |

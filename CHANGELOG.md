@@ -1,5 +1,14 @@
 # Changelog
 
+## 20.0.0
+
+- Add support for LayerNorm
+- Add support for RMSNorm
+- Add support for sqrt operations (`torch.sqrt` and `torch.rsqrt`)
+- Add support for summing over the data dimension
+- Add `cycle_count_per_inference` VM method
+- Add support for a wider range of torch arithmetic operation aliases
+
 ## 19.2.3
 
 - Downgrade glibc dependency to support systems with glibc >=2.17

@@ -6,7 +6,7 @@ The Vollo SDK contains a trivial program for each accelerator to check if the ac
 
    ```sh
    cd <vollo-sdk>
-   sudo ./load_kernel_driver.sh
+   sudo ./load-kernel-driver.sh
    source setup.sh
    export MYRTLE_LICENSE=<your-license-file>
    ```

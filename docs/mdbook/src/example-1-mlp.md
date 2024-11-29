@@ -89,7 +89,7 @@ range of floating point error.
 ```python
 vm = program.to_vm()
 vm_output = vm.run(input.detach().numpy())
-torch.testing.assert_close(expected_output, torch.from_numpy(vm_output), atol = 5e-3, rtol = 1e-3)
+torch.testing.assert_close(expected_output, torch.from_numpy(vm_output), atol = 1e-2, rtol = 1e-2)
 print("cycle count:", vm.cycle_count())
 # Translate the estimated cycle count to a duration for the compute (not
 # including IO) in microseconds, using the bitstream clock speed (320 MHz)

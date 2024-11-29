@@ -73,7 +73,7 @@ A `model_index` can be provided when running inferences on the accelerator or on
 vm = multi_model_program.to_vm()
 
 mlp_vm_output = vm.run(mlp_input.detach().numpy(), model_index = 0)
-torch.testing.assert_close(mlp_expected_output, torch.from_numpy(mlp_vm_output), atol = 5e-3, rtol = 1e-3)
+torch.testing.assert_close(mlp_expected_output, torch.from_numpy(mlp_vm_output), atol = 1e-2, rtol = 1e-2)
 
 cnn_vm_outputs = []
 for i in range(5):
@@ -85,7 +85,7 @@ torch.testing.assert_close(
         [torch.from_numpy(output) for output in cnn_vm_outputs],
         axis=output_axis,
     ),
-    atol = 5e-3,
-    rtol = 1e-3
+    atol = 1e-2,
+    rtol = 1e-2
 )
 ```

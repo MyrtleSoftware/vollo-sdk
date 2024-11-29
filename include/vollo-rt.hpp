@@ -47,7 +47,8 @@ void vollo_rt_destroy(vollo_rt_context_t vollo);
 /// of PCI addresses. This should be called after `vollo_rt_init` but before `vollo_rt_load_program`
 vollo_rt_error_t vollo_rt_add_accelerator(vollo_rt_context_t vollo, size_t accelerator_index);
 
-/// Get the number of cores of a Vollo accelerator
+/// Get the number of cores of a Vollo accelerator.
+/// For Vollo Trees accelerators, this will return the number of tree units.
 ///
 /// Requirements (panics otherwise):
 /// - The accelerator at `accelerator_index` has already been added to context
@@ -59,6 +60,8 @@ size_t vollo_rt_accelerator_num_cores(vollo_rt_context_t vollo, size_t accelerat
 /// Requirements (panics otherwise):
 /// - The accelerator at `accelerator_index` has already been added to context
 ///   with `vollo_rt_add_accelerator`
+/// - The accelerator at `accelerator_index` has a Vollo bitstream loaded (i.e. not a Vollo Trees
+/// bitstream)
 size_t vollo_rt_accelerator_block_size(vollo_rt_context_t vollo, size_t accelerator_index);
 
 /// Load a program onto the Vollo accelerators.
