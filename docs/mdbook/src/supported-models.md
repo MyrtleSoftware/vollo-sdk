@@ -12,12 +12,15 @@ The Vollo compiler supports PyTorch models that use the following operations:
 | Convolution              | Via `vollo_torch.nn.PaddedConv1d`                     |
 | LSTM                     | Via `vollo_torch.nn.LSTM`                             |
 | Indexing / slicing       | Partial square bracket `[]` support; `index_select`   |
-| `sum`                    |                                                       |
+| `sum`                    | `keepdim = True` required when summing over data dim  |
 | `where`                  | If the `where` condition is an inequality comparison  |
 | Concatenation            | `cat`, `concat`                                       |
+| `LayerNorm`              |                                                       |
+| `RMSNorm`                | via `vollo_torch.nn.RMSNorm` for torch versions < 2.4 |
 | Batch Normalization      | `BatchNorm1d`, `BatchNorm2d`, `BatchNorm3d`           |
 | `transpose`              | See [section below](#tensor-memory-format)            |
 | `squeeze`, `unsqueeze`   |                                                       |
+| `sqrt`                   | `torch.sqrt`, `torch.rsqrt`                           |
 
 Note that for operations like `Dropout` and `BatchNorm1d` (which change behaviour at inference time) to be handled correctly, the model should be in `eval` mode.
 

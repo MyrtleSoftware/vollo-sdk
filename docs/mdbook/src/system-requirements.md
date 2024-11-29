@@ -12,10 +12,10 @@ The minimum CPU specification for the system is shown below.
 The SDK runs on a server CPU with PCIe FPGA accelerator cards.
 It currently supports the following accelerator cards:
 
-| Accelerator Card | FPGA                |
-| ---------------- | ------------------- |
-| BittWare IA-420f | Intel Agilex AGF014 |
-| BittWare IA-840f | Intel Agilex AGF027 |
+| Accelerator Card | FPGA                | Max parameter count |
+| ---------------- | ------------------- | ------------------- |
+| BittWare IA-420f | Intel Agilex AGF014 | 3 Million           |
+| BittWare IA-840f | Intel Agilex AGF027 | 6 Million           |
 
 ## Operating System Requirements
 

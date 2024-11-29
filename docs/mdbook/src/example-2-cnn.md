@@ -127,8 +127,8 @@ torch.testing.assert_close(
         [torch.from_numpy(output) for output in vm_outputs],
         axis=output_axis,
     ),
-    atol = 5e-3,
-    rtol = 1e-3
+    atol = 1e-2,
+    rtol = 1e-2
 )
 ```
 

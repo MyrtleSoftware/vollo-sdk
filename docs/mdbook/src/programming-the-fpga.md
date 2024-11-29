@@ -122,8 +122,8 @@ NOTE: this can only be done with an FPGA that is already programmed with a Vollo
    ```
 
 4. Update the `USER_IMAGE` partition of the flash with the new bitstream image
-   contained in the `rpd` archive. This should take around 5 minutes. Do not
-   interrupt this process until it completes.
+   contained in the `rpd` archive in the `<vollo-sdk>/bitstream` directory. This should take
+   around 5 minutes. Do not interrupt this process until it completes.
 
    ```sh
    sudo ./load-kernel-driver.sh
