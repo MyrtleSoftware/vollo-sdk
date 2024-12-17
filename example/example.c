@@ -1,3 +1,8 @@
+#if __STDC_VERSION__ >= 199901L
+#define _XOPEN_SOURCE 600
+#else
+#define _XOPEN_SOURCE 500
+#endif /* __STDC_VERSION__ */
 #include "npy.h"
 #include "utils.h"
 
@@ -26,6 +31,8 @@ typedef struct ExampleOptions {
   bool fp32_api;
   // Use raw DMA buffers and skip input/output data copy
   bool raw_buffer_api;
+  // Run the program in software simulation rather than on hardware
+  bool run_in_vm;
   // The input is random numbers (as opposed to all 1.0), only when input_path is not set
   bool random_input;
   // Output detailed measurements in JSON
@@ -67,16 +74,31 @@ static void vollo_example(ExampleOptions options) {
   //////////////////////////////////////////////////
   // Add accelerators
   size_t accelerator_index = 0;
-  EXIT_ON_ERROR(vollo_rt_add_accelerator(ctx, accelerator_index));
-  fprintf(
-    stderr,
-    "Using Vollo accelerator with %ld core(s) and block_size %ld\n",
-    vollo_rt_accelerator_num_cores(ctx, accelerator_index),
-    vollo_rt_accelerator_block_size(ctx, accelerator_index));
+
+  if (options.run_in_vm) {
+    bool bit_accurate = true;
+    EXIT_ON_ERROR(vollo_rt_add_vm(ctx, accelerator_index, bit_accurate));
+  } else {
+    EXIT_ON_ERROR(vollo_rt_add_accelerator(ctx, accelerator_index));
+    fprintf(
+      stderr,
+      "Using Vollo accelerator with %ld core(s) and block_size %ld\n",
+      vollo_rt_accelerator_num_cores(ctx, accelerator_index),
+      vollo_rt_accelerator_block_size(ctx, accelerator_index));
+  }
 
   //////////////////////////////////////////////////
   // Load program
   EXIT_ON_ERROR(vollo_rt_load_program(ctx, options.program_path));
+
+  // The VM's hardware config is determined by the program
+  if (options.run_in_vm) {
+    fprintf(
+      stderr,
+      "Using Vollo VM with %ld core(s) and block_size %ld\n",
+      vollo_rt_accelerator_num_cores(ctx, accelerator_index),
+      vollo_rt_accelerator_block_size(ctx, accelerator_index));
+  }
 
   //////////////////////////////////////////////////
   // Get model metadata
@@ -400,6 +422,10 @@ void print_help(const char* example_program) {
     "        Use raw DMA buffers and skip input/output data copy\n"
     "\n"
 
+    "    -v, --run-in-vm\n"
+    "        Run the program in a VM instead of on an accelerator\n"
+    "\n"
+
     "    -r, --random\n"
     "        Use random inputs instead of the constant 1.0\n"
     "\n"
@@ -441,6 +467,7 @@ int main(int argc, char** argv) {
   options.fp32_api = false;
   options.raw_buffer_api = false;
   options.random_input = false;
+  options.run_in_vm = false;
   options.max_concurrent_jobs = 1;
   options.num_inferences = 10000;
   options.num_warmup_inferences = 10000;
@@ -457,6 +484,7 @@ int main(int argc, char** argv) {
     {"num-inferences", required_argument, 0, 'i'},
     {"fp32-api", no_argument, 0, 'F'},
     {"raw-buffer-api", no_argument, 0, 'R'},
+    {"run-in-vm", no_argument, 0, 'v'},
     {"random", no_argument, 0, 'r'},
     {"max-concurrent-jobs", required_argument, 0, 'c'},
     {"num-warmup-inferences", required_argument, 0, 'w'},
@@ -469,12 +497,13 @@ int main(int argc, char** argv) {
 
   int opt = 0;
   int long_index = 0;
-  while ((opt = getopt_long(argc, argv, "i:FRrc:w:jf:o:h", long_options, &long_index)) != -1) {
+  while ((opt = getopt_long(argc, argv, "m:i:FRvrc:w:jf:o:h", long_options, &long_index)) != -1) {
     switch (opt) {
     case 'm': options.model_index = (size_t)strtoul(optarg, NULL, 10); break;
     case 'i': options.num_inferences = (size_t)strtoul(optarg, NULL, 10); break;
     case 'F': options.fp32_api = true; break;
     case 'R': options.raw_buffer_api = true; break;
+    case 'v': options.run_in_vm = true; break;
     case 'r': options.random_input = true; break;
     case 'c': options.max_concurrent_jobs = (size_t)strtoul(optarg, NULL, 10); break;
     case 'w': options.num_warmup_inferences = (size_t)strtoul(optarg, NULL, 10); break;

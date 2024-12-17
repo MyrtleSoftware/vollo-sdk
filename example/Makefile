@@ -1,17 +1,25 @@
 all: vollo-example vollo-identity vollo-partial-update
 
-CFLAGS = -Wall -Wextra -Wpedantic -Wconversion
+CFLAGS += -std=c99 -O2 -flto -Wall -Wextra -Wpedantic -Wconversion
+LDFLAGS += -flto -L$(VOLLO_SDK)/lib
+LDLIBS += -lvollo_rt
 
 .PHONY: all clean
 
-vollo-example: example.c npy.h utils.h
-	$(CC) example.c -O2 -std=gnu11 $(CFLAGS) -I $(VOLLO_SDK)/include -L $(VOLLO_SDK)/lib -lvollo_rt -o vollo-example
+utils.o: utils.c utils.h
+npy.o: npy.c npy.h
+identity.o: identity.c
+example.o: example.c npy.h utils.h
+partial_update.o: partial_update.c npy.h utils.h
 
-vollo-identity: identity.c
-	$(CC) identity.c -O2 -std=gnu11 $(CFLAGS) -I $(VOLLO_SDK)/include -L $(VOLLO_SDK)/lib -lvollo_rt -o vollo-identity
+vollo-identity: identity.o
+	$(CC) $(LDFLAGS) $(LDLIBS) $^ -o $@
 
-vollo-partial-update: partial_update.c npy.h utils.h
-	$(CC) partial_update.c -O2 -std=gnu11 $(CFLAGS) -I $(VOLLO_SDK)/include -L $(VOLLO_SDK)/lib -lvollo_rt -o vollo-partial-update
+vollo-example: example.o npy.o utils.o
+	$(CC) $(LDFLAGS) $(LDLIBS) $^ -o $@
+
+vollo-partial-update: partial_update.o npy.o utils.o
+	$(CC) $(LDFLAGS) $(LDLIBS) $^ -o $@
 
 clean:
-	rm -f vollo-example vollo-identity vollo-partial-update
+	rm -f vollo-example vollo-identity vollo-partial-update *.o
