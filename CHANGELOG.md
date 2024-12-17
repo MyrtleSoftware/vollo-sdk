@@ -1,12 +1,21 @@
 # Changelog
 
+## 20.0.1
+
+- `vollo_rt_add_vm` to test the `vollo-rt` API without an accelerator
+- `vollo_rt_load_program_from_buffer` and `vollo_compiler.Program.{save,load}_bytes`
+- Add `vollo_torch.nn.RecurrentStateLSTM` for modelling streaming LSTM models across forward passes
+- Codegen fix for `vollo_torch.nn.Scan`
+- Fix incorrect input validation for `torch.sum` layers
+- Change vollo-rt example to compile with older C compilers
+
 ## 20.0.0
 
 - Add support for LayerNorm
 - Add support for RMSNorm
 - Add support for sqrt operations (`torch.sqrt` and `torch.rsqrt`)
 - Add support for summing over the data dimension
-- Add `cycle_count_per_inference` VM method
+- Add `cycle_count_per_inference` and `compute_duration_per_inference_us` Program methods
 - Add support for a wider range of torch arithmetic operation aliases
 
 ## 19.2.3
