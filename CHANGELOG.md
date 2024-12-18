@@ -1,5 +1,9 @@
 # Changelog
 
+## 20.0.2
+
+- Fix for incorrect `vollo_rt_accelerator_num_cores` introduced in 20.0.1
+
 ## 20.0.1
 
 - `vollo_rt_add_vm` to test the `vollo-rt` API without an accelerator
