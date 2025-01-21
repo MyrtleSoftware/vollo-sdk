@@ -41,7 +41,7 @@ The user can specify:
       --hw-config-preset <PRESET_NAME>
         Hardware configuration to use, chosen from a set of presets
 
-        [possible values: ia420f-c6b32, ia840f-c3b64]
+        [possible values: ia420f-c6b32, ia840f-c3b64, ia840f-c2b64d]
   ```
 
 - Which transformations to perform on the model. Currently the only available transformation is the streaming transform [Example 2: CNN](example-2-cnn.md):

@@ -1,5 +1,12 @@
 # Changelog
 
+## 20.0.3
+
+- Separate bitstreams from Vollo SDK
+- Add c2b64d hw config to support models up to 8M parameters (bitstream and compiler)
+- Improve compiler error messages
+- Fix example build
+
 ## 20.0.2
 
 - Fix for incorrect `vollo_rt_accelerator_num_cores` introduced in 20.0.1

@@ -67,8 +67,9 @@ class LSTM(nn.Module):
 
 
 all_configs = {
-    "ia_420f": vollo_compiler.Config.ia_420f_c6b32(),
-    "ia_840f": vollo_compiler.Config.ia_840f_c3b64(),
+    "ia_420f_c6b32": vollo_compiler.Config.ia_420f_c6b32(),
+    "ia_840f_c3b64": vollo_compiler.Config.ia_840f_c3b64(),
+    "ia_840f_c2b64d": vollo_compiler.Config.ia_840f_c2b64d(),
 }
 
 # The number of timesteps in the streaming dimension of the model

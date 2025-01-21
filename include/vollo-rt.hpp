@@ -1,5 +1,7 @@
 // Copyright(C) 2024 Myrtle Software Ltd. All rights reserved.
 
+#pragma once
+
 #include <cstdarg>
 #include <cstddef>
 #include <cstdint>
