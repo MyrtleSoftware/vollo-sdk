@@ -1,5 +1,7 @@
 // Copyright(C) 2024 Myrtle Software Ltd. All rights reserved.
 
+#pragma once
+
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stddef.h>

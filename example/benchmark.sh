@@ -33,7 +33,7 @@ pip3 install "$VOLLO_SDK"/python/vollo_torch-*.whl  --extra-index-url https://do
 
 info "building example application"
 mkdir -p example
-cp "$VOLLO_SDK"/example/{example.c,npy.h,utils.h,Makefile} example/
+cp "$VOLLO_SDK"/example/{*.{h,c},Makefile} example/
 chmod +w example
 ( cd example; make vollo-example)
 

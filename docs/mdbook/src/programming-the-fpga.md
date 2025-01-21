@@ -1,5 +1,16 @@
 # Programming the FPGA
 
+## Download the bitstream for your FPGA
+
+The bitstream is available on the Github Release page alongside the Vollo SDK.
+For example to download the bitstream for the Agilex `ia840f` board with the `c2b64d` configuration of Vollo:
+
+```sh
+wget https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v20.0.3/vollo-ia840f-c2b64d-20.0.tar.gz
+mkdir -p $VOLLO_SDK/bitstream
+tar -xzf vollo-ia840f-c2b64d-20.0.tar.gz -C $VOLLO_SDK/bitstream
+```
+
 ## Programming the FPGA via JTAG
 
 If your FPGA is not already programmed with the Vollo accelerator then please
@@ -50,7 +61,8 @@ require a USB programming cable or for Quartus Programmer to be installed.
 5. Navigate to the directory containing the `jic` file:
 
     ```sh
-    cd <vollo-sdk>/bitstream
+    source setup.sh
+    cd $VOLLO_SDK/bitstream
     ```
 
 6. Set the JTAG clock frequency of the device you want to program to 16 MHz.
@@ -92,8 +104,7 @@ require a USB programming cable or for Quartus Programmer to be installed.
     Check the correct Vollo bitstream is loaded:
 
     ```sh
-    cd <vollo-sdk>
-    bin/vollo-tool bitstream-check bitstream/<bitstream-name>.json
+    vollo-tool bitstream-check bitstream/<bitstream-name>.json
     ```
 
 ## Programming the FPGA via PCIe
@@ -109,7 +120,8 @@ NOTE: this can only be done with an FPGA that is already programmed with a Vollo
 2. Check the current bitstream information:
 
    ```sh
-   bin/vollo-tool bitstream-info
+   source setup.sh
+   vollo-tool bitstream-info
    ```
 
 3. Check that the device is set up for remote system updates by running the
@@ -118,16 +130,16 @@ NOTE: this can only be done with an FPGA that is already programmed with a Vollo
    It should print a `json` string to the terminal showing the device status.
 
    ```sh
-   bin/vollo-tool fpga-config rsu-status <device index>
+   vollo-tool fpga-config rsu-status <device index>
    ```
 
 4. Update the `USER_IMAGE` partition of the flash with the new bitstream image
-   contained in the `rpd` archive in the `<vollo-sdk>/bitstream` directory. This should take
+   contained in the `rpd` archive in the `$VOLLO_SDK/bitstream` directory. This should take
    around 5 minutes. Do not interrupt this process until it completes.
 
    ```sh
    sudo ./load-kernel-driver.sh
-   bin/vollo-tool fpga-config overwrite-partition <device index> <.rpd.tar.gz file> USER_IMAGE
+   vollo-tool fpga-config overwrite-partition <device index> <.rpd.tar.gz file> USER_IMAGE
    ```
 
 5. Repeat step 4 for any other devices you wish to update.
@@ -147,5 +159,5 @@ NOTE: this can only be done with an FPGA that is already programmed with a Vollo
 
    ```sh
    sudo ./load-kernel-driver.sh
-   bin/vollo-tool bitstream-check bitstream/<bitstream-name>.json
+   vollo-tool bitstream-check bitstream/<bitstream-name>.json
    ```
