@@ -31,9 +31,9 @@ class CNN(nn.Module):
 
 | Model     | Layers | Channels | Parameters | Mean latency (μs) | 99th Percentile latency (μs) |
 | --------- | ------ | -------- | ---------- | ----------------- | ---------------------------- |
-| cnn_tiny  | 3      | 128      | 393K       | 2.6               | 2.7                          |
-| cnn_small | 3      | 256      | 1.6M       | 2.7               | 2.9                          |
-| cnn_med   | 6      | 256      | 3.1M       | 3.4               | 3.6                          |
+| cnn_tiny  | 3      | 128      | 393K       | 2.2               | 2.2                          |
+| cnn_small | 3      | 256      | 1.6M       | 2.4               | 2.5                          |
+| cnn_med   | 6      | 256      | 3.1M       | 3.0               | 3.2                          |
 
 The kernel size for all models is 8.
 
@@ -41,8 +41,8 @@ The kernel size for all models is 8.
 
 | Model     | Layers | Channels | Parameters | Mean latency (μs) | 99th Percentile latency (μs) |
 | --------- | ------ | -------- | ---------- | ----------------- | ---------------------------- |
-| cnn_tiny  | 3      | 128      | 393K       | 2.6               | 2.8                          |
-| cnn_small | 3      | 256      | 1.6M       | 3.1               | 3.2                          |
-| cnn_med   | 6      | 256      | 3.1M       | 4.2               | 4.3                          |
+| cnn_tiny  | 3      | 128      | 393K       | 2.2               | 2.3                          |
+| cnn_small | 3      | 256      | 1.6M       | 2.8               | 3.0                          |
+| cnn_med   | 6      | 256      | 3.1M       | 3.9               | 3.9                          |
 
 The kernel size for all models is 8.
