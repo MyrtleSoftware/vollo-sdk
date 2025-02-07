@@ -1,5 +1,12 @@
 # Release Notes
 
+## 21.0.0
+
+- Runtime/bitstream optimisation for small inputs (using MMIO instead of DMA)
+- Scheduling and architecture optimisations
+- Add `reset` subcommand to `vollo-tool`
+- Support ReLU via `torch.relu`
+
 ## 20.0.3
 
 - Separate bitstreams from Vollo SDK

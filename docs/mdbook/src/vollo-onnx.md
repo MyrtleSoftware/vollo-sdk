@@ -69,11 +69,11 @@ The user can specify:
         Generate a program with IO only - useful for testing IO latencies
   ```
 
-- Whether to use the VM to decide whether certain optimizations should be applied. Note: this is experimental and likely to change.
+- Whether to disable certain optimizations in the compiler which increase compilation time.
 
   ```text
-      --optimize-transforms
-          Runs the VM to decide whether to apply certain transformations or not
+      --disable-optimizations
+          Disables some compiler optimizations. This can improve compilation time
   ```
 
 ## Simplifying ONNX Models
