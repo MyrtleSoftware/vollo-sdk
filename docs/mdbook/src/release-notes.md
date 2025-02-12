@@ -1,5 +1,9 @@
 # Release Notes
 
+## 21.1.0
+
+- Support tanh
+
 ## 21.0.0
 
 - Runtime/bitstream optimisation for small inputs (using MMIO instead of DMA)

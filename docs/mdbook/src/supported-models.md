@@ -21,6 +21,7 @@ The Vollo compiler supports PyTorch models that use the following operations:
 | `transpose`              | See [section below](#tensor-memory-format)            |
 | `squeeze`, `unsqueeze`   |                                                       |
 | `sqrt`                   | `torch.sqrt`, `torch.rsqrt`                           |
+| `tanh`                   | `torch.tanh`, `torch.nn.Tanh`                         |
 
 Note that for operations like `Dropout` and `BatchNorm1d` (which change behaviour at inference time) to be handled correctly, the model should be in `eval` mode.
 
