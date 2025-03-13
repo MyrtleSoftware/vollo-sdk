@@ -6,6 +6,7 @@
 - [Key Features](key-features.md)
 - [Getting Started](getting-started.md)
 - [Vollo Compiler](vollo-compiler.md)
+  - [API Reference](api.md)
   - [Supported Models](supported-models.md)
   - [Example 1: MLP](example-1-mlp.md)
   - [Example 2: CNN](example-2-cnn.md)

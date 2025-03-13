@@ -47,19 +47,27 @@ The user can specify:
 - Which transformations to perform on the model. Currently the only available transformation is the streaming transform [Example 2: CNN](example-2-cnn.md):
 
   ```text
-      --streaming-transform <STREAMING_AXIS>
-        Axis on which to perform the streaming transform in the NNIR graph
+      --streaming-transform <STREAMING_AXIS>...
+        Axes on which to perform the streaming transform in the NNIR graph
+
+        There should be one axis per model input, as separate arguments
 
         If unspecified, no streaming transform is performed
+
+        Example: --streaming-transform 0 1
+        for a two-input model with input streaming axes 0 and 1
   ```
 
-- The input shape of the model. This is required if the ONNX model has dynamic input shapes. Vollo requires that the shape of the input be known at compile-time:
+- The input shapes of the model. This is required if the ONNX model has dynamic input shapes. Vollo requires that the shapes of the inputs be known at compile-time:
 
   ```text
-      --override-input-shape <SHAPE>
-        If the model has dynamic input shapes, the user must pass a fixed input shape
+      --override-input-shapes <SHAPE>...
+        If the model has dynamic input shapes, the user must pass fixed input shapes
 
-        Example: 10,100,250
+        Separate each dimension with a ',' and pass each model input as a separate argument
+
+        Example: --override-input-shapes 10,100,250 20,40
+        for a two-input model with input shapes (10, 100, 250) and (20, 40)
   ```
 
 - Whether to elide all compute logic and generate a program with only IO logic. This is useful for determining IO latencies.
@@ -88,10 +96,10 @@ It is also recommended to use the `--overwrite-input-shape` with `onnx-simplifie
 
 ## Using ONNX from Python
 
-ONNX models can also be imported and translated to NNIR models directly in python using the static `NNIR` method `from_onnx`. This also requires that the input shape be specified if the ONNX model has dynamic input shapes, otherwise it can be `None`.
+ONNX models can also be imported and translated to NNIR models directly in python using the static `NNIR` method `from_onnx`. This also requires that the input shapes be specified if the ONNX model has dynamic input shapes, otherwise it can be `None`.
 
 ```python
-onnx_nnir = vollo_compiler.NNIR.from_onnx(onnx_path, input_shape)
+onnx_nnir = vollo_compiler.NNIR.from_onnx(onnx_path, input_shapes)
 ```
 
 ## Supported Nodes
