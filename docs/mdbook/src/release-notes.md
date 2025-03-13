@@ -1,5 +1,31 @@
 # Release Notes
 
+## 22.0.0
+
+- Add support for compiling models with multiple input tensors and multiple
+  output tensors
+- Improve accuracy of LSTM unit
+- Change behavior of VOLLO_FP32_ROUND in Vollo RT so that it's enabled by
+  default; set to 0 to truncate f32 inputs
+- Change `vollo-tool reset --pci` to `vollo-tool reset-pci`
+- Expand supported PyTorch stacking and concatenating operations:
+  `concatenate`, `stack`, `vstack`, `hstack`, `row_stack`, `column_stack`,
+  `dstack`
+- Expand supported PyTorch transposition operations: `permute`,
+  `swapdims`, `swapaxes`, `t`, `T`, `mT`
+
+## 21.1.1
+
+- Initial support for `torch.nn.LSTM`
+- Performance improvements in VM simulation, especially for LSTMs
+- Improve error messages from `vollo_torch.fx.nnir.to_nnir` for unsupported
+  field accesses (`getattr`) in PyTorch model
+- Add `f32_round` argument to `vollo_compiler.VM.run` methods to choose whether
+  to round or truncate f32 inputs (previously always rounded)
+- Fix handling of non-contiguous input arrays/tensors in Vollo RT Python
+  bindings
+- Fix bug in `streaming_transform` for tensor sum reductions
+
 ## 21.1.0
 
 - Support tanh

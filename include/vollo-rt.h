@@ -326,8 +326,9 @@ vollo_rt_error_t vollo_rt_add_job_bf16(
  *
  * Note:
  * - The computation will still be performed in bf16 but the driver will perform the conversion.
- * - The environment variable `VOLLO_FP32_ROUND` can be used to round input when converting
- *   instead of truncating (which is faster).
+ * - By default the input is rounded to bf16 using the round-to-nearest-even rounding mode.
+ *   To disable rounding of the input and truncate instead, set the environment variable
+ * `VOLLO_FP32_ROUND` to 0.
  * - The computation is only started on the next call to vollo_rt_poll. This way it is possible
  *   to set up several computations that are kicked off at the same time.
  *

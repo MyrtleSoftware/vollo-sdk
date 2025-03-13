@@ -33,15 +33,18 @@ typedef struct ExampleOptions {
   bool raw_buffer_api;
   // Run the program in software simulation rather than on hardware
   bool run_in_vm;
-  // The input is random numbers (as opposed to all 1.0), only when input_path is not set
+  // The inputs are random numbers (as opposed to all 1.0), only when input_paths is not set
   bool random_input;
   // Output detailed measurements in JSON
   bool json;
-  // Path to an input file (.npy format with float32 as dtype)
-  const char* input_path;
-  // Path to an output file (.npy format with float32 as dtype)
-  // Only the first output is serialized to a file even when num_inferences > 1
-  const char* output_path;
+  // Paths to input files (.npy format with float32 as dtype)
+  // One path per model input
+  const char* const* input_paths;
+  // Paths to output files (.npy format with float32 as dtype)
+  // One path per model output
+  // Only the model outputs from the first inference are serialized to files even when
+  // num_inferences > 1
+  const char* const* output_paths;
 } ExampleOptions;
 
 // A small example of the Vollo API
@@ -108,10 +111,7 @@ static void vollo_example(ExampleOptions options) {
   assert(model_index < num_models);
 
   size_t model_num_inputs = vollo_rt_model_num_inputs(ctx, model_index);
-  assert(model_num_inputs == 1);
-
   size_t model_num_outputs = vollo_rt_model_num_outputs(ctx, model_index);
-  assert(model_num_outputs == 1);
 
   const char* model_name = vollo_rt_model_name(ctx, model_index);
 
@@ -121,42 +121,48 @@ static void vollo_example(ExampleOptions options) {
   } else {
     fprintf(stderr, "%ld:\n", model_index);
   }
-  fprintf(stderr, "  %ld input with shape: [", model_num_inputs);
+  fprintf(stderr, "  %ld input(s) with shape(s): [", model_num_inputs);
 
-  // Initialised to 1 to get the product of the shape dims
-  size_t num_input_elems = 1;
-  {
-    const size_t* input_shape = vollo_rt_model_input_shape(ctx, model_index, 0);
+  for (size_t model_input_ix = 0; model_input_ix < model_num_inputs; model_input_ix++) {
+    const size_t* input_shape = vollo_rt_model_input_shape(ctx, model_index, model_input_ix);
 
     while (*input_shape != 0) {
       fprintf(stderr, "%ld", *input_shape);
-      num_input_elems *= *input_shape;
       input_shape++;
 
       if (*input_shape != 0) {
         fprintf(stderr, ", ");
       } else {
-        fprintf(stderr, "]\n");
+        fprintf(stderr, "]");
       }
+    }
+
+    if (model_input_ix + 1 < model_num_inputs) {
+      fprintf(stderr, ", [");
+    } else {
+      fprintf(stderr, "\n");
     }
   }
 
-  fprintf(stderr, "  %ld output with shape: [", model_num_outputs);
+  fprintf(stderr, "  %ld output(s) with shape(s): [", model_num_outputs);
 
-  // Initialised to 1 to get the product of the shape dims
-  size_t num_output_elems = 1;
-  {
-    const size_t* output_shape = vollo_rt_model_output_shape(ctx, model_index, 0);
+  for (size_t model_output_ix = 0; model_output_ix < model_num_outputs; model_output_ix++) {
+    const size_t* output_shape = vollo_rt_model_output_shape(ctx, model_index, model_output_ix);
     while (*output_shape != 0) {
       fprintf(stderr, "%ld", *output_shape);
-      num_output_elems *= *output_shape;
       output_shape++;
 
       if (*output_shape != 0) {
         fprintf(stderr, ", ");
       } else {
-        fprintf(stderr, "]\n");
+        fprintf(stderr, "]");
       }
+    }
+
+    if (model_output_ix + 1 < model_num_outputs) {
+      fprintf(stderr, ", [");
+    } else {
+      fprintf(stderr, "\n");
     }
   }
 
@@ -164,39 +170,46 @@ static void vollo_example(ExampleOptions options) {
     fprintf(stderr, "  The model is streaming\n");
   }
 
-  assert(vollo_rt_model_input_num_elements(ctx, model_index, 0) == num_input_elems);
-  assert(vollo_rt_model_output_num_elements(ctx, model_index, 0) == num_output_elems);
-
   //////////////////////////////////////////////////
   // Setup input/output files
 
-  NpyArray input_array = {0};
-  if (options.input_path != NULL) {
-    input_array = read_npy(options.input_path);
+  NpyArray* input_arrays = (NpyArray*)malloc(sizeof(NpyArray) * model_num_inputs);
 
-    // Check that the input has the number of input elements that the model expects
-    assert(input_array.buffer_len == num_input_elems);
-    const size_t* input_shape = vollo_rt_model_input_shape(ctx, model_index, 0);
+  if (options.input_paths != NULL && options.input_paths[0] != NULL) {
+    for (size_t i = 0; i < model_num_inputs; i++) {
+      assert(options.input_paths[i] != NULL);
 
-    // Check that the input has the shape of input that the model expects
-    for (size_t i = 0; i < input_array.shape_len; i++) {
-      assert(input_array.shape[i] == *input_shape);
-      input_shape++;
+      input_arrays[i] = read_npy(options.input_paths[i]);
+
+      // Check that the input has the number of input elements that the model expects
+      assert(input_arrays[i].buffer_len == vollo_rt_model_input_num_elements(ctx, model_index, i));
+      const size_t* input_shape = vollo_rt_model_input_shape(ctx, model_index, i);
+
+      // Check that the input has the shape of input that the model expects
+      for (size_t j = 0; j < input_arrays[i].shape_len; j++) {
+        assert(input_arrays[i].shape[j] == *input_shape);
+        input_shape++;
+      }
     }
   }
 
-  NpyArray output_array = {0};
-  if (options.output_path != NULL) {
-    output_array.buffer = (float*)malloc(sizeof(float) * num_output_elems);
-    output_array.buffer_len = num_output_elems;
-    {
-      const size_t* output_shape = vollo_rt_model_output_shape(ctx, model_index, 0);
+  NpyArray* output_arrays = (NpyArray*)malloc(sizeof(NpyArray) * model_num_outputs);
 
-      output_array.shape_len = 0;
-      while (*output_shape != 0) {
-        output_array.shape[output_array.shape_len] = *output_shape;
-        output_array.shape_len++;
-        output_shape++;
+  if (options.output_paths != NULL && options.output_paths[0] != NULL) {
+    for (size_t i = 0; i < model_num_outputs; i++) {
+      assert(options.output_paths[i] != NULL);
+
+      output_arrays[i].buffer_len = vollo_rt_model_output_num_elements(ctx, model_index, i);
+      output_arrays[i].buffer = (float*)malloc(sizeof(float) * output_arrays[i].buffer_len);
+      {
+        const size_t* output_shape = vollo_rt_model_output_shape(ctx, model_index, i);
+
+        output_arrays[i].shape_len = 0;
+        while (*output_shape != 0) {
+          output_arrays[i].shape[output_arrays[i].shape_len] = *output_shape;
+          output_arrays[i].shape_len++;
+          output_shape++;
+        }
       }
     }
   }
@@ -206,29 +219,43 @@ static void vollo_example(ExampleOptions options) {
 
   // Number of input vectors
   // When random input is used, we randomly select a vector of random data for each inference
-  size_t num_inputs = options.random_input ? NUM_RANDOM_INPUT_VECTORS : 1;
-  bf16** inputs = (bf16**)malloc(sizeof(bf16*) * num_inputs);
-  float** inputs_fp32 = (float**)malloc(sizeof(float*) * num_inputs);
+  size_t num_test_inputs = options.random_input ? NUM_RANDOM_INPUT_VECTORS : 1;
+  bf16*** test_inputs = (bf16***)malloc(sizeof(bf16**) * num_test_inputs);
+  float*** test_inputs_fp32 = (float***)malloc(sizeof(float**) * num_test_inputs);
 
-  for (size_t i = 0; i < num_inputs; i++) {
-    inputs[i] = options.raw_buffer_api ? vollo_rt_get_raw_buffer(ctx, num_input_elems)
-                                       : (bf16*)malloc(sizeof(bf16) * num_input_elems);
-    inputs_fp32[i] = (float*)malloc(sizeof(float) * num_input_elems);
+  for (size_t i = 0; i < num_test_inputs; i++) {
+    test_inputs[i] = (bf16**)malloc(sizeof(bf16*) * model_num_inputs);
+    test_inputs_fp32[i] = (float**)malloc(sizeof(float*) * model_num_inputs);
 
-    for (size_t j = 0; j < num_input_elems; j++) {
-      if (options.input_path != NULL) {
-        inputs[i][j] = float_to_bf16(input_array.buffer[j]);
-        inputs_fp32[i][j] = input_array.buffer[j];
-      } else {
-        inputs[i][j] = options.random_input ? rand_bf16() : 0x3f80;  // 1.0 as a bf16
-        inputs_fp32[i][j] = options.random_input ? rand_float() : 1.0f;
+    for (size_t j = 0; j < model_num_inputs; j++) {
+      size_t num_input_elems = vollo_rt_model_input_num_elements(ctx, model_index, j);
+
+      test_inputs[i][j] = options.raw_buffer_api ? vollo_rt_get_raw_buffer(ctx, num_input_elems)
+                                                 : (bf16*)malloc(sizeof(bf16) * num_input_elems);
+      test_inputs_fp32[i][j] = (float*)malloc(sizeof(float) * num_input_elems);
+
+      for (size_t k = 0; k < num_input_elems; k++) {
+        if (options.input_paths != NULL && options.input_paths[0] != NULL) {
+          test_inputs[i][j][k] = float_to_bf16(input_arrays[j].buffer[k]);
+          test_inputs_fp32[i][j][k] = input_arrays[j].buffer[k];
+        } else {
+          test_inputs[i][j][k] = options.random_input ? rand_bf16() : 0x3f80;  // 1.0 as a bf16
+          test_inputs_fp32[i][j][k] = options.random_input ? rand_float() : 1.0f;
+        }
       }
     }
   }
 
-  bf16* output = options.raw_buffer_api ? vollo_rt_get_raw_buffer(ctx, num_output_elems)
-                                        : (bf16*)malloc(sizeof(bf16) * num_output_elems);
-  float* output_fp32 = (float*)malloc(sizeof(float) * num_output_elems);
+  bf16** model_outputs = (bf16**)malloc(sizeof(bf16*) * model_num_outputs);
+  float** model_outputs_fp32 = (float**)malloc(sizeof(float*) * model_num_outputs);
+
+  for (size_t i = 0; i < model_num_outputs; i++) {
+    size_t num_output_elems = vollo_rt_model_output_num_elements(ctx, model_index, i);
+
+    model_outputs[i] = options.raw_buffer_api ? vollo_rt_get_raw_buffer(ctx, num_output_elems)
+                                              : (bf16*)malloc(sizeof(bf16) * num_output_elems);
+    model_outputs_fp32[i] = (float*)malloc(sizeof(float) * num_output_elems);
+  }
 
   struct timespec* start_times
     = (struct timespec*)malloc(sizeof(struct timespec) * options.num_inferences);
@@ -267,15 +294,15 @@ static void vollo_example(ExampleOptions options) {
       int input_ix = options.random_input ? rand() % NUM_RANDOM_INPUT_VECTORS : 0;
 
       if (options.fp32_api) {
-        const float* input_arr[1] = {inputs_fp32[input_ix]};
-        float* output_arr[1] = {output_fp32};
-
-        EXIT_ON_ERROR(vollo_rt_add_job_fp32(ctx, model_index, user_ctx, input_arr, output_arr));
+        EXIT_ON_ERROR(vollo_rt_add_job_fp32(
+          ctx,
+          model_index,
+          user_ctx,
+          (const float* const*)test_inputs_fp32[input_ix],
+          model_outputs_fp32));
       } else {
-        const bf16* input_arr[1] = {inputs[input_ix]};
-        bf16* output_arr[1] = {output};
-
-        EXIT_ON_ERROR(vollo_rt_add_job_bf16(ctx, model_index, user_ctx, input_arr, output_arr));
+        EXIT_ON_ERROR(vollo_rt_add_job_bf16(
+          ctx, model_index, user_ctx, (const bf16* const*)test_inputs[input_ix], model_outputs));
       }
 
       inf_started++;
@@ -297,17 +324,23 @@ static void vollo_example(ExampleOptions options) {
       clock_gettime(CLOCK_MONOTONIC, &job_completed_time);
 
       for (size_t i = 0; i < num_completed; i++) {
-        // Serialize first output if output path is set
-        if (inf_completed == 0 && options.output_path != NULL) {
-          for (size_t i = 0; i < num_output_elems; i++) {
-            if (options.fp32_api) {
-              output_array.buffer[i] = output_fp32[i];
-            } else {
-              output_array.buffer[i] = bf16_to_float(output[i]);
-            }
-          }
+        // Serialize model outputs from first inference if output paths are set
+        if (inf_completed == 0 && options.output_paths != NULL && options.output_paths[0] != NULL) {
+          for (size_t j = 0; j < model_num_outputs; j++) {
+            assert(options.output_paths[j] != NULL);
 
-          write_npy(options.output_path, output_array);
+            size_t num_output_elems = vollo_rt_model_output_num_elements(ctx, model_index, j);
+
+            for (size_t k = 0; k < num_output_elems; k++) {
+              if (options.fp32_api) {
+                output_arrays[j].buffer[k] = model_outputs_fp32[j][k];
+              } else {
+                output_arrays[j].buffer[k] = bf16_to_float(model_outputs[j][k]);
+              }
+            }
+
+            write_npy(options.output_paths[j], output_arrays[j]);
+          }
         }
 
         // if it is not warmup
@@ -371,26 +404,45 @@ static void vollo_example(ExampleOptions options) {
 
   free(latencies);
   free(start_times);
-  if (!options.raw_buffer_api) {
-    free(output);
-  }
-  free(output_fp32);
-  for (size_t i = 0; i < num_inputs; i++) {
+
+  for (size_t i = 0; i < model_num_outputs; i++) {
     if (!options.raw_buffer_api) {
-      free(inputs[i]);
+      free(model_outputs[i]);
     }
-    free(inputs_fp32[i]);
+    free(model_outputs_fp32[i]);
   }
-  free(inputs);
-  free(inputs_fp32);
+  free(model_outputs);
+  free(model_outputs_fp32);
+
+  for (size_t i = 0; i < num_test_inputs; i++) {
+    for (size_t j = 0; j < model_num_inputs; j++) {
+      if (!options.raw_buffer_api) {
+        free(test_inputs[i][j]);
+      }
+      free(test_inputs_fp32[i][j]);
+    }
+    free(test_inputs[i]);
+    free(test_inputs_fp32[i]);
+  }
+  free(test_inputs);
+  free(test_inputs_fp32);
 
   vollo_rt_destroy(ctx);
 
-  if (options.input_path != NULL) {
-    free_npy(input_array);
+  if (options.input_paths != NULL && options.input_paths[0] != NULL) {
+    for (size_t i = 0; i < model_num_inputs; i++) {
+      free_npy(input_arrays[i]);
+    }
+
+    free(input_arrays);
   }
-  if (options.output_path != NULL) {
-    free_npy(output_array);
+
+  if (options.output_paths != NULL && options.output_paths[0] != NULL) {
+    for (size_t i = 0; i < model_num_outputs; i++) {
+      free_npy(output_arrays[i]);
+    }
+
+    free(output_arrays);
   }
 }
 
@@ -446,12 +498,14 @@ void print_help(const char* example_program) {
 
     "    -f, --input\n"
     "        Path to an input file (.npy format with bfloat16 as dtype)\n"
+    "        Use this argument once per model input, in order of model input\n"
     "\n"
 
     "    -o, --output\n"
     "        Path to an output file (.npy format with bfloat16 as dtype)\n"
-    "        Note: Only the first output is serialized to a file even when\n"
-    "        num_inferences > 1\n"
+    "        Use this argument once per model output, in order of model output\n"
+    "        Note: Only the model outputs from the first inference are serialized\n"
+    "        to files even when num_inferences > 1\n"
     "\n"
 
     "    -h, --help\n"
@@ -460,7 +514,15 @@ void print_help(const char* example_program) {
     example_program);
 }
 
+#define MAX_INPUT_PATH_COUNT 10
+#define MAX_OUTPUT_PATH_COUNT 10
+
 int main(int argc, char** argv) {
+  const char* input_paths[MAX_INPUT_PATH_COUNT] = {NULL};
+  size_t input_paths_count = 0;
+  const char* output_paths[MAX_OUTPUT_PATH_COUNT] = {NULL};
+  size_t output_paths_count = 0;
+
   ExampleOptions options;
   options.program_path = "";
   options.model_index = 0;
@@ -472,8 +534,8 @@ int main(int argc, char** argv) {
   options.num_inferences = 10000;
   options.num_warmup_inferences = 10000;
   options.json = false;
-  options.input_path = NULL;
-  options.output_path = NULL;
+  options.input_paths = input_paths;
+  options.output_paths = output_paths;
 
   // Seed the random number generator
   srand((uint32_t)time(NULL));
@@ -508,8 +570,20 @@ int main(int argc, char** argv) {
     case 'c': options.max_concurrent_jobs = (size_t)strtoul(optarg, NULL, 10); break;
     case 'w': options.num_warmup_inferences = (size_t)strtoul(optarg, NULL, 10); break;
     case 'j': options.json = true; break;
-    case 'f': options.input_path = optarg; break;
-    case 'o': options.output_path = optarg; break;
+    case 'f':
+      input_paths[input_paths_count] = optarg;
+      input_paths_count++;
+      // We still need a NULL at the end of the array in case we don't specify enough inputs on the
+      // CLI for the model
+      assert(input_paths_count < MAX_INPUT_PATH_COUNT);
+      break;
+    case 'o':
+      output_paths[output_paths_count] = optarg;
+      output_paths_count++;
+      // We still need a NULL at the end of the array in case we don't specify enough outputs on the
+      // CLI for the model
+      assert(output_paths_count < MAX_OUTPUT_PATH_COUNT);
+      break;
     default: print_help(argv[0]); exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
     }
   }
@@ -525,7 +599,7 @@ int main(int argc, char** argv) {
   assert(options.max_concurrent_jobs > 0);
   assert(options.num_inferences > 0);
 
-  if (options.random_input && options.input_path != NULL) {
+  if (options.random_input && options.input_paths[0] != NULL) {
     fprintf(stderr, "Options -r,--random and -f,--input are not compatible\n");
     exit(EXIT_FAILURE);
   }
