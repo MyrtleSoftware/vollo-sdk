@@ -987,11 +987,11 @@ It currently supports the following accelerator cards:</p>
 <p>Vollo is compatible with Ubuntu 20.04 and later.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="programming-the-fpga"><a class="header" href="#programming-the-fpga">Programming the FPGA</a></h1>
 <h2 id="download-the-bitstream-for-your-fpga"><a class="header" href="#download-the-bitstream-for-your-fpga">Download the bitstream for your FPGA</a></h2>
-<p>The bitstream is available on the Github Release page alongside the Vollo SDK.
+<p>The bitstream is available on the <a href="https://github.com/MyrtleSoftware/vollo-sdk/releases/">Github Release page</a> alongside the Vollo SDK.
 For example to download the bitstream for the Agilex <code>ia840f</code> board with the <code>c2b64d</code> configuration of Vollo:</p>
-<pre><code class="language-sh">wget https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v20.0.3/vollo-ia840f-c2b64d-20.0.tar.gz
+<pre><code class="language-sh">wget https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v22.0.0/vollo-ia840f-c2b64d-22.0.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-ia840f-c2b64d-20.0.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-ia840f-c2b64d-22.0.tar.gz -C $VOLLO_SDK/bitstream
 </code></pre>
 <h2 id="programming-the-fpga-via-jtag"><a class="header" href="#programming-the-fpga-via-jtag">Programming the FPGA via JTAG</a></h2>
 <p>If your FPGA is not already programmed with the Vollo accelerator then please
