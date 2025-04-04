@@ -51,6 +51,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#vollo_compiler.Config"><code class="docutils literal notranslate"><span class="pre">Config</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#vollo_compiler.Config.ia_420f_c6b32"><code class="docutils literal notranslate"><span class="pre">Config.ia_420f_c6b32()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#vollo_compiler.Config.ia_840f_c3b64"><code class="docutils literal notranslate"><span class="pre">Config.ia_840f_c3b64()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vollo_compiler.Config.ia_840f_c2b64d"><code class="docutils literal notranslate"><span class="pre">Config.ia_840f_c2b64d()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#vollo_compiler.Config.save"><code class="docutils literal notranslate"><span class="pre">Config.save()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#vollo_compiler.Config.load"><code class="docutils literal notranslate"><span class="pre">Config.load()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#vollo_compiler.Config.block_size"><code class="docutils literal notranslate"><span class="pre">Config.block_size</span></code></a></li>
@@ -221,7 +222,7 @@
 cores, size of each core, etc. <a class="reference internal" href="#vollo_compiler.Program" title="vollo_compiler.Program"><code class="xref py py-class docutils literal notranslate"><span class="pre">Program</span></code></a> s need to be compiled for the accelerator
 configuration that they will be run on.</p>
 <p>For the bitstreams included in the Vollo SDK, use the preset configs <a class="reference internal" href="#vollo_compiler.Config.ia_420f_c6b32" title="vollo_compiler.Config.ia_420f_c6b32"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ia_420f_c6b32()</span></code></a>,
-<a class="reference internal" href="#vollo_compiler.Config.ia_840f_c3b64" title="vollo_compiler.Config.ia_840f_c3b64"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ia_840f_c3b64()</span></code></a>.</p>
+<a class="reference internal" href="#vollo_compiler.Config.ia_840f_c3b64" title="vollo_compiler.Config.ia_840f_c3b64"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ia_840f_c3b64()</span></code></a>, <a class="reference internal" href="#vollo_compiler.Config.ia_840f_c2b64d" title="vollo_compiler.Config.ia_840f_c2b64d"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ia_840f_c2b64d()</span></code></a>.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="vollo_compiler.Config.ia_420f_c6b32">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ia_420f_c6b32</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vollo_compiler.Config.ia_420f_c6b32" title="Link to this definition"></a></dt>
@@ -232,6 +233,12 @@ configuration that they will be run on.</p>
 <dt class="sig sig-object py" id="vollo_compiler.Config.ia_840f_c3b64">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ia_840f_c3b64</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vollo_compiler.Config.ia_840f_c3b64" title="Link to this definition"></a></dt>
 <dd><p>IA-840f configuration with 3 cores and block size 64</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_compiler.Config.ia_840f_c2b64d">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ia_840f_c2b64d</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#vollo_compiler.Config.ia_840f_c2b64d" title="Link to this definition"></a></dt>
+<dd><p>IA-840f configuration with 2 cores, block size 64, and deeper weight stores</p>
 </dd></dl>
 
 <dl class="py method">
