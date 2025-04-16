@@ -1,5 +1,9 @@
 # Changelog
 
+## 22.1.0
+
+- Update compatibility with newer IA420F boards (IA420F-0015)
+
 ## 22.0.0
 
 - Add support for compiling models with multiple input tensors and multiple
