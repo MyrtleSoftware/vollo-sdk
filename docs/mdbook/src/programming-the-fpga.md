@@ -2,13 +2,13 @@
 
 ## Download the bitstream for your FPGA
 
-The bitstream is available on the Github Release page alongside the Vollo SDK.
+The bitstream is available on the [Github Release page](https://github.com/MyrtleSoftware/vollo-sdk/releases/) alongside the Vollo SDK.
 For example to download the bitstream for the Agilex `ia840f` board with the `c2b64d` configuration of Vollo:
 
 ```sh
-wget https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v20.0.3/vollo-ia840f-c2b64d-20.0.tar.gz
+wget https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v22.1.0/vollo-ia840f-c2b64d-22.1.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-ia840f-c2b64d-20.0.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-ia840f-c2b64d-22.1.tar.gz -C $VOLLO_SDK/bitstream
 ```
 
 ## Programming the FPGA via JTAG
