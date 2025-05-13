@@ -1,5 +1,9 @@
 # Changelog
 
+## 22.0.1
+
+- Allow weights to be shared in multi-model programs
+
 ## 22.0.0
 
 - Add support for compiling models with multiple input tensors and multiple
