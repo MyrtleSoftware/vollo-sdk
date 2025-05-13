@@ -1,7 +1,8 @@
 # Vollo IP Core
 
-The Vollo IP Core is an encrypted netlist for Agilex FPGAs, that can be integrated into your own FPGA design.
+The Vollo IP Core is an encrypted netlist that can be integrated into your own FPGA design.
 It is available upon request, and can be configured by number of cores and the core size.
+The IP Core is currently only available for Agilex FPGAs.
 
 An IP Core release consists of the following components:
 

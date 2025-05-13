@@ -19,13 +19,13 @@ The Vollo SDK contains a trivial program for each accelerator to check if the ac
 
 3. Run the example.
 
-   For a block-size 64 accelerator such as `vollo-ia840f-c3b64.jic`:
+   For a block-size 64 accelerator such as `vollo-ia840f-c3b64` or `vollo-ia840f-c2b64d`:
 
    ```sh
    ./example/vollo-example example/identity_b64.vollo
    ```
 
-   For a block-size 32 accelerator such as `vollo-ia420f-c6b32.jic`:
+   For a block-size 32 accelerator such as `vollo-ia420f-c6b32` or `vollo-v80-c6b32`:
 
    ```sh
    ./example/vollo-example example/identity_b32.vollo

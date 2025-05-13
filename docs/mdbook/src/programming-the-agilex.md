@@ -1,4 +1,4 @@
-# Programming the FPGA
+# Programming the Agilex FPGA
 
 ## Download the bitstream for your FPGA
 
@@ -6,9 +6,9 @@ The bitstream is available on the [Github Release page](https://github.com/Myrtl
 For example to download the bitstream for the Agilex `ia840f` board with the `c2b64d` configuration of Vollo:
 
 ```sh
-wget https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v22.1.0/vollo-ia840f-c2b64d-22.1.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v23.0.0/vollo-ia840f-c2b64d-23.0.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-ia840f-c2b64d-22.1.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-ia840f-c2b64d-23.0.tar.gz -C $VOLLO_SDK/bitstream
 ```
 
 ## Programming the FPGA via JTAG
@@ -88,11 +88,13 @@ require a USB programming cable or for Quartus Programmer to be installed.
 8. Go back to 6 and program any other devices.
 
 9. Power off the system and start it back up. The bitstream will now be loaded
-    onto the FPGA.
+   onto the FPGA.
 
-    > :warning: For the configuration process to be triggered the board has to register
-    > the power being off. It is recommended to turn the power off and then wait
-    > a few seconds before turning the power back on to ensure this happens.
+   <div class="warning">
+   For the configuration process to be triggered the board has to register the power being off. It
+   is recommended to turn the power off and then wait a few seconds before turning the power back
+   on to ensure this happens.
+   </div>
 
 10. Check a Vollo bitstream is loaded:
 
@@ -146,9 +148,11 @@ NOTE: this can only be done with an FPGA that is already programmed with a Vollo
 
 6. Power off the system and start it back up.
 
-   > :warning: For the configuration process to be triggered the board has to register
-   > the power being off. It is recommended to turn the power off and then wait
-   > a few seconds before turning the power back on to ensure this happens.
+   <div class="warning">
+   For the configuration process to be triggered the board has to register the power being off. It
+   is recommended to turn the power off and then wait a few seconds before turning the power back on
+   to ensure this happens.
+   </div>
 
 7. Repeat steps 1, 2 and 3. The `bitstream-info` command should show that the
    updated bitstream has been loaded (e.g. a newer release date), and the output

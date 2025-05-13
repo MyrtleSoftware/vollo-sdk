@@ -45,11 +45,19 @@ input = torch.randn(input_size)
 nnir = vollo_torch.fx.nnir.to_nnir(model)
 ```
 
+<!-- markdown-link-check-disable -->
+
 NNIR can be compiled to a Vollo program given a Vollo accelerator configuration.
+You can find the preset configurations that can be instantiated in the [API
+reference](./api-reference/vollo_compiler.html#vollo_compiler.Config).
+
+<!-- markdown-link-check-enable -->
 
 ```python
 import vollo_compiler
 
+# Replace the Config in the line below with the Config for the accelerator you
+# are using
 config = vollo_compiler.Config.ia_420f_c6b32()
 program = nnir.to_program(config)
 ```

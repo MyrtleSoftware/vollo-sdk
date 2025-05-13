@@ -5,7 +5,7 @@ learning (ML) models on FPGA platforms.
 
 ## Installation
 
-The latest SDK is available for download from <https://github.com/MyrtleSoftware/vollo-sdk/releases>.
+The latest SDK is available for download from the [GitHub Releases page][GitHub Releases].
 
 Download the `vollo-sdk-<version>.run` self-extractable archive and execute it
 to extract the Vollo SDK [contents](#release-file-structure) to the current
@@ -15,6 +15,11 @@ directory:
 chmod +x vollo-sdk-<version>.run
 ./vollo-sdk-<version>.run
 ```
+
+The FPGA images, e.g. `vollo-ia420f-c6b32-<version>.tar.gz`, are downloadable
+as separate files, also from the [GitHub Releases page][GitHub Releases].
+
+[GitHub Releases]: https://github.com/MyrtleSoftware/vollo-sdk/releases
 
 ## User guide
 
@@ -66,7 +71,6 @@ compiler.
 | Directory        | Contents                                           |
 | ---------------- | -------------------------------------------------- |
 | `bin/`           | Prebuilt applications (`vollo-tool`, `vollo-onnx`) |
-| `bitstream/`     | FPGA programming files                             |
 | `docs/`          | Documentation                                      |
 | `example/`       | Example application and benchmark script           |
 | `include/`       | Vollo runtime C/C++ header files                   |

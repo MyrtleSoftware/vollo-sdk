@@ -112,6 +112,8 @@ For example, using the VM:
 ```python
 import vollo_compiler
 
+# Replace the Config in the line below with the Config for the accelerator you
+# are using
 program = nnir.to_program(vollo_compiler.Config.ia_420f_c6b32())
 vm = program.to_vm()
 

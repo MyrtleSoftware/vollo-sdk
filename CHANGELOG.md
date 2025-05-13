@@ -1,8 +1,22 @@
 # Changelog
 
-## 22.1.0
+## 23.0.0
 
-- Update compatibility with newer IA420F boards (IA420F-0015)
+**This is an alpha release for the newly supported Alveo V80 which is not
+intended for production use. Performance on the V80 is not yet optimized.**
+
+- Add support for Alveo V80
+- Add support for vfio-pci; use `load-kernel-driver.sh vfio` to load it,
+  required for V80
+- Add lock to Vollo RT to prevent concurrent usage of the accelerator
+- Add support for broadcasting non-constant tensors except along the data dimension
+- Add grouped convolution support to `vollo_torch.nn.PaddedConv1d`
+- Add support for reshape operations
+- Improve VM cycle count estimates for Agilex devices
+- Changes to the API of `vollo_torch.nn.Scan`: the `step` function now returns
+  an output tensor and a separate state tensor instead of a single tensor; the
+  `forward` method now takes both an `input_axis` and an `output_axis` instead
+  of a single `axis` argument
 
 ## 22.0.0
 
