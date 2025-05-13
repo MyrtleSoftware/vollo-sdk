@@ -18,6 +18,14 @@ intended for production use. Performance on the V80 is not yet optimized.**
   `forward` method now takes both an `input_axis` and an `output_axis` instead
   of a single `axis` argument
 
+## 22.1.0
+
+- Update compatibility with newer IA420F boards (IA420F-0015)
+
+## 22.0.1
+
+- Allow weights to be shared in multi-model programs
+
 ## 22.0.0
 
 - Add support for compiling models with multiple input tensors and multiple
