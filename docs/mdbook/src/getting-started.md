@@ -53,8 +53,8 @@ To validate inference performance on Vollo:
 
 <!-- markdownlint-disable MD029 -->
 
-6. Follow the steps to [program](programming-the-fpga.md) and
-   [license](licensing.md) the FPGA.
+6. Follow the steps to program the [Intel Agilex](programming-the-agilex.md) or [AMD
+   V80](programming-the-v80.md) and [license](licensing.md) the FPGA.
 
 7. Compile your model and save it as a `.vollo` program file using the Vollo
    compiler.

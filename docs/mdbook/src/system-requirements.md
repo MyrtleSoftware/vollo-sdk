@@ -16,6 +16,7 @@ It currently supports the following accelerator cards:
 | ---------------- | ------------------- | ------------------- |
 | BittWare IA-420f | Intel Agilex AGF014 | 3 Million           |
 | BittWare IA-840f | Intel Agilex AGF027 | 8 Million           |
+| AMD Alveo V80    | AMD Versal XCV80    | 24 Million          |
 
 ## Operating System Requirements
 

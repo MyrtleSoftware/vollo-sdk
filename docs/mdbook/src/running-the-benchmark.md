@@ -17,7 +17,7 @@ models on the accelerator to measure the performance.
 
    ```sh
    cd <vollo-sdk>
-   sudo ./load_kernel_driver.sh
+   sudo ./load-kernel-driver.sh
    source setup.sh
    export MYRTLE_LICENSE=<your-license-file>
    ```
