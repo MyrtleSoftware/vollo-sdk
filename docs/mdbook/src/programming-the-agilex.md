@@ -6,10 +6,45 @@ The bitstream is available on the [Github Release page](https://github.com/Myrtl
 For example to download the bitstream for the Agilex `ia840f` board with the `c2b64d` configuration of Vollo:
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v23.0.0/vollo-ia840f-c2b64d-23.0.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v23.1.0/vollo-ia840f-c2b64d-23.1.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-ia840f-c2b64d-23.0.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-ia840f-c2b64d-23.1.tar.gz -C $VOLLO_SDK/bitstream
 ```
+
+The Agilex-based boards that are currently supported are:
+
+- Bittware IA420F
+
+- Bittware IA840F
+
+- Napatech NT400D11 (Link programmable version)
+
+## Note on programming the Napatech NT400D11 over JTAG
+
+The NT400D11 card needs additional cabling beyond a USB cable to program the
+board over JTAG. This cabling is provided as a development kit by Napatech
+(PGM-DEVKIT-IFPGA-DF52-2XIDC-UART, product number: 802-0116-01-10) and includes:
+
+- An Intel® FPGA USB-Blaster II cable and,
+
+- A Napatech Passive FPGA Download Cable converter box
+
+These two cables must be connected to each other as shown in the image below:
+
+![Intel JTAG and Napatech cables connected](./assets/napatech-cables.png)
+
+To connect this cable array to the Napatech board, the long thin plug should be
+connected to the connector shown in the following image:
+
+![Connector J29 on the NT400D11](./assets/connector.png)
+
+In order to correctly couple these two connectors, observe the conventions shown
+in the following image:
+
+![Connector coupling conventions](./assets/connector-pins.png)
+
+Connector the USB side of the cable array to a high-speed USB port on your host PC
+and the follow the rest of the directions in the next section.
 
 ## Programming the FPGA via JTAG
 
@@ -58,6 +93,14 @@ require a USB programming cable or for Quartus Programmer to be installed.
       0341B0DD   AGFB027R25A(.|R0)
     ```
 
+    or, for the NT400D11:
+
+    ```sh
+    $ jtagconfig
+    1) USB-BlasterII [1-5]
+      C34320DD   AGFA014R24C(.|B|AA)
+    ```
+
 5. Navigate to the directory containing the `jic` file:
 
     ```sh
@@ -72,6 +115,12 @@ require a USB programming cable or for Quartus Programmer to be installed.
     jtagconfig --setparam "IA-840F [1-5.2]" JtagClock 16M
     ```
 
+    or, for the NT400D11:
+
+    ```sh
+    jtagconfig --setparam "USB-BlasterII [1-5]" JtagClock 16M
+    ```
+
 7. Start the programming operation on the chosen device. This takes around 20
     minutes. For the IA840F:
 
@@ -79,10 +128,16 @@ require a USB programming cable or for Quartus Programmer to be installed.
     quartus_pgm -c "IA-840F [1-5.2]" -m JTAG -o "ipv;vollo-ia840f-c3b64.jic"
     ```
 
-    Or for IA420F:
+    or, for the IA420F:
 
     ```sh
     quartus_pgm -c "IA-420F [1-5.2]" -m JTAG -o "ipv;vollo-ia420f-c6b32.jic"
+    ```
+
+    or, for the NT400D11:
+
+    ```sh
+    quartus_pgm -c "USB-BlasterII [1-5]" -m JTAG -o "ipv;vollo-nt400d1-c6b32.jic"
     ```
 
 8. Go back to 6 and program any other devices.
