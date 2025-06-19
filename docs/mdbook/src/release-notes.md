@@ -3,7 +3,7 @@
 ## 23.1.0
 
 - Add initial support for Alveo V80, further performance optimisations still outstanding
-- Add support for Napatech N6010
+- Add support for Napatech NT400D11
 - Add support for vfio-pci; use `load-kernel-driver.sh vfio` to load it,
   required for V80
 - Add lock to Vollo RT to prevent concurrent usage of the accelerator
