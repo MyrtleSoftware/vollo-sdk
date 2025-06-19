@@ -21,7 +21,7 @@ The Vollo compiler supports PyTorch models that use the following operations:
 | Transposing              | `transpose`, `swapdims`, `swapaxes`, `t`, `T`, `mT`, `permute`; See [section below](#tensor-memory-format)        |
 | `squeeze`, `unsqueeze`   |                                                                                                                   |
 | Reshaping                | `reshape`, `view`, `reshape_as`, `view_as`, `flatten`; Stride of data dimension must be unchanged                 |
-| Broadcasting             | Implicitly or with `broadcast_to`, `broadcast_tensors`, `expand`, `expand_as`; Not supported along data dimension |
+| Broadcasting             | Implicitly or with `broadcast_to`, `broadcast_tensors`, `expand`, `expand_as`                                     |
 | `sqrt`                   | `torch.sqrt`, `torch.rsqrt`                                                                                       |
 | `tanh`                   | `torch.tanh`, `torch.nn.Tanh`                                                                                     |
 
