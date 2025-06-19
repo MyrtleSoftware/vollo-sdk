@@ -108,27 +108,27 @@ Tensors are expected to be in `float32` format, unless they are used as indices 
 
 `vollo-onnx` supports models with the following nodes:
 
-| Operator                 | Support Notes                                                                                                                  |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
-| Pointwise arithmetic ops | `Add`, `Sub`, `Mul`, `Div`                                                                                                     |
-| Inequality               | `>`, `<`, `>=`, `<=` (when followed by a `Where`)                                                                              |
-| `Max` and `Min`          |                                                                                                                                |
-| `Neg`                    |                                                                                                                                |
-| Clamp ops                | `Clip`, `Relu`                                                                                                                 |
-| Matrix multiplication    | `MatMul` / `Gemm` where one input is a constant                                                                                |
-| `Conv`                   | 1d with left-padding such that input and output seq dimensions match, `groups == 1` or `groups == in_channels == out_channels` |
-| `LSTM`                   | Forward LSTM without explicit hidden or cell state initialisation                                                              |
-| `Gather`                 | With a 0d/1d tensor of indices                                                                                                 |
-| `Slice`                  | `step` size 1 with constant `starts`, `ends` and `axes`.                                                                       |
-| `ReduceSum`              | With constant axes, `keepdims = 1` required on data dimension                                                                  |
-| `Where`                  | If the `Where` condition is an inequality comparison                                                                           |
-| `Concat`                 | On outer dimension or at start or end of model                                                                                 |
-| `Transpose`              | See [tensor memory format](supported-models.md#tensor-memory-format)                                                           |
-| `LayerNormalization`     | With `axis = -1`. Supported in onnx opset versions >= 17                                                                       |
-| `BatchNormalization`     | Where input scale, bias, mean and var are constants                                                                            |
-| `Squeeze`, `Unsqueeze`   |                                                                                                                                |
-| `Reciprocal`             |                                                                                                                                |
-| `Identity`               |                                                                                                                                |
-| `Sqrt`                   |                                                                                                                                |
-| `Expand`                 | Broadcasting along the data dimension is currently not supported                                                               |
-| `Reshape`                | The stride of the data dimension must be unchanged                                                                             |
+| Operator                  | Support Notes                                                                                                                  |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Pointwise arithmetic ops  | `Add`, `Sub`, `Mul`, `Div`                                                                                                     |
+| Inequality                | `>`, `<`, `>=`, `<=` (when followed by a `Where`)                                                                              |
+| `Max` and `Min`           |                                                                                                                                |
+| `Neg`                     |                                                                                                                                |
+| Clamp ops                 | `Clip`, `Relu`                                                                                                                 |
+| Matrix multiplication     | `MatMul` / `Gemm` where one input is a constant                                                                                |
+| `Conv`                    | 1d with left-padding such that input and output seq dimensions match, `groups == 1` or `groups == in_channels == out_channels` |
+| `LSTM`                    | Forward LSTM without explicit hidden or cell state initialisation                                                              |
+| `Gather`                  | With a 0d/1d tensor of indices                                                                                                 |
+| `Slice`                   | `step` size 1 with constant `starts`, `ends` and `axes`.                                                                       |
+| `ReduceSum`, `ReduceMean` | With constant axes, `keepdims = 1` required on data dimension                                                                  |
+| `Where`                   | If the `Where` condition is an inequality comparison                                                                           |
+| `Concat`                  | On outer dimension or at start or end of model                                                                                 |
+| `Transpose`               | See [tensor memory format](supported-models.md#tensor-memory-format)                                                           |
+| `LayerNormalization`      | With `axis = -1`. Supported in onnx opset versions >= 17                                                                       |
+| `BatchNormalization`      | Where input scale, bias, mean and var are constants                                                                            |
+| `Squeeze`, `Unsqueeze`    |                                                                                                                                |
+| `Reciprocal`              |                                                                                                                                |
+| `Identity`                |                                                                                                                                |
+| `Sqrt`                    |                                                                                                                                |
+| `Expand`                  |                                                                                                                                |
+| `Reshape`                 | The stride of the data dimension must be unchanged                                                                             |

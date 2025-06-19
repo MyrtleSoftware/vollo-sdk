@@ -547,6 +547,7 @@ static void ifcuio_pci_remove(struct pci_dev *dev)
 }
 
 const struct pci_device_id ifc_pci_tbl[] = { { PCI_DEVICE(0x1ed9, 0x766f) },
+					     { PCI_DEVICE(0x1ed9, 0x000a) },
 					     { PCI_DEVICE(0x12ba, 0x0069) },
 					     { PCI_DEVICE(0x10ee, 0x50b5) },
 					     {
