@@ -8,88 +8,44 @@ download the bitstream for the AMD `v80` board with the `c6b32` configuration of
 [Github Release page]: https://github.com/MyrtleSoftware/vollo-sdk/releases/
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v23.0.0/vollo-amd-v80-c6b32-23.0.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v23.1.0/vollo-amd-v80-c6b32-23.1.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-amd-v80-c6b32-23.0.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-amd-v80-c6b32-23.1.tar.gz -C $VOLLO_SDK/bitstream
 ```
 
 ## Programming the FPGA over PCIe
 
-The AMD V80 boards should come pre-programmed with an image that lets you program the flash over
-PCIe. First check that the board enumerates correctly:
+If your FPGA is already programmed with the Vollo accelerator then you can update the bitstream over
+PCIe. You can check if the device is programmed with the Myrtle.ai Vollo bitstream by running:
 
 ```sh
-$ lspci -d 10ee:50b4
-01:00.0 Processing accelerators: Xilinx Corporation Device 50b4
+$ lspci -d 1ed9:
+01:00.0 Processing accelerators: Myrtle.ai Device 100a
+01:00.1 Processing accelerators: Myrtle.ai Device 000a
 ```
 
-If the board has not enumerated then you will need to program the board over JTAG. See [Programming
-the FPGA via JTAG](#programming-the-fpga-via-jtag) below.
+If the device has not been programmed with the vollo bitstream then you will need to program the board
+over JTAG. See [Programming the FPGA via JTAG](#programming-the-fpga-via-jtag) below.
 
-If the board enumerates correctly, you can program the flash over PCIe. This is the preferred method
-of programming the board as it is faster than programming over JTAG, and does not require a USB
-programming cable or for Vivado to be installed. To do this we will use the `ami_tool` from the
-AMD AVED repository.
+Programming over PCIe is the preferred method of programming the board as it is faster than
+programming over JTAG, and does not require a USB programming cable or for Vivado to be installed.
 
-1. Clone and build the AVED repository. Depending on your system, you may need to install the
-   dependencies first. Also, you may need to patch the kernel driver for it to build.
+1. Build and insert the ami driver.
 
    ```sh
-   git clone https://github.com/Xilinx/AVED
-   cd AVED/sw/AMI
-
-   # Rocky Linux 8
-   sudo dnf install make
-   sudo dnf install kernel-devel-$(uname -r)
-   sed -i 's/^static char \*devnode(struct device \*dev,/static char *devnode(const struct device *dev,/' driver/ami_cdev.c
-
-   scripts/build.sh
+   cd ami_kernel_driver
+   make
+   sudo insmod ami.ko
    ```
 
-   If there is an issue with your system, please contact us.
+   There may be compilation issues with your version of Linux. This has been checked with Rocky Linux
+   8.10. If there is an issue with your system, please contact us.
 
-2. Load the kernel driver and check the current bitstream information:
-
-   ```sh
-   sudo insmod driver/ami.ko
-   app/build/ami_tool overview
-   ```
-
-   You should see something like this:
+2. Once the kernel driver is loaded you can program the flash with `vollo-tool` (which uses
+   `ami_tool`). If you only have one board, `device_index` is `0`.
 
    ```sh
-   AMI
-   -------------------------------------------------------------
-   Version          | 2.3.0  (0)
-   Branch
-   Hash             | 0bab29e568f64a25f17425c0ffd1c0e89609b6d1
-   Hash Date        | 20240307
-   Driver Version   | 2.3.0  (0)
-
-
-   BDF       | Device          | UUID                               | AMC          | State
-   -----------------------------------------------------------------------------------------
-   01:00.0   | Alveo V80 ES3   | e8134e38dcac1a63e93bfb1b320dd588   | 2.3.0  (0)   | READY
-   ```
-
-   The UUID here is a hash of the source used to build the bitstream. Your UUID might be different
-   but as long as version of the AMC and AMI versions match it should be fine. If the board is not
-   in the `READY` state, power cycle the host and try again.
-
-   The AMI tool can also be used to show the sensor information, such as temperature and power.
-
-   ```sh
-   app/build/ami_tool sensors
-   ```
-
-   The `ami` kernel module is needed for the `ami_tool` to work but it is not needed for the Vollo
-   runtime.
-
-3. Program the flash with the `ami_tool`. There will be a progress bar and it should take around 5
-   minutes to program the flash. **Replace `01:00.0` with the BDF of your device:**
-
-   ```sh
-   sudo app/build/ami_tool cfgmem_program -d 01:00.0 -t primary -i $VOLLO_SDK/bitstream/vollo-amd-v80-c6b32.pdi -p 0 -y
+   sudo $VOLLO_SDK/bin/vollo-tool fpga-config overwrite-partition ${device_index:?} $VOLLO_SDK/bitstream/vollo-amd-v80-c6b32.pdi USER_IMAGE
    ```
 
    There will be a progress bar and it should take around 5 minutes to program the flash. You will
@@ -101,23 +57,12 @@ AMD AVED repository.
    off for several minutes before turning it back on.
    </div>
 
-4. You can check a Vollo bitstream is loaded with lspci (note the `b5d4` in the subsystem device id on PF1):
+3. If successful the device should now enumerate as a Myrtle.ai Vollo device:
 
    ```sh
-   $ lspci -d 10ee: -knn
-   01:00.0 Processing accelerators [1200]: Xilinx Corporation Device [10ee:50b4]
-           Subsystem: Xilinx Corporation Device [10ee:000e]
-   01:00.1 Processing accelerators [1200]: Xilinx Corporation Device [10ee:50b5]
-           Subsystem: Xilinx Corporation Device [10ee:b5d4]
-   ```
-
-   You can also run `ami_tool overview` and check that the V80 is in the `READY` state and that
-   the UUID matches the `hash` in `vollo-amd-v80-c6b32.json`.
-
-   ```sh
-   sudo insmod driver/ami.ko
-   app/build/ami_tool overview
-   cat "$VOLLO_SDK"/bitstream/vollo-amd-v80-c6b32.json
+   $ lspci -d 1ed9:
+   01:00.0 Processing accelerators: Myrtle.ai Device 100a
+   01:00.1 Processing accelerators: Myrtle.ai Device 000a
    ```
 
 ## Programming the FPGA via JTAG
@@ -193,12 +138,10 @@ system so that the device can be programmed over JTAG.
    off for several minutes before turning it back on.
    </div>
 
-3. Check a Vollo bitstream is loaded (note the `b5d4` in the subsystem device id on PF1):
+3. If successful the device should now enumerate as a Myrtle.ai Vollo device:
 
    ```sh
-   $ lspci -d 10ee: -knn
-   01:00.0 Processing accelerators [1200]: Xilinx Corporation Device [10ee:50b4]
-           Subsystem: Xilinx Corporation Device [10ee:000e]
-   01:00.1 Processing accelerators [1200]: Xilinx Corporation Device [10ee:50b5]
-           Subsystem: Xilinx Corporation Device [10ee:b5d4]
+   $ lspci -d 1ed9:
+   01:00.0 Processing accelerators: Myrtle.ai Device 100a
+   01:00.1 Processing accelerators: Myrtle.ai Device 000a
    ```
