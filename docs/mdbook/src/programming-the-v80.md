@@ -8,9 +8,9 @@ download the bitstream for the AMD `v80` board with the `c6b32` configuration of
 [Github Release page]: https://github.com/MyrtleSoftware/vollo-sdk/releases/
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v23.1.0/vollo-amd-v80-c6b32-23.1.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v24.0.0/vollo-amd-v80-c6b32-24.0.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-amd-v80-c6b32-23.1.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-amd-v80-c6b32-24.0.tar.gz -C $VOLLO_SDK/bitstream
 ```
 
 ## Programming the FPGA over PCIe

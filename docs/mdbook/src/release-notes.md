@@ -1,5 +1,13 @@
 # Release Notes
 
+## 24.0.0
+
+- Improved latency when using multiple models
+- Improved V80 performance
+- Scheduler improvements, especially for models with large layers
+- `remember_allocations` argument added to `vollo_compiler.ProgramBuilder` to
+  help fit more models in multi-model programs
+
 ## 23.1.0
 
 - Add initial support for Alveo V80, further performance optimisations still outstanding
