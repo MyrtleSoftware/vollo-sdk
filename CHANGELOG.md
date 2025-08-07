@@ -1,5 +1,13 @@
 # Changelog
 
+## 24.0.1
+
+- Improve latency of streaming models, especially e.g. large LSTMs, when
+  inferences have spacing between them, i.e. not being run back-to-back
+- Add `spaced` flag to `vollo_compiler.Program.cycle_count_per_inference` to
+  get cycle counts of programs with or without spacing in between inferences
+- Speed up model compilation
+
 ## 24.0.0
 
 - Improved latency when using multiple models
