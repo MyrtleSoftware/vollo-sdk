@@ -8,6 +8,10 @@ double diff_timespec_ns(struct timespec from, struct timespec to) {
   return (double)((long long)(to.tv_sec - from.tv_sec) * NANOSECONDS + (to.tv_nsec - from.tv_nsec));
 }
 
+long long diff_timespec_ns_ll(struct timespec from, struct timespec to) {
+  return (long long)(to.tv_sec - from.tv_sec) * NANOSECONDS + (to.tv_nsec - from.tv_nsec);
+}
+
 // Compare two doubles
 int compare_double(const void* a, const void* b) {
   if (*(double*)a > *(double*)b)
