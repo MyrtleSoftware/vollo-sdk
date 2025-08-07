@@ -6,7 +6,7 @@ The bitstream is available on the [Github Release page](https://github.com/Myrtl
 For example to download the bitstream for the Agilex `ia840f` board with the `c2b64d` configuration of Vollo:
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v24.0.0/vollo-ia840f-c2b64d-24.0.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v24.0.1/vollo-ia840f-c2b64d-24.0.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
 tar -xzf vollo-ia840f-c2b64d-24.0.tar.gz -C $VOLLO_SDK/bitstream
 ```

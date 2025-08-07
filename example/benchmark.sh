@@ -51,7 +51,11 @@ for m in $(python3 "$VOLLO_SDK"/example/programs.py --list-models); do
   info "Compiling program for $m example"
   if python3 "$VOLLO_SDK"/example/programs.py -m "$m" -c hw_config.json;
   then
-    info "Program compiled for $m example, now running inference"
+    info "Program compiled for $m example"
+    info "Now running spaced inference for $m example"
+    $cmd --inference-spacing-ns 20000 "$m.vollo"
+    echo
+    info "Now running unspaced inference for $m example"
     $cmd "$m.vollo"
     echo
   else

@@ -27,6 +27,9 @@ typedef struct ExampleOptions {
   size_t max_concurrent_jobs;
   // Number of extra inferences to run before starting to measure
   size_t num_warmup_inferences;
+  // Time to wait in between each inference in nanoseconds (only for 1 concurrent job, defaults to
+  // 0)
+  size_t inference_spacing_ns;
   // Use the fp32 version of the API (compute is still done in bf16)
   bool fp32_api;
   // Use raw DMA buffers and skip input/output data copy
@@ -61,7 +64,8 @@ typedef struct ExampleOptions {
 // This example is set up to get some timing data from the multiple runs of
 // multiple concurrent jobs on a single model
 static void vollo_example(ExampleOptions options) {
-  struct timespec start_setup_time, start_warmup_time, start_compute_time, end_time;
+  struct timespec start_setup_time, start_warmup_time, start_compute_time, end_time,
+    wait_time_start, wait_time_current;
 
   clock_gettime(CLOCK_MONOTONIC, &start_setup_time);
 
@@ -352,6 +356,16 @@ static void vollo_example(ExampleOptions options) {
 
         inf_completed++;
       }
+
+      // Wait in between inferences
+      if (options.inference_spacing_ns > 0) {
+        clock_gettime(CLOCK_MONOTONIC, &wait_time_start);
+
+        do {
+          clock_gettime(CLOCK_MONOTONIC, &wait_time_current);
+        } while (diff_timespec_ns_ll(wait_time_start, wait_time_current)
+                 < (long long)options.inference_spacing_ns);
+      }
     }
   }
 
@@ -375,7 +389,8 @@ static void vollo_example(ExampleOptions options) {
     printf("  \"options\": {\n");
     printf("    \"max_concurrent_jobs\": %ld,\n", options.max_concurrent_jobs);
     printf("    \"num_inferences\": %ld,\n", options.num_inferences);
-    printf("    \"raw_buffer_api\": %d\n", options.raw_buffer_api);
+    printf("    \"raw_buffer_api\": %d,\n", options.raw_buffer_api);
+    printf("    \"inference_spacing_ns\": %ld\n", options.inference_spacing_ns);
     printf("  },\n");
     printf("  \"metrics\": {\n");
     printf("    \"time\": {\n");
@@ -492,6 +507,11 @@ void print_help(const char* example_program) {
     "        Defaults to 10000\n"
     "\n"
 
+    "    -s, --inference-spacing-ns\n"
+    "        Time to wait in between each inference in nanoseconds (only for 1 concurrent job)\n"
+    "        Defaults to 0\n"
+    "\n"
+
     "    -j, --json\n"
     "        Output detailed measurements in JSON\n"
     "\n"
@@ -533,6 +553,7 @@ int main(int argc, char** argv) {
   options.max_concurrent_jobs = 1;
   options.num_inferences = 10000;
   options.num_warmup_inferences = 10000;
+  options.inference_spacing_ns = 0;
   options.json = false;
   options.input_paths = input_paths;
   options.output_paths = output_paths;
@@ -550,6 +571,7 @@ int main(int argc, char** argv) {
     {"random", no_argument, 0, 'r'},
     {"max-concurrent-jobs", required_argument, 0, 'c'},
     {"num-warmup-inferences", required_argument, 0, 'w'},
+    {"inference-spacing-ns", required_argument, 0, 's'},
     {"json", no_argument, 0, 'j'},
     {"input", required_argument, 0, 'f'},
     {"output", required_argument, 0, 'o'},
@@ -569,6 +591,7 @@ int main(int argc, char** argv) {
     case 'r': options.random_input = true; break;
     case 'c': options.max_concurrent_jobs = (size_t)strtoul(optarg, NULL, 10); break;
     case 'w': options.num_warmup_inferences = (size_t)strtoul(optarg, NULL, 10); break;
+    case 's': options.inference_spacing_ns = (size_t)strtoul(optarg, NULL, 10); break;
     case 'j': options.json = true; break;
     case 'f':
       input_paths[input_paths_count] = optarg;
@@ -615,6 +638,15 @@ int main(int argc, char** argv) {
       "Combination of -R,--raw-buffer-api and -c,--max-concurrent-jobs > 1 is not supported in "
       "this simple example\n");
     fprintf(stderr, "NOTE: output raw buffers cannot be reused for concurrent inferences\n");
+    exit(EXIT_FAILURE);
+  }
+
+  if ((options.inference_spacing_ns > 0) && (options.max_concurrent_jobs > 1)) {
+    fprintf(
+      stderr,
+      "Combination of -s,--inference-spacing-ns and -c,--max-concurrent-jobs > 1 is not supported "
+      "in "
+      "this simple example\n");
     exit(EXIT_FAILURE);
   }
 

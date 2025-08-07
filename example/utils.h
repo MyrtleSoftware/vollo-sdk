@@ -23,6 +23,7 @@
 #define NANOSECONDS (1000 * 1000 * 1000)
 
 double diff_timespec_ns(struct timespec from, struct timespec to);
+long long diff_timespec_ns_ll(struct timespec from, struct timespec to);
 
 // Compare two doubles
 int compare_double(const void* a, const void* b);
