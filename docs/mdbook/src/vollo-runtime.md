@@ -8,7 +8,8 @@ installation in the `example/` directory.
 
 In order to use the Vollo runtime you need to have [an accelerator set up](./accelerator-setup.md):
 
-- Programmed [Intel Agilex](./programming-the-agilex.md) or [AMD V80](./programming-the-v80.md) accelerator
+- Programmed [Intel Agilex](./programming-the-agilex.md), [Silicom fb4CGg3](./programming-the-silicom-fb4CGg3.md)
+  or [AMD V80](./programming-the-v80.md) accelerator
 - [A loaded kernel driver and an installed license](./licensing.md)
 - Environment set up with `source setup.sh`
 

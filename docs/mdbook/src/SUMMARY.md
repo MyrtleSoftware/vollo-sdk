@@ -20,6 +20,7 @@
 - [Accelerator Setup](accelerator-setup.md)
   - [System Requirements](system-requirements.md)
   - [Programming the Agilex](programming-the-agilex.md)
+  - [Programming the Silicom fb4CGg3](programming-the-silicom-fb4CGg3.md)
   - [Programming the V80](programming-the-v80.md)
   - [Licensing](licensing.md)
   - [Running an Example](running-an-example.md)

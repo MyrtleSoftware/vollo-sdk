@@ -1,5 +1,15 @@
 # Release Notes
 
+## 25.0.0
+
+- Add early access support for Silicom fb4CGg3@VU09P
+- "Spaced" inference latency optimization now applies to multi-model programs
+  too
+- Increase clock speed on V80 from 280MHz to 300MHz.
+- Compiler and scheduler optimizations to improve inference latency
+- Speed up model compilation
+- Add support for bidirectional LSTMs
+
 ## 24.0.1
 
 - Improve latency of streaming models, especially e.g. large LSTMs, when

@@ -117,7 +117,7 @@ Tensors are expected to be in `float32` format, unless they are used as indices 
 | Clamp ops                 | `Clip`, `Relu`                                                                                                                 |
 | Matrix multiplication     | `MatMul` / `Gemm` where one input is a constant                                                                                |
 | `Conv`                    | 1d with left-padding such that input and output seq dimensions match, `groups == 1` or `groups == in_channels == out_channels` |
-| `LSTM`                    | Forward LSTM without explicit hidden or cell state initialisation                                                              |
+| `LSTM`                    | LSTM without explicit hidden or cell state initialisation                                                                      |
 | `Gather`                  | With a 0d/1d tensor of indices                                                                                                 |
 | `Slice`                   | `step` size 1 with constant `starts`, `ends` and `axes`.                                                                       |
 | `ReduceSum`, `ReduceMean` | With constant axes, `keepdims = 1` required on data dimension                                                                  |
