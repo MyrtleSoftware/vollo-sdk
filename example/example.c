@@ -179,7 +179,7 @@ static void vollo_example(ExampleOptions options) {
 
   NpyArray* input_arrays = (NpyArray*)malloc(sizeof(NpyArray) * model_num_inputs);
 
-  if (options.input_paths != NULL && options.input_paths[0] != NULL) {
+  if (options.input_paths[0] != NULL) {
     for (size_t i = 0; i < model_num_inputs; i++) {
       assert(options.input_paths[i] != NULL);
 
@@ -199,7 +199,7 @@ static void vollo_example(ExampleOptions options) {
 
   NpyArray* output_arrays = (NpyArray*)malloc(sizeof(NpyArray) * model_num_outputs);
 
-  if (options.output_paths != NULL && options.output_paths[0] != NULL) {
+  if (options.output_paths[0] != NULL) {
     for (size_t i = 0; i < model_num_outputs; i++) {
       assert(options.output_paths[i] != NULL);
 
@@ -239,7 +239,7 @@ static void vollo_example(ExampleOptions options) {
       test_inputs_fp32[i][j] = (float*)malloc(sizeof(float) * num_input_elems);
 
       for (size_t k = 0; k < num_input_elems; k++) {
-        if (options.input_paths != NULL && options.input_paths[0] != NULL) {
+        if (options.input_paths[0] != NULL) {
           test_inputs[i][j][k] = float_to_bf16(input_arrays[j].buffer[k]);
           test_inputs_fp32[i][j][k] = input_arrays[j].buffer[k];
         } else {
@@ -329,7 +329,7 @@ static void vollo_example(ExampleOptions options) {
 
       for (size_t i = 0; i < num_completed; i++) {
         // Serialize model outputs from first inference if output paths are set
-        if (inf_completed == 0 && options.output_paths != NULL && options.output_paths[0] != NULL) {
+        if (inf_completed == 0 && options.output_paths[0] != NULL) {
           for (size_t j = 0; j < model_num_outputs; j++) {
             assert(options.output_paths[j] != NULL);
 
@@ -444,21 +444,19 @@ static void vollo_example(ExampleOptions options) {
 
   vollo_rt_destroy(ctx);
 
-  if (options.input_paths != NULL && options.input_paths[0] != NULL) {
+  if (options.input_paths[0] != NULL) {
     for (size_t i = 0; i < model_num_inputs; i++) {
       free_npy(input_arrays[i]);
     }
-
-    free(input_arrays);
   }
+  free(input_arrays);
 
-  if (options.output_paths != NULL && options.output_paths[0] != NULL) {
+  if (options.output_paths[0] != NULL) {
     for (size_t i = 0; i < model_num_outputs; i++) {
       free_npy(output_arrays[i]);
     }
-
-    free(output_arrays);
   }
+  free(output_arrays);
 }
 
 void print_help(const char* example_program) {

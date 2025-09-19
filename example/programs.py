@@ -2,6 +2,10 @@
     CLI to generate and compile Vollo reference models.
 """
 
+import argparse
+import json
+import warnings
+
 import torch
 
 import vollo_compiler
@@ -9,10 +13,53 @@ import vollo_torch
 import numpy as np
 import torch.nn as nn
 
+# In some versions of torch, a module within torch (torch.fx.proxy) triggers a
+# deprecation warning from another module of torch (torch.overrides), so just
+# ignore these.
+warnings.filterwarnings("ignore", category=UserWarning, module="torch.overrides")
+
+
+def pretty_parameters(num_params: int) -> str:
+    """
+    >>> pretty_parameters(12345)
+    "12K"
+    >>> pretty_parameters(123456)
+    "123K"
+    >>> pretty_parameters(1234567)
+    "1.2M"
+    >>> pretty_parameters(12345678)
+    "12.3M"
+    """
+    if num_params < 1000:
+        return str(num_params)
+    elif num_params < 1_000_000:
+        # K range
+        k_value = num_params / 1000
+        if k_value >= 100:
+            return f"{int(k_value)}K"
+        elif k_value >= 10:
+            return f"{k_value:.0f}K"
+        else:
+            return f"{k_value:.1f}K"
+    else:
+        # M range
+        m_value = num_params / 1_000_000
+        if m_value >= 100:
+            return f"{int(m_value)}M"
+        elif m_value >= 10:
+            return f"{m_value:.1f}M"
+        else:
+            return f"{m_value:.1f}M"
+
 
 class Identity(torch.nn.Module):
     def forward(self, x):
         return x
+
+    def describe_self(self, _input_shape):
+        return {
+            "Model": "Identity",
+        }
 
 
 class MLP(nn.Module):
@@ -26,6 +73,13 @@ class MLP(nn.Module):
         x = nn.functional.relu(self.fc1(x))
         x = nn.functional.relu(self.fc2(x))
         return self.out(x)
+
+    def describe_self(self, input_shape):
+        batch_size = input_shape[0]
+        return {
+            "Model": f"mlp_b{batch_size}",
+            "Batch size": batch_size,
+        }
 
 
 # A simple convolutional block with a residual connection
@@ -52,6 +106,13 @@ class CNN(nn.Module):
         x = self.cnn(x)  # N x channels x T
         return x
 
+    def describe_self(self, input_shape):
+        return {
+            "Layers": len(self.cnn),
+            "Channels": input_shape[1],
+            "Parameters": pretty_parameters(sum(p.numel() for p in self.parameters())),
+        }
+
 
 class LSTM(nn.Module):
     def __init__(self, num_layers, input_size, hidden_size, output_size):
@@ -64,6 +125,13 @@ class LSTM(nn.Module):
         x = self.lstm(x)
         x = self.fc(x)
         return x
+
+    def describe_self(self, input_shape):
+        return {
+            "Layers": self.lstm.lstm.num_layers,
+            "Hidden size": self.lstm.lstm.hidden_size,
+            "Parameters": pretty_parameters(sum(p.numel() for p in self.parameters())),
+        }
 
 
 all_configs = {
@@ -113,48 +181,31 @@ all_models = {
 }
 
 
-def cli():
-    import argparse
+def get_selected_subparser(parser, args):
+    """
+    Get the parser that was selected based on the subcommand
+    """
+    for action in parser._actions:
+        if not isinstance(action, argparse._SubParsersAction):
+            continue
+        choice = getattr(args, action.dest)
+        if choice is None:
+            return None
+        else:
+            subparser = action.choices[choice]
+            return get_selected_subparser(subparser, args) or subparser
+    else:
+        return None
 
-    parser = argparse.ArgumentParser(
-        prog=__name__,
-        description="Generate and compile a Vollo reference model",
-    )
-    parser.add_argument(
-        "-l",
-        "--list-models",
-        action="store_true",
-        help="list the names of all supported models and exit",
-    )
-    parser.add_argument(
-        "-m",
-        "--model-name",
-        choices=list(all_models.keys()),
-        help="name of the Vollo model to generate",
-    )
-    config_group = parser.add_mutually_exclusive_group()
-    config_group.add_argument(
-        "-c",
-        "--config",
-        help="hardware configuration JSON to use",
-    )
-    config_group.add_argument(
-        "--config-preset",
-        choices=list(all_configs.keys()),
-        help="hardware configuration preset to use",
-    )
-    parser.add_argument(
-        "-o",
-        "--program-out",
-        help="Vollo file to export (default: MODEL_NAME.vollo)",
-    )
-    args = parser.parse_args()
 
-    if args.list_models:
-        for model_name in all_models.keys():
+def list_models(parser, args):
+    for model_name in all_models.keys():
+        if args.model_type == "all" or model_name.startswith(args.model_type):
             print(model_name)
-        return 0
+    return 0
 
+
+def compile_model(parser, args):
     if args.model_name is None:
         parser.error("Expected --list-models or --model-name argument")
 
@@ -171,6 +222,11 @@ def cli():
         config = vollo_compiler.Config.load(args.config)
 
     model, input_shape, transforms = all_models[args.model_name]
+
+    if args.describe_only:
+        description = model.describe_self(input_shape)
+        print(json.dumps(description, indent=2))
+        return 0
 
     x = torch.randn(input_shape).bfloat16().to(torch.float32)
 
@@ -205,6 +261,55 @@ def cli():
     program_name = args.program_out
     program.save(program_name)
     print(f"Exported model {args.model_name} to {args.program_out}")
+
+
+def cli():
+    parser = argparse.ArgumentParser(
+        prog="programs.py",
+        description="Generate and compile a Vollo reference model",
+    )
+
+    subparsers = parser.add_subparsers(dest="command", required=True)
+
+    list_models_parser = subparsers.add_parser("list-models")
+    list_models_parser.add_argument(
+        "--model-type", choices=["all", "identity", "mlp", "cnn", "lstm"], default="all"
+    )
+    list_models_parser.set_defaults(handler=list_models)
+
+    compile_model_parser = subparsers.add_parser("compile-model")
+    compile_model_parser.set_defaults(handler=compile_model)
+    compile_model_parser.add_argument(
+        "-m",
+        "--model-name",
+        choices=list(all_models.keys()),
+        help="name of the Vollo model to generate",
+    )
+    config_group = compile_model_parser.add_mutually_exclusive_group()
+    config_group.add_argument(
+        "-c",
+        "--config",
+        help="hardware configuration JSON to use",
+    )
+    config_group.add_argument(
+        "--config-preset",
+        choices=list(all_configs.keys()),
+        help="hardware configuration preset to use",
+    )
+    compile_model_parser.add_argument(
+        "-o",
+        "--program-out",
+        help="Vollo file to export (default: MODEL_NAME.vollo)",
+    )
+    compile_model_parser.add_argument(
+        "--describe-only",
+        action="store_true",
+        help="output json describing the model and exit (requires --model-name)",
+    )
+
+    args = parser.parse_args()
+
+    return args.handler(get_selected_subparser(parser, args), args)
 
 
 if __name__ == "__main__":

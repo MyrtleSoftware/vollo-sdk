@@ -16,10 +16,11 @@ info "creating work directory"
 mkdir -p work
 cd work
 
-if [ ! -d "vollo-venv" ]; then
+if [ ! -f vollo-venv/bin/activate ]; then
   info "creating vollo-venv virtual environment"
   python3 -m venv vollo-venv
 fi
+
 
 info "activating vollo-venv virtual environment"
 # Directory is created dynamically
@@ -47,20 +48,52 @@ echo
 
 cmd="example/vollo-example"
 
-for m in $(python3 "$VOLLO_SDK"/example/programs.py --list-models); do
+for m in $(python3 "$VOLLO_SDK"/example/programs.py list-models); do
   info "Compiling program for $m example"
-  if python3 "$VOLLO_SDK"/example/programs.py -m "$m" -c hw_config.json;
-  then
-    info "Program compiled for $m example"
-    info "Now running spaced inference for $m example"
-    $cmd --inference-spacing-ns 20000 "$m.vollo"
-    echo
-    info "Now running unspaced inference for $m example"
-    $cmd "$m.vollo"
-    echo
+  python3 "$VOLLO_SDK"/example/programs.py compile-model -m "$m" -c hw_config.json 2>/dev/null || echo "Could not compile $m for config"
+  echo
+done
+
+for spacing_ns in 0 20000; do
+  if [[ $spacing_ns -gt 0 ]]; then
+    spacing=spaced
   else
-    info "Failed to compile model $m, it is not currently supported on this hardware config"
-    echo
+    spacing=unspaced
+  fi
+
+  for model_type in identity mlp cnn lstm; do
+    metrics_csv="$model_type-$spacing-latency-metrics.csv"
+
+    # Write csv header (consists of a model_type dependent description and latency metrics)
+    for m in $(python3 "$VOLLO_SDK"/example/programs.py list-models --model-type $model_type); do
+      python3 "$VOLLO_SDK"/example/programs.py compile-model --describe-only -m "$m" -c hw_config.json \
+        | jq -r 'keys_unsorted | . + ["Mean latency (us)", "99th percentile latency (us)"] | join(",")' > $metrics_csv
+      # Only need to do this once per model type
+      break
+    done
+
+    # Write csv rows
+    for m in $(python3 "$VOLLO_SDK"/example/programs.py list-models --model-type $model_type); do
+      # Skip models that couldn't be compiled
+      [[ ! -f "$m.vollo" ]] && continue
+
+      model_description_json=$(python3 "$VOLLO_SDK"/example/programs.py compile-model --describe-only -m "$m" -c hw_config.json)
+      model_description_row=$(echo "$model_description_json" | jq -r 'join(",")')
+
+      latency_json=$($cmd --inference-spacing-ns $spacing_ns --json "$m.vollo" | tee /dev/stderr)
+      latency_row=$(echo "$latency_json" | jq -r '.metrics.latency_us | [.mean, .p99] | join(",")')
+
+      combined_row="$model_description_row,$latency_row"
+
+      echo "$combined_row" >> $metrics_csv
+    done
+  done
+done
+
+# cleanup
+for m in $(python3 "$VOLLO_SDK"/example/programs.py list-models); do
+  if [[ -f "$m.vollo" ]]; then
+    rm "$m.vollo"
   fi
 done
 
