@@ -265,11 +265,12 @@ int main(int argc, char** argv) {
       output_array.buffer_len = num_output_elements;
       {
         const size_t* output_shape = vollo_rt_model_output_shape(ctx, model_index, i);
+        const uint8_t output_shape_len
+          = (uint8_t)vollo_rt_model_output_shape_len(ctx, model_index, i);
 
-        output_array.shape_len = 0;
-        while (*output_shape != 0) {
-          output_array.shape[output_array.shape_len] = *output_shape;
-          output_array.shape_len++;
+        output_array.shape_len = output_shape_len;
+        for (uint8_t output_shape_ix = 0; output_shape_ix < output_shape_len; output_shape_ix++) {
+          output_array.shape[output_shape_ix] = (size_t)*output_shape;
           output_shape++;
         }
       }

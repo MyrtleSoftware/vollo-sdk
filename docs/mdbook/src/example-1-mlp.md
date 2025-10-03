@@ -98,10 +98,10 @@ range of floating point error.
 vm = program.to_vm()
 vm_output = vm.run(input.detach().numpy())
 torch.testing.assert_close(expected_output, torch.from_numpy(vm_output), atol = 1e-2, rtol = 1e-2)
-print("cycle count:", vm.cycle_count())
+print("cycle count:", program.cycle_count_per_inference())
 # Translate the estimated cycle count to a duration for the compute (not
 # including IO) in microseconds, using the bitstream clock speed (320 MHz)
-print(f"latency (compute): {vm.compute_duration_us():.1f}us")
+print(f"latency (compute): {program.compute_duration_per_inference_us():.1f}us")
 ```
 
 The VM records the number of cycles the program took to execute.
