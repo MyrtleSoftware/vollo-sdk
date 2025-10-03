@@ -129,17 +129,16 @@ static void vollo_example(ExampleOptions options) {
 
   for (size_t model_input_ix = 0; model_input_ix < model_num_inputs; model_input_ix++) {
     const size_t* input_shape = vollo_rt_model_input_shape(ctx, model_index, model_input_ix);
+    size_t input_shape_len = vollo_rt_model_input_shape_len(ctx, model_index, model_input_ix);
 
-    while (*input_shape != 0) {
+    for (size_t input_shape_ix = 0; input_shape_ix < input_shape_len; input_shape_ix++) {
       fprintf(stderr, "%ld", *input_shape);
       input_shape++;
-
-      if (*input_shape != 0) {
+      if (input_shape_ix != input_shape_len) {
         fprintf(stderr, ", ");
-      } else {
-        fprintf(stderr, "]");
       }
     }
+    fprintf(stderr, "]");
 
     if (model_input_ix + 1 < model_num_inputs) {
       fprintf(stderr, ", [");
@@ -152,16 +151,16 @@ static void vollo_example(ExampleOptions options) {
 
   for (size_t model_output_ix = 0; model_output_ix < model_num_outputs; model_output_ix++) {
     const size_t* output_shape = vollo_rt_model_output_shape(ctx, model_index, model_output_ix);
-    while (*output_shape != 0) {
+    size_t output_shape_len = vollo_rt_model_output_shape_len(ctx, model_index, model_output_ix);
+
+    for (size_t output_shape_ix = 0; output_shape_ix < output_shape_len; output_shape_ix++) {
       fprintf(stderr, "%ld", *output_shape);
       output_shape++;
-
-      if (*output_shape != 0) {
+      if (output_shape_ix != output_shape_len) {
         fprintf(stderr, ", ");
-      } else {
-        fprintf(stderr, "]");
       }
     }
+    fprintf(stderr, "]");
 
     if (model_output_ix + 1 < model_num_outputs) {
       fprintf(stderr, ", [");
@@ -191,7 +190,7 @@ static void vollo_example(ExampleOptions options) {
 
       // Check that the input has the shape of input that the model expects
       for (size_t j = 0; j < input_arrays[i].shape_len; j++) {
-        assert(input_arrays[i].shape[j] == *input_shape);
+        assert(input_arrays[i].shape[j] == (size_t)*input_shape);
         input_shape++;
       }
     }
@@ -207,11 +206,12 @@ static void vollo_example(ExampleOptions options) {
       output_arrays[i].buffer = (float*)malloc(sizeof(float) * output_arrays[i].buffer_len);
       {
         const size_t* output_shape = vollo_rt_model_output_shape(ctx, model_index, i);
+        const uint8_t output_shape_len
+          = (uint8_t)vollo_rt_model_output_shape_len(ctx, model_index, i);
 
-        output_arrays[i].shape_len = 0;
-        while (*output_shape != 0) {
-          output_arrays[i].shape[output_arrays[i].shape_len] = *output_shape;
-          output_arrays[i].shape_len++;
+        output_arrays[i].shape_len = output_shape_len;
+        for (uint8_t output_shape_ix = 0; output_shape_ix < output_shape_len; output_shape_ix++) {
+          output_arrays[i].shape[output_shape_ix] = (size_t)*output_shape;
           output_shape++;
         }
       }

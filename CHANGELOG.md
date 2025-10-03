@@ -1,5 +1,12 @@
 # Changelog
 
+## 25.0.1
+
+- Add support for size 0 input and output tensors in the compiler
+- Add `vollo_rt_model_input_shape_len` and `vollo_rt_model_output_shape_len`
+  functions to Vollo RT
+- Improve constant folding in the compiler
+
 ## 25.0.0
 
 - Add early access support for Silicom fb4CGg3@VU09P

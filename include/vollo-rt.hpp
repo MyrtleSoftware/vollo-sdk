@@ -162,7 +162,12 @@ size_t vollo_rt_model_num_outputs(vollo_rt_context_t vollo, size_t model_index);
 
 /// Get the shape for input at a given index
 ///
-/// The return value is a 0 terminated array of dims containing the input shape
+/// The return value is an array of dims containing the input shape
+/// Use `vollo_rt_model_input_shape_len` to get the number of axes in the shape.
+///
+/// For backwards compatibility the array is also 0-terminated, but that should not be relied upon
+/// in order to correctly support shapes containing a 0 dimension
+///
 /// The value lives for as long as the model
 ///
 /// Requirements (panics otherwise):
@@ -172,9 +177,23 @@ size_t vollo_rt_model_num_outputs(vollo_rt_context_t vollo, size_t model_index);
 const size_t* vollo_rt_model_input_shape(
   vollo_rt_context_t vollo, size_t model_index, size_t input_index);
 
+/// Get the number of axes in the shape for the input at a given index
+///
+/// Requirements (panics otherwise):
+/// - a program was loaded with `vollo_rt_load_program`
+/// - `model_index < vollo_rt_num_models`
+/// - `input_index < vollo_rt_model_num_inputs`
+size_t vollo_rt_model_input_shape_len(
+  vollo_rt_context_t vollo, size_t model_index, size_t input_index);
+
 /// Get the shape for output at a given index
 ///
-/// The return value is a 0 terminated array of dims containing the output shape
+/// The return value is an array of dims containing the output shape
+/// Use `vollo_rt_model_output_shape_len` to get the number of axes in the shape.
+///
+/// For backwards compatibility the array is also 0-terminated, but that should not be relied upon
+/// in order to correctly support shapes containing a 0 dimension
+///
 /// The value lives for as long as the model
 ///
 /// Requirements (panics otherwise):
@@ -182,6 +201,15 @@ const size_t* vollo_rt_model_input_shape(
 /// - `model_index < vollo_rt_num_models`
 /// - `output_index < vollo_rt_model_num_outputs`
 const size_t* vollo_rt_model_output_shape(
+  vollo_rt_context_t vollo, size_t model_index, size_t output_index);
+
+/// Get the number of axes in the shape for the output at a given index
+///
+/// Requirements (panics otherwise):
+/// - a program was loaded with `vollo_rt_load_program`
+/// - `model_index < vollo_rt_num_models`
+/// - `output_index < vollo_rt_model_num_outputs`
+size_t vollo_rt_model_output_shape_len(
   vollo_rt_context_t vollo, size_t model_index, size_t output_index);
 
 /// Get the number of elements for input at a given index
