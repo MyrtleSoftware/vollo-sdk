@@ -1,5 +1,15 @@
 # Release Notes
 
+## 25.1.0
+
+- Early access support for Mamba models
+- Add support for SiLU
+- Add support for Softplus
+- Add support for Exp, Exp2
+- Add support for Sigmoid
+- Add support for Softmax
+- Speed up model compilation
+
 ## 25.0.1
 
 - Add support for size 0 input and output tensors in the compiler
