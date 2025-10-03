@@ -9,7 +9,7 @@ Vollo:
 [Github Release page]: https://github.com/MyrtleSoftware/vollo-sdk/releases/
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v24.0.0/vollo-silicom-fb4CGg3@VU09P-3-c3b32-24.0.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v25.0.1/vollo-silicom-fb4CGg3@VU09P-3-c3b32-25.0.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
 tar -xzf vollo-silicom-fb4CGg3@VU09P-3-c3b32-25.0.tar.gz -C $VOLLO_SDK/bitstream
 ```
