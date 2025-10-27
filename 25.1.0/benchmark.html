@@ -148,10 +148,16 @@
                     <main>
                         <h1 id="benchmarks"><a class="header" href="#benchmarks">Benchmarks</a></h1>
 <p>This section provides benchmarks for the Vollo accelerator for a variety of models.</p>
-<p>Performance figures are given for two configurations of the Vollo accelerator.
-A three big core configuration which is provided for the IA-840F accelerator card
-and a six small core configuration which is provided for the IA-420F accelerator card.
-If you require a different configuration, please contact us at <a href="mailto:vollo@myrtle.ai">vollo@myrtle.ai</a>.</p>
+<p>Performance figures are given for the following configurations of the Vollo
+accelerator:</p>
+<ul>
+<li>a 6 core, block size 32 configuration which is provided for the V80 accelerator card</li>
+<li>a 3 core, block size 64 configuration which is provided for the IA-840F accelerator
+card</li>
+<li>a 6 core, block size 32 configuration which is provided for the IA-420F accelerator
+card</li>
+</ul>
+<p>If you require a different configuration, please contact us at <a href="mailto:vollo@myrtle.ai">vollo@myrtle.ai</a>.</p>
 <p>All these performance numbers can be measured using the <code>vollo-sdk</code> with the correct accelerator card
 by running the provided <a href="running-the-benchmark.html">benchmark script</a>.</p>
 <p>We also provide performance figures for a PCIe roundtrip for various input and output sizes.</p>

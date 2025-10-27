@@ -171,7 +171,16 @@
 <p><a href="https://www.stacresearch.com/MRTL230426">STAC ML Tacana</a></p>
 </li>
 </ul>
-<h2 id="ia-840f-3-big-cores"><a class="header" href="#ia-840f-3-big-cores">IA-840F: 3 big cores</a></h2>
+<h2 id="v80-6-core-block-size-32"><a class="header" href="#v80-6-core-block-size-32">V80: 6 core, block size 32</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Model</th><th>Layers</th><th>Hidden size</th><th>Parameters</th><th>Mean latency (us)</th><th>99th percentile latency (us)</th></tr></thead><tbody>
+<tr><td>lstm_tiny</td><td>2</td><td>128</td><td>268K</td><td>2.8</td><td>2.8</td></tr>
+<tr><td>lstm_small</td><td>3</td><td>256</td><td>1.6M</td><td>3.3</td><td>3.4</td></tr>
+<tr><td>lstm_med</td><td>3</td><td>480</td><td>5.6M</td><td>4.3</td><td>4.5</td></tr>
+<tr><td>lstm_med_deep</td><td>6</td><td>320</td><td>4.9M</td><td>4.5</td><td>4.8</td></tr>
+<tr><td>lstm_large</td><td>3</td><td>960</td><td>22.2M</td><td>8.5</td><td>8.7</td></tr>
+</tbody></table>
+</div>
+<h2 id="ia-840f-3-core-block-size-64"><a class="header" href="#ia-840f-3-core-block-size-64">IA-840F: 3 core, block size 64</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Layers</th><th>Hidden size</th><th>Parameters</th><th>Mean latency (μs)</th><th>99th Percentile latency (μs)</th></tr></thead><tbody>
 <tr><td>lstm_tiny</td><td>2</td><td>128</td><td>266K</td><td>1.9</td><td>2.0</td></tr>
 <tr><td>lstm_small</td><td>3</td><td>256</td><td>1.6M</td><td>3.0</td><td>3.1</td></tr>
@@ -181,7 +190,7 @@
 </div>
 <p>The input size is the same as the hidden size for all models and the output size is set to 32. The layers refers to the number of
 LSTM layers in the stack.</p>
-<h2 id="ia-420f-6-small-cores"><a class="header" href="#ia-420f-6-small-cores">IA-420F: 6 small cores</a></h2>
+<h2 id="ia-420f-6-core-block-size-32"><a class="header" href="#ia-420f-6-core-block-size-32">IA-420F: 6 core, block size 32</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Layers</th><th>Hidden size</th><th>Parameters</th><th>Mean latency (μs)</th><th>99th Percentile latency (μs)</th></tr></thead><tbody>
 <tr><td>lstm_tiny</td><td>2</td><td>128</td><td>266K</td><td>2.2</td><td>2.3</td></tr>
 <tr><td>lstm_small</td><td>3</td><td>256</td><td>1.6M</td><td>4.2</td><td>4.4</td></tr>

@@ -171,23 +171,28 @@ class CNN(nn.Module):
         x = self.cnn(x)  # N x channels x T
         return x
 </code></pre>
-<h2 id="ia-840f-3-big-cores"><a class="header" href="#ia-840f-3-big-cores">IA-840F: 3 big cores</a></h2>
+<p>The kernel size for all models is 8.</p>
+<h2 id="v80-6-cores-block-size-32"><a class="header" href="#v80-6-cores-block-size-32">V80: 6 cores, block size 32</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Model</th><th>Layers</th><th>Channels</th><th>Parameters</th><th>Mean latency (us)</th><th>99th percentile latency (us)</th></tr></thead><tbody>
+<tr><td>cnn_tiny</td><td>3</td><td>128</td><td>393K</td><td>3.1</td><td>3.3</td></tr>
+<tr><td>cnn_small</td><td>3</td><td>256</td><td>1.6M</td><td>3.3</td><td>3.4</td></tr>
+<tr><td>cnn_med</td><td>6</td><td>256</td><td>3.1M</td><td>3.8</td><td>4.0</td></tr>
+</tbody></table>
+</div>
+<h2 id="ia-840f-3-cores-block-size-64"><a class="header" href="#ia-840f-3-cores-block-size-64">IA-840F: 3 cores, block size 64</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Layers</th><th>Channels</th><th>Parameters</th><th>Mean latency (μs)</th><th>99th Percentile latency (μs)</th></tr></thead><tbody>
 <tr><td>cnn_tiny</td><td>3</td><td>128</td><td>393K</td><td>2.2</td><td>2.2</td></tr>
 <tr><td>cnn_small</td><td>3</td><td>256</td><td>1.6M</td><td>2.4</td><td>2.5</td></tr>
 <tr><td>cnn_med</td><td>6</td><td>256</td><td>3.1M</td><td>3.0</td><td>3.2</td></tr>
 </tbody></table>
 </div>
-<p>The kernel size for all models is 8.</p>
-<h3 id="ia-420f-6-small-cores"><a class="header" href="#ia-420f-6-small-cores">IA-420F: 6 small cores</a></h3>
+<h2 id="ia-420f-6-cores-block-size-32"><a class="header" href="#ia-420f-6-cores-block-size-32">IA-420F: 6 cores, block size 32</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Layers</th><th>Channels</th><th>Parameters</th><th>Mean latency (μs)</th><th>99th Percentile latency (μs)</th></tr></thead><tbody>
 <tr><td>cnn_tiny</td><td>3</td><td>128</td><td>393K</td><td>2.2</td><td>2.3</td></tr>
 <tr><td>cnn_small</td><td>3</td><td>256</td><td>1.6M</td><td>2.8</td><td>3.0</td></tr>
 <tr><td>cnn_med</td><td>6</td><td>256</td><td>3.1M</td><td>3.9</td><td>3.9</td></tr>
 </tbody></table>
 </div>
-<p>The kernel size for all models is 8.</p>
-
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">

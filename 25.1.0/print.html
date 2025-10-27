@@ -856,10 +856,16 @@ torch.testing.assert_close(
 </tbody></table>
 </div><div style="break-before: page; page-break-before: always;"></div><h1 id="benchmarks"><a class="header" href="#benchmarks">Benchmarks</a></h1>
 <p>This section provides benchmarks for the Vollo accelerator for a variety of models.</p>
-<p>Performance figures are given for two configurations of the Vollo accelerator.
-A three big core configuration which is provided for the IA-840F accelerator card
-and a six small core configuration which is provided for the IA-420F accelerator card.
-If you require a different configuration, please contact us at <a href="mailto:vollo@myrtle.ai">vollo@myrtle.ai</a>.</p>
+<p>Performance figures are given for the following configurations of the Vollo
+accelerator:</p>
+<ul>
+<li>a 6 core, block size 32 configuration which is provided for the V80 accelerator card</li>
+<li>a 3 core, block size 64 configuration which is provided for the IA-840F accelerator
+card</li>
+<li>a 6 core, block size 32 configuration which is provided for the IA-420F accelerator
+card</li>
+</ul>
+<p>If you require a different configuration, please contact us at <a href="mailto:vollo@myrtle.ai">vollo@myrtle.ai</a>.</p>
 <p>All these performance numbers can be measured using the <code>vollo-sdk</code> with the correct accelerator card
 by running the provided <a href="running-the-benchmark.html">benchmark script</a>.</p>
 <p>We also provide performance figures for a PCIe roundtrip for various input and output sizes.</p>
@@ -880,14 +886,21 @@ by running the provided <a href="running-the-benchmark.html">benchmark script</a
 mlp = MLP(256.0, 384.0, 128.0)
 </code></pre>
 <p>We demonstrate the model at a variety of batch sizes. The model has 295K parameters.</p>
-<h2 id="ia-840f-3-big-cores"><a class="header" href="#ia-840f-3-big-cores">IA-840F: 3 big cores</a></h2>
+<h2 id="v80-6-cores-block-size-32"><a class="header" href="#v80-6-cores-block-size-32">V80: 6 cores, block size 32</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Model</th><th>Batch size</th><th>Mean latency (us)</th><th>99th percentile latency (us)</th></tr></thead><tbody>
+<tr><td>mlp_b1</td><td>1</td><td>2.8</td><td>3.0</td></tr>
+<tr><td>mlp_b4</td><td>4</td><td>3.8</td><td>4.0</td></tr>
+<tr><td>mlp_b8</td><td>8</td><td>5.9</td><td>6.2</td></tr>
+</tbody></table>
+</div>
+<h2 id="ia-840f-3-cores-block-size-64"><a class="header" href="#ia-840f-3-cores-block-size-64">IA-840F: 3 cores, block size 64</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Batch size</th><th>Mean latency (μs)</th><th>99th Percentile latency (μs)</th></tr></thead><tbody>
 <tr><td>mlp_b1</td><td>1</td><td>2.3</td><td>2.4</td></tr>
 <tr><td>mlp_b4</td><td>4</td><td>2.5</td><td>2.6</td></tr>
 <tr><td>mlp_b8</td><td>8</td><td>2.7</td><td>2.8</td></tr>
 </tbody></table>
 </div>
-<h2 id="ia-420f-6-small-cores"><a class="header" href="#ia-420f-6-small-cores">IA-420F: 6 small cores</a></h2>
+<h2 id="ia-420f-6-core-block-size-32"><a class="header" href="#ia-420f-6-core-block-size-32">IA-420F: 6 core, block size 32</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Batch size</th><th>Mean latency (μs)</th><th>99th Percentile latency (μs)</th></tr></thead><tbody>
 <tr><td>mlp_b1</td><td>1</td><td>2.9</td><td>3.0</td></tr>
 <tr><td>mlp_b4</td><td>4</td><td>3.0</td><td>3.1</td></tr>
@@ -918,23 +931,28 @@ class CNN(nn.Module):
         x = self.cnn(x)  # N x channels x T
         return x
 </code></pre>
-<h2 id="ia-840f-3-big-cores-1"><a class="header" href="#ia-840f-3-big-cores-1">IA-840F: 3 big cores</a></h2>
+<p>The kernel size for all models is 8.</p>
+<h2 id="v80-6-cores-block-size-32-1"><a class="header" href="#v80-6-cores-block-size-32-1">V80: 6 cores, block size 32</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Model</th><th>Layers</th><th>Channels</th><th>Parameters</th><th>Mean latency (us)</th><th>99th percentile latency (us)</th></tr></thead><tbody>
+<tr><td>cnn_tiny</td><td>3</td><td>128</td><td>393K</td><td>3.1</td><td>3.3</td></tr>
+<tr><td>cnn_small</td><td>3</td><td>256</td><td>1.6M</td><td>3.3</td><td>3.4</td></tr>
+<tr><td>cnn_med</td><td>6</td><td>256</td><td>3.1M</td><td>3.8</td><td>4.0</td></tr>
+</tbody></table>
+</div>
+<h2 id="ia-840f-3-cores-block-size-64-1"><a class="header" href="#ia-840f-3-cores-block-size-64-1">IA-840F: 3 cores, block size 64</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Layers</th><th>Channels</th><th>Parameters</th><th>Mean latency (μs)</th><th>99th Percentile latency (μs)</th></tr></thead><tbody>
 <tr><td>cnn_tiny</td><td>3</td><td>128</td><td>393K</td><td>2.2</td><td>2.2</td></tr>
 <tr><td>cnn_small</td><td>3</td><td>256</td><td>1.6M</td><td>2.4</td><td>2.5</td></tr>
 <tr><td>cnn_med</td><td>6</td><td>256</td><td>3.1M</td><td>3.0</td><td>3.2</td></tr>
 </tbody></table>
 </div>
-<p>The kernel size for all models is 8.</p>
-<h3 id="ia-420f-6-small-cores-1"><a class="header" href="#ia-420f-6-small-cores-1">IA-420F: 6 small cores</a></h3>
+<h2 id="ia-420f-6-cores-block-size-32"><a class="header" href="#ia-420f-6-cores-block-size-32">IA-420F: 6 cores, block size 32</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Layers</th><th>Channels</th><th>Parameters</th><th>Mean latency (μs)</th><th>99th Percentile latency (μs)</th></tr></thead><tbody>
 <tr><td>cnn_tiny</td><td>3</td><td>128</td><td>393K</td><td>2.2</td><td>2.3</td></tr>
 <tr><td>cnn_small</td><td>3</td><td>256</td><td>1.6M</td><td>2.8</td><td>3.0</td></tr>
 <tr><td>cnn_med</td><td>6</td><td>256</td><td>3.1M</td><td>3.9</td><td>3.9</td></tr>
 </tbody></table>
-</div>
-<p>The kernel size for all models is 8.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="long-short-term-memory-lstm-networks"><a class="header" href="#long-short-term-memory-lstm-networks">Long Short Term Memory (LSTM) networks</a></h1>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="long-short-term-memory-lstm-networks"><a class="header" href="#long-short-term-memory-lstm-networks">Long Short Term Memory (LSTM) networks</a></h1>
 <p>We benchmark an LSTM model consisting of a stack of LSTMs followed by a linear layer.</p>
 <pre><code class="language-python">class LSTM(nn.Module):
     def __init__(self, num_layers, input_size, hidden_size, output_size):
@@ -959,7 +977,16 @@ class CNN(nn.Module):
 <p><a href="https://www.stacresearch.com/MRTL230426">STAC ML Tacana</a></p>
 </li>
 </ul>
-<h2 id="ia-840f-3-big-cores-2"><a class="header" href="#ia-840f-3-big-cores-2">IA-840F: 3 big cores</a></h2>
+<h2 id="v80-6-core-block-size-32"><a class="header" href="#v80-6-core-block-size-32">V80: 6 core, block size 32</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Model</th><th>Layers</th><th>Hidden size</th><th>Parameters</th><th>Mean latency (us)</th><th>99th percentile latency (us)</th></tr></thead><tbody>
+<tr><td>lstm_tiny</td><td>2</td><td>128</td><td>268K</td><td>2.8</td><td>2.8</td></tr>
+<tr><td>lstm_small</td><td>3</td><td>256</td><td>1.6M</td><td>3.3</td><td>3.4</td></tr>
+<tr><td>lstm_med</td><td>3</td><td>480</td><td>5.6M</td><td>4.3</td><td>4.5</td></tr>
+<tr><td>lstm_med_deep</td><td>6</td><td>320</td><td>4.9M</td><td>4.5</td><td>4.8</td></tr>
+<tr><td>lstm_large</td><td>3</td><td>960</td><td>22.2M</td><td>8.5</td><td>8.7</td></tr>
+</tbody></table>
+</div>
+<h2 id="ia-840f-3-core-block-size-64"><a class="header" href="#ia-840f-3-core-block-size-64">IA-840F: 3 core, block size 64</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Layers</th><th>Hidden size</th><th>Parameters</th><th>Mean latency (μs)</th><th>99th Percentile latency (μs)</th></tr></thead><tbody>
 <tr><td>lstm_tiny</td><td>2</td><td>128</td><td>266K</td><td>1.9</td><td>2.0</td></tr>
 <tr><td>lstm_small</td><td>3</td><td>256</td><td>1.6M</td><td>3.0</td><td>3.1</td></tr>
@@ -969,7 +996,7 @@ class CNN(nn.Module):
 </div>
 <p>The input size is the same as the hidden size for all models and the output size is set to 32. The layers refers to the number of
 LSTM layers in the stack.</p>
-<h2 id="ia-420f-6-small-cores-2"><a class="header" href="#ia-420f-6-small-cores-2">IA-420F: 6 small cores</a></h2>
+<h2 id="ia-420f-6-core-block-size-32-1"><a class="header" href="#ia-420f-6-core-block-size-32-1">IA-420F: 6 core, block size 32</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Layers</th><th>Hidden size</th><th>Parameters</th><th>Mean latency (μs)</th><th>99th Percentile latency (μs)</th></tr></thead><tbody>
 <tr><td>lstm_tiny</td><td>2</td><td>128</td><td>266K</td><td>2.2</td><td>2.3</td></tr>
 <tr><td>lstm_small</td><td>3</td><td>256</td><td>1.6M</td><td>4.2</td><td>4.4</td></tr>

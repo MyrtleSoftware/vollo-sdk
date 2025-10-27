@@ -163,14 +163,21 @@
 mlp = MLP(256.0, 384.0, 128.0)
 </code></pre>
 <p>We demonstrate the model at a variety of batch sizes. The model has 295K parameters.</p>
-<h2 id="ia-840f-3-big-cores"><a class="header" href="#ia-840f-3-big-cores">IA-840F: 3 big cores</a></h2>
+<h2 id="v80-6-cores-block-size-32"><a class="header" href="#v80-6-cores-block-size-32">V80: 6 cores, block size 32</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Model</th><th>Batch size</th><th>Mean latency (us)</th><th>99th percentile latency (us)</th></tr></thead><tbody>
+<tr><td>mlp_b1</td><td>1</td><td>2.8</td><td>3.0</td></tr>
+<tr><td>mlp_b4</td><td>4</td><td>3.8</td><td>4.0</td></tr>
+<tr><td>mlp_b8</td><td>8</td><td>5.9</td><td>6.2</td></tr>
+</tbody></table>
+</div>
+<h2 id="ia-840f-3-cores-block-size-64"><a class="header" href="#ia-840f-3-cores-block-size-64">IA-840F: 3 cores, block size 64</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Batch size</th><th>Mean latency (μs)</th><th>99th Percentile latency (μs)</th></tr></thead><tbody>
 <tr><td>mlp_b1</td><td>1</td><td>2.3</td><td>2.4</td></tr>
 <tr><td>mlp_b4</td><td>4</td><td>2.5</td><td>2.6</td></tr>
 <tr><td>mlp_b8</td><td>8</td><td>2.7</td><td>2.8</td></tr>
 </tbody></table>
 </div>
-<h2 id="ia-420f-6-small-cores"><a class="header" href="#ia-420f-6-small-cores">IA-420F: 6 small cores</a></h2>
+<h2 id="ia-420f-6-core-block-size-32"><a class="header" href="#ia-420f-6-core-block-size-32">IA-420F: 6 core, block size 32</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Batch size</th><th>Mean latency (μs)</th><th>99th Percentile latency (μs)</th></tr></thead><tbody>
 <tr><td>mlp_b1</td><td>1</td><td>2.9</td><td>3.0</td></tr>
 <tr><td>mlp_b4</td><td>4</td><td>3.0</td><td>3.1</td></tr>
