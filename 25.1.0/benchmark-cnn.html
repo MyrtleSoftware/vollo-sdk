@@ -171,8 +171,14 @@ class CNN(nn.Module):
         x = self.cnn(x)  # N x channels x T
         return x
 </code></pre>
-<p>The kernel size for all models is 8.</p>
+<p>The kernel size for all models is 8. The batch size and sequence length are both set to 1 (i.e., we benchmark a single timestep).
+Consecutive inferences are run with spacing between them to minimise latency.</p>
 <h2 id="v80-6-cores-block-size-32"><a class="header" href="#v80-6-cores-block-size-32">V80: 6 cores, block size 32</a></h2>
+<blockquote>
+<div class="warning">
+V80 PCIe optimisations underway, improvements coming in the next release
+</div>
+</blockquote>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Layers</th><th>Channels</th><th>Parameters</th><th>Mean latency (us)</th><th>99th percentile latency (us)</th></tr></thead><tbody>
 <tr><td>cnn_tiny</td><td>3</td><td>128</td><td>393K</td><td>3.1</td><td>3.3</td></tr>
 <tr><td>cnn_small</td><td>3</td><td>256</td><td>1.6M</td><td>3.3</td><td>3.4</td></tr>

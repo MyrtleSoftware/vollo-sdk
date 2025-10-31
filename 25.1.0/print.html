@@ -887,6 +887,11 @@ mlp = MLP(256.0, 384.0, 128.0)
 </code></pre>
 <p>We demonstrate the model at a variety of batch sizes. The model has 295K parameters.</p>
 <h2 id="v80-6-cores-block-size-32"><a class="header" href="#v80-6-cores-block-size-32">V80: 6 cores, block size 32</a></h2>
+<blockquote>
+<div class="warning">
+V80 PCIe optimisations underway, improvements coming in the next release
+</div>
+</blockquote>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Batch size</th><th>Mean latency (us)</th><th>99th percentile latency (us)</th></tr></thead><tbody>
 <tr><td>mlp_b1</td><td>1</td><td>2.8</td><td>3.0</td></tr>
 <tr><td>mlp_b4</td><td>4</td><td>3.8</td><td>4.0</td></tr>
@@ -931,8 +936,14 @@ class CNN(nn.Module):
         x = self.cnn(x)  # N x channels x T
         return x
 </code></pre>
-<p>The kernel size for all models is 8.</p>
+<p>The kernel size for all models is 8. The batch size and sequence length are both set to 1 (i.e., we benchmark a single timestep).
+Consecutive inferences are run with spacing between them to minimise latency.</p>
 <h2 id="v80-6-cores-block-size-32-1"><a class="header" href="#v80-6-cores-block-size-32-1">V80: 6 cores, block size 32</a></h2>
+<blockquote>
+<div class="warning">
+V80 PCIe optimisations underway, improvements coming in the next release
+</div>
+</blockquote>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Layers</th><th>Channels</th><th>Parameters</th><th>Mean latency (us)</th><th>99th percentile latency (us)</th></tr></thead><tbody>
 <tr><td>cnn_tiny</td><td>3</td><td>128</td><td>393K</td><td>3.1</td><td>3.3</td></tr>
 <tr><td>cnn_small</td><td>3</td><td>256</td><td>1.6M</td><td>3.3</td><td>3.4</td></tr>
@@ -968,7 +979,10 @@ class CNN(nn.Module):
         x = self.fc(x)
         return x
 </code></pre>
-<p>We have also had LSTM models benchmarked and audited as part of a STAC-ML submission where we hold the lowest latency across all models. Please refer to our STAC-ML submissions for more details:</p>
+<p>For all the benchmarked models, the input size is the same as the hidden size for all models and the output size is set to 32. The
+layers refers to the number of LSTM layers in the stack. The batch size and sequence length are both set to 1 (i.e., we benchmark a
+single timestep). Consecutive inferences are run with spacing between them to minimise latency.</p>
+<p>We have also had LSTM models benchmarked and audited as part of a STAC-ML submission where we held the lowest latency across all models. Please refer to our STAC-ML submissions for more details:</p>
 <ul>
 <li>
 <p><a href="https://www.stacresearch.com/MRTL221125">STAC ML Sumaco</a></p>
@@ -977,7 +991,13 @@ class CNN(nn.Module):
 <p><a href="https://www.stacresearch.com/MRTL230426">STAC ML Tacana</a></p>
 </li>
 </ul>
+<p>Note that Vollo's current performance, as shown in the tables below, is significantly improved over the STAC-ML submissions.</p>
 <h2 id="v80-6-core-block-size-32"><a class="header" href="#v80-6-core-block-size-32">V80: 6 core, block size 32</a></h2>
+<blockquote>
+<div class="warning">
+V80 PCIe optimisations underway, improvements coming in the next release
+</div>
+</blockquote>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Layers</th><th>Hidden size</th><th>Parameters</th><th>Mean latency (us)</th><th>99th percentile latency (us)</th></tr></thead><tbody>
 <tr><td>lstm_tiny</td><td>2</td><td>128</td><td>268K</td><td>2.8</td><td>2.8</td></tr>
 <tr><td>lstm_small</td><td>3</td><td>256</td><td>1.6M</td><td>3.3</td><td>3.4</td></tr>
@@ -994,16 +1014,14 @@ class CNN(nn.Module):
 <tr><td>lstm_med_deep</td><td>6</td><td>320</td><td>4.9M</td><td>4.3</td><td>4.5</td></tr>
 </tbody></table>
 </div>
-<p>The input size is the same as the hidden size for all models and the output size is set to 32. The layers refers to the number of
-LSTM layers in the stack.</p>
+<p>The large model is not supported on the IA-840F accelerator card as it is too large to fit in the accelerator memory.</p>
 <h2 id="ia-420f-6-core-block-size-32-1"><a class="header" href="#ia-420f-6-core-block-size-32-1">IA-420F: 6 core, block size 32</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Model</th><th>Layers</th><th>Hidden size</th><th>Parameters</th><th>Mean latency (μs)</th><th>99th Percentile latency (μs)</th></tr></thead><tbody>
 <tr><td>lstm_tiny</td><td>2</td><td>128</td><td>266K</td><td>2.2</td><td>2.3</td></tr>
 <tr><td>lstm_small</td><td>3</td><td>256</td><td>1.6M</td><td>4.2</td><td>4.4</td></tr>
 </tbody></table>
 </div>
-<p>The input size is the same as the hidden size and the output size is set to 32.</p>
-<p>The two medium models are not supported on the IA-420F accelerator card as they are too large to fit in the accelerator memory.</p>
+<p>The medium and large models are not supported on the IA-420F accelerator card as they are too large to fit in the accelerator memory.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="io-round-trip"><a class="header" href="#io-round-trip">IO Round Trip</a></h1>
 <p>The following IO round trip times are sampled by using a program with no compute on the
 Vollo accelerator from the Vollo runtime.</p>
