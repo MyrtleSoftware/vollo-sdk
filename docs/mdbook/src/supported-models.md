@@ -24,6 +24,11 @@ The Vollo compiler supports PyTorch models that use the following operations:
 | Broadcasting             | Implicitly or with `broadcast_to`, `broadcast_tensors`, `expand`, `expand_as`                                     |
 | `sqrt`                   | `torch.sqrt`, `torch.rsqrt`                                                                                       |
 | `tanh`                   | `torch.tanh`, `torch.nn.Tanh`                                                                                     |
+| Exponential              | `torch.exp`, `torch.exp2`                                                                                         |
+| `silu`                   | `torch.nn.functional.silu`, `torch.nn.SiLU`                                                                       |
+| `softplus`               | `torch.nn.functional.softplus`, `torch.nn.Softplus`                                                               |
+| `softmax`                | `torch.softmax`, `torch.nn.Softmax`                                                                               |
+| `sigmoid`                | `torch.sigmoid`, `torch.nn.functional.sigmoid`, `torch.nn.Sigmoid`                                                |
 
 Models that take multiple input tensors and return multiple output tensors
 (i.e. a tuple of tensors) are supported.

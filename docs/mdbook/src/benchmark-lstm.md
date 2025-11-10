@@ -18,13 +18,33 @@ class LSTM(nn.Module):
         return x
 ```
 
-We have also had LSTM models benchmarked and audited as part of a STAC-ML submission where we hold the lowest latency across all models. Please refer to our STAC-ML submissions for more details:
+For all the benchmarked models, the input size is the same as the hidden size for all models and the output size is set to 32. The
+layers refers to the number of LSTM layers in the stack. The batch size and sequence length are both set to 1 (i.e., we benchmark a
+single timestep). Consecutive inferences are run with spacing between them to minimise latency.
+
+We have also had LSTM models benchmarked and audited as part of a STAC-ML submission where we held the lowest latency across all models. Please refer to our STAC-ML submissions for more details:
 
 - [STAC ML Sumaco](https://www.stacresearch.com/MRTL221125)
 
 - [STAC ML Tacana](https://www.stacresearch.com/MRTL230426)
 
-## IA-840F: 3 big cores
+Note that Vollo's current performance, as shown in the tables below, is significantly improved over the STAC-ML submissions.
+
+## V80: 6 core, block size 32
+
+> <div class="warning">
+> V80 PCIe optimisations underway, improvements coming in the next release
+> </div>
+
+| Model         |   Layers |   Hidden size | Parameters   |   Mean latency (us) |   99th percentile latency (us) |
+|---------------|----------|---------------|--------------|---------------------|--------------------------------|
+| lstm_tiny     |        2 |           128 | 268K         |                 2.8 |                            2.8 |
+| lstm_small    |        3 |           256 | 1.6M         |                 3.3 |                            3.4 |
+| lstm_med      |        3 |           480 | 5.6M         |                 4.3 |                            4.5 |
+| lstm_med_deep |        6 |           320 | 4.9M         |                 4.5 |                            4.8 |
+| lstm_large    |        3 |           960 | 22.2M        |                 8.5 |                            8.7 |
+
+## IA-840F: 3 core, block size 64
 
 | Model         | Layers | Hidden size | Parameters | Mean latency (μs) | 99th Percentile latency (μs) |
 | ------------- | ------ | ----------- | ---------- | ----------------- | ---------------------------- |
@@ -33,16 +53,13 @@ We have also had LSTM models benchmarked and audited as part of a STAC-ML submis
 | lstm_med      | 3      | 480         | 5.5M       | 4.2               | 4.4                          |
 | lstm_med_deep | 6      | 320         | 4.9M       | 4.3               | 4.5                          |
 
-The input size is the same as the hidden size for all models and the output size is set to 32. The layers refers to the number of
-LSTM layers in the stack.
+The large model is not supported on the IA-840F accelerator card as it is too large to fit in the accelerator memory.
 
-## IA-420F: 6 small cores
+## IA-420F: 6 core, block size 32
 
 | Model      | Layers | Hidden size | Parameters | Mean latency (μs) | 99th Percentile latency (μs) |
 | ---------- | ------ | ----------- | ---------- | ----------------- | ---------------------------- |
 | lstm_tiny  | 2      | 128         | 266K       | 2.2               | 2.3                          |
 | lstm_small | 3      | 256         | 1.6M       | 4.2               | 4.4                          |
 
-The input size is the same as the hidden size and the output size is set to 32.
-
-The two medium models are not supported on the IA-420F accelerator card as they are too large to fit in the accelerator memory.
+The medium and large models are not supported on the IA-420F accelerator card as they are too large to fit in the accelerator memory.
