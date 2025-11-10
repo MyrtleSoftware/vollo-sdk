@@ -1,5 +1,22 @@
 # Release Notes
 
+## 25.1.1
+
+- Fix bug in `vollo-tool` where `vollo-tool fpga-config` did not enumerate the
+  V80 management physical function
+- Fix bug in `load-kernel-driver.sh` where the Vollo driver was loaded for the
+  V80 management physical function instead of the AMI driver
+
+## 25.1.0
+
+- Early access support for Mamba models
+- Add support for SiLU
+- Add support for Softplus
+- Add support for Exp, Exp2
+- Add support for Sigmoid
+- Add support for Softmax
+- Speed up model compilation
+
 ## 25.0.1
 
 - Add support for size 0 input and output tensors in the compiler
