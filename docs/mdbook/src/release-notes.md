@@ -1,5 +1,12 @@
 # Release Notes
 
+## 25.1.1
+
+- Fix bug in `vollo-tool` where `vollo-tool fpga-config` did not enumerate the
+  V80 management physical function
+- Fix bug in `load-kernel-driver.sh` where the Vollo driver was loaded for the
+  V80 management physical function instead of the AMI driver
+
 ## 25.1.0
 
 - Early access support for Mamba models

@@ -56,7 +56,7 @@ class Identity(torch.nn.Module):
     def forward(self, x):
         return x
 
-    def describe_self(self, _input_shape):
+    def describe_self(self, _name, _input_shape):
         return {
             "Model": "Identity",
         }
@@ -74,10 +74,10 @@ class MLP(nn.Module):
         x = nn.functional.relu(self.fc2(x))
         return self.out(x)
 
-    def describe_self(self, input_shape):
+    def describe_self(self, name, input_shape):
         batch_size = input_shape[0]
         return {
-            "Model": f"mlp_b{batch_size}",
+            "Model": name,
             "Batch size": batch_size,
         }
 
@@ -103,13 +103,14 @@ class CNN(nn.Module):
         )
 
     def forward(self, x):
-        x = self.cnn(x)  # N x channels x T
+        x = self.cnn(x)  # channels x T, if not using a batch dimension
         return x
 
-    def describe_self(self, input_shape):
+    def describe_self(self, name, input_shape):
         return {
+            "Model": name,
             "Layers": len(self.cnn),
-            "Channels": input_shape[1],
+            "Channels": input_shape[0],
             "Parameters": pretty_parameters(sum(p.numel() for p in self.parameters())),
         }
 
@@ -126,8 +127,9 @@ class LSTM(nn.Module):
         x = self.fc(x)
         return x
 
-    def describe_self(self, input_shape):
+    def describe_self(self, name, _input_shape):
         return {
+            "Model": name,
             "Layers": self.lstm.lstm.num_layers,
             "Hidden size": self.lstm.lstm.hidden_size,
             "Parameters": pretty_parameters(sum(p.numel() for p in self.parameters())),
@@ -178,6 +180,11 @@ all_models = {
         [STREAM_DIM, 320],
         {"streaming_transform": [0]},
     ),
+    "lstm_large": (
+        LSTM(3, 960, 960, 32),
+        [STREAM_DIM, 960],
+        {"streaming_transform": [0]},
+    ),
 }
 
 
@@ -224,7 +231,7 @@ def compile_model(parser, args):
     model, input_shape, transforms = all_models[args.model_name]
 
     if args.describe_only:
-        description = model.describe_self(input_shape)
+        description = model.describe_self(args.model_name, input_shape)
         print(json.dumps(description, indent=2))
         return 0
 

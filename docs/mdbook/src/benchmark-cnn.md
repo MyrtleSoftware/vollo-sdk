@@ -27,7 +27,22 @@ class CNN(nn.Module):
         return x
 ```
 
-## IA-840F: 3 big cores
+The kernel size for all models is 8. The batch size and sequence length are both set to 1 (i.e., we benchmark a single timestep).
+Consecutive inferences are run with spacing between them to minimise latency.
+
+## V80: 6 cores, block size 32
+
+> <div class="warning">
+> V80 PCIe optimisations underway, improvements coming in the next release
+> </div>
+
+| Model     |   Layers |   Channels | Parameters   |   Mean latency (us) |   99th percentile latency (us) |
+|-----------|----------|------------|--------------|---------------------|--------------------------------|
+| cnn_tiny  |        3 |        128 | 393K         |                 3.1 |                            3.3 |
+| cnn_small |        3 |        256 | 1.6M         |                 3.3 |                            3.4 |
+| cnn_med   |        6 |        256 | 3.1M         |                 3.8 |                            4.0 |
+
+## IA-840F: 3 cores, block size 64
 
 | Model     | Layers | Channels | Parameters | Mean latency (μs) | 99th Percentile latency (μs) |
 | --------- | ------ | -------- | ---------- | ----------------- | ---------------------------- |
@@ -35,14 +50,10 @@ class CNN(nn.Module):
 | cnn_small | 3      | 256      | 1.6M       | 2.4               | 2.5                          |
 | cnn_med   | 6      | 256      | 3.1M       | 3.0               | 3.2                          |
 
-The kernel size for all models is 8.
-
-### IA-420F: 6 small cores
+## IA-420F: 6 cores, block size 32
 
 | Model     | Layers | Channels | Parameters | Mean latency (μs) | 99th Percentile latency (μs) |
 | --------- | ------ | -------- | ---------- | ----------------- | ---------------------------- |
 | cnn_tiny  | 3      | 128      | 393K       | 2.2               | 2.3                          |
 | cnn_small | 3      | 256      | 1.6M       | 2.8               | 3.0                          |
 | cnn_med   | 6      | 256      | 3.1M       | 3.9               | 3.9                          |
-
-The kernel size for all models is 8.
