@@ -12,6 +12,7 @@
 #include <linux/err.h>           /* IS_ERR, PTR_ERR */
 #include <linux/string.h>        /* string functions */
 #include <linux/kernel.h>        /* container_of */
+#include <linux/version.h>
 
 #include "ami.h"
 #include "ami_pcie.h"
@@ -1420,5 +1421,7 @@ void remove_hwmon(struct device *dev)
 	if (!dev)
 		return;
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(6, 12, 0)
 	devm_hwmon_device_unregister(dev);
+#endif
 }

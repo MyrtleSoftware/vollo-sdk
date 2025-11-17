@@ -25,7 +25,7 @@ $(TARGET_MODULE)-objs += gcq-driver/src/gcq_driver.o
 $(TARGET_MODULE)-objs += gcq-driver/src/gcq_hw.o
 $(TARGET_MODULE)-objs += gcq-driver/src/gcq_features.o
 
-EXTRA_CFLAGS:=-I$(PWD) -I$(PWD)/fal -I$(PWD)/fal/gcq -I$(PWD)/gcq-driver/src
+EXTRA_CFLAGS:=-I$(src) -I$(src)/fal -I$(src)/fal/gcq -I$(src)/gcq-driver/src
 
 KDIR?=/lib/modules/$(shell uname -r)/build
 
@@ -41,3 +41,6 @@ all:
 
 clean:
 	$(MAKE) -C ${KDIR} M=${PWD} clean
+
+install:
+	$(MAKE) -C ${KDIR} M=${PWD} modules_install
