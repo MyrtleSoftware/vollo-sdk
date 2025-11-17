@@ -1,5 +1,11 @@
 # Changelog
 
+## 25.1.2
+
+- Reduced memory usage of the compiler during compilation of large models
+- Improve `ami-tool`'s detection of bitstream UUIDs
+- Improve AMI driver's compatibility with Linux kernel versions
+
 ## 25.1.1
 
 - Fix bug in `vollo-tool` where `vollo-tool fpga-config` did not enumerate the
