@@ -9,6 +9,7 @@
 #include <linux/delay.h>
 #include <linux/pci.h>
 #include <linux/eventfd.h>
+#include <linux/version.h>
 
 #include "ami_top.h"
 #include "ami_program.h"
@@ -20,6 +21,11 @@
 #define INVALID_BOOT_TAG	(0xFFFFFFFF)
 #define BOOT_TAG_CHUNK		(0)
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 8, 0)
+#define EVENTFD_SIGNAL(ctx, _n) eventfd_signal(ctx)
+#else
+#define EVENTFD_SIGNAL(ctx, n) eventfd_signal(ctx, n)
+#endif
 
 /**
  * do_image_download() - Perform an image download operation.
@@ -90,7 +96,7 @@ static int do_image_download(struct amc_control_ctxt *amc_ctrl_ctxt, uint8_t *bu
 				break;
 
 			if (efd_ctx)
-				eventfd_signal(efd_ctx, bytes_to_write);
+				EVENTFD_SIGNAL(efd_ctx, bytes_to_write);
 		} else {
 			uint32_t boot_tag = INVALID_BOOT_TAG;
 
@@ -144,7 +150,7 @@ static int do_image_download(struct amc_control_ctxt *amc_ctrl_ctxt, uint8_t *bu
 			buf, (PDI_CHUNK_SIZE * PDI_CHUNK_MULTIPLIER));
 
 		if (!ret && efd_ctx)
-			eventfd_signal(efd_ctx, (PDI_CHUNK_SIZE * PDI_CHUNK_MULTIPLIER));
+			EVENTFD_SIGNAL(efd_ctx, (PDI_CHUNK_SIZE * PDI_CHUNK_MULTIPLIER));
 	}
 
 	if (ret)
