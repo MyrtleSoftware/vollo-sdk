@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>vollo_rt &mdash; Vollo Compiler 25.1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=4ab8bd86"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="vollo_torch.nn" href="vollo_torch.nn.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Vollo Compiler
+              <img src="_static/vollo_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="vollo_compiler.html">vollo_compiler</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config"><code class="docutils literal notranslate"><span class="pre">Config</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.ia_420f_c6b32"><code class="docutils literal notranslate"><span class="pre">Config.ia_420f_c6b32()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.ia_840f_c3b64"><code class="docutils literal notranslate"><span class="pre">Config.ia_840f_c3b64()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.ia_840f_c2b64d"><code class="docutils literal notranslate"><span class="pre">Config.ia_840f_c2b64d()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.nt400d11_c6b32"><code class="docutils literal notranslate"><span class="pre">Config.nt400d11_c6b32()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.v80_c6b32"><code class="docutils literal notranslate"><span class="pre">Config.v80_c6b32()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.fb4cgg3_c3b32"><code class="docutils literal notranslate"><span class="pre">Config.fb4cgg3_c3b32()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.ip_core"><code class="docutils literal notranslate"><span class="pre">Config.ip_core()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.save"><code class="docutils literal notranslate"><span class="pre">Config.save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.load"><code class="docutils literal notranslate"><span class="pre">Config.load()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.block_size"><code class="docutils literal notranslate"><span class="pre">Config.block_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.num_cores"><code class="docutils literal notranslate"><span class="pre">Config.num_cores</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.tensor_ram_depth"><code class="docutils literal notranslate"><span class="pre">Config.tensor_ram_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.tensor_descriptor_count"><code class="docutils literal notranslate"><span class="pre">Config.tensor_descriptor_count</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.weight_store_depth"><code class="docutils literal notranslate"><span class="pre">Config.weight_store_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.accum_store_depth"><code class="docutils literal notranslate"><span class="pre">Config.accum_store_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.cell_state_depth"><code class="docutils literal notranslate"><span class="pre">Config.cell_state_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.clamp_store_depth"><code class="docutils literal notranslate"><span class="pre">Config.clamp_store_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.max_read_size"><code class="docutils literal notranslate"><span class="pre">Config.max_read_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.io_size"><code class="docutils literal notranslate"><span class="pre">Config.io_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.fabric"><code class="docutils literal notranslate"><span class="pre">Config.fabric</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.NNIR"><code class="docutils literal notranslate"><span class="pre">NNIR</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.NNIR.from_onnx"><code class="docutils literal notranslate"><span class="pre">NNIR.from_onnx()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.NNIR.streaming_transform"><code class="docutils literal notranslate"><span class="pre">NNIR.streaming_transform()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.NNIR.to_program"><code class="docutils literal notranslate"><span class="pre">NNIR.to_program()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.NNIR.__new__"><code class="docutils literal notranslate"><span class="pre">NNIR.__new__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program"><code class="docutils literal notranslate"><span class="pre">Program</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.compute_duration_per_inference_us"><code class="docutils literal notranslate"><span class="pre">Program.compute_duration_per_inference_us()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.cycle_count_per_inference"><code class="docutils literal notranslate"><span class="pre">Program.cycle_count_per_inference()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.cycle_summary_per_inference"><code class="docutils literal notranslate"><span class="pre">Program.cycle_summary_per_inference()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.hw_config"><code class="docutils literal notranslate"><span class="pre">Program.hw_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.io_only_test"><code class="docutils literal notranslate"><span class="pre">Program.io_only_test()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.load"><code class="docutils literal notranslate"><span class="pre">Program.load()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.load_bytes"><code class="docutils literal notranslate"><span class="pre">Program.load_bytes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.metrics"><code class="docutils literal notranslate"><span class="pre">Program.metrics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.model_input_shape"><code class="docutils literal notranslate"><span class="pre">Program.model_input_shape()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.model_input_streaming_dim"><code class="docutils literal notranslate"><span class="pre">Program.model_input_streaming_dim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.model_num_inputs"><code class="docutils literal notranslate"><span class="pre">Program.model_num_inputs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.model_num_outputs"><code class="docutils literal notranslate"><span class="pre">Program.model_num_outputs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.model_output_shape"><code class="docutils literal notranslate"><span class="pre">Program.model_output_shape()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.model_output_streaming_dim"><code class="docutils literal notranslate"><span class="pre">Program.model_output_streaming_dim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.num_models"><code class="docutils literal notranslate"><span class="pre">Program.num_models()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.save"><code class="docutils literal notranslate"><span class="pre">Program.save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.save_bytes"><code class="docutils literal notranslate"><span class="pre">Program.save_bytes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.to_vm"><code class="docutils literal notranslate"><span class="pre">Program.to_vm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.transform_to_io_only_test"><code class="docutils literal notranslate"><span class="pre">Program.transform_to_io_only_test()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.ProgramBuilder"><code class="docutils literal notranslate"><span class="pre">ProgramBuilder</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.ProgramBuilder.add_nnir"><code class="docutils literal notranslate"><span class="pre">ProgramBuilder.add_nnir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.ProgramBuilder.to_program"><code class="docutils literal notranslate"><span class="pre">ProgramBuilder.to_program()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics"><code class="docutils literal notranslate"><span class="pre">Metrics</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.clamp_store_depth"><code class="docutils literal notranslate"><span class="pre">Metrics.clamp_store_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.clamp_store_used"><code class="docutils literal notranslate"><span class="pre">Metrics.clamp_store_used</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.input_bytes"><code class="docutils literal notranslate"><span class="pre">Metrics.input_bytes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.model_names"><code class="docutils literal notranslate"><span class="pre">Metrics.model_names</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.num_instrs"><code class="docutils literal notranslate"><span class="pre">Metrics.num_instrs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.num_micro_instructions"><code class="docutils literal notranslate"><span class="pre">Metrics.num_micro_instructions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.output_bytes"><code class="docutils literal notranslate"><span class="pre">Metrics.output_bytes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.tensor_ram_depth"><code class="docutils literal notranslate"><span class="pre">Metrics.tensor_ram_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.tensor_ram_used"><code class="docutils literal notranslate"><span class="pre">Metrics.tensor_ram_used</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.weight_store_depth"><code class="docutils literal notranslate"><span class="pre">Metrics.weight_store_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.weight_store_used"><code class="docutils literal notranslate"><span class="pre">Metrics.weight_store_used</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM"><code class="docutils literal notranslate"><span class="pre">VM</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM.compute_duration_us"><code class="docutils literal notranslate"><span class="pre">VM.compute_duration_us()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM.cycle_count"><code class="docutils literal notranslate"><span class="pre">VM.cycle_count()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM.metrics"><code class="docutils literal notranslate"><span class="pre">VM.metrics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM.run"><code class="docutils literal notranslate"><span class="pre">VM.run()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM.run_flat"><code class="docutils literal notranslate"><span class="pre">VM.run_flat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM.run_flat_timesteps"><code class="docutils literal notranslate"><span class="pre">VM.run_flat_timesteps()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM.run_timesteps"><code class="docutils literal notranslate"><span class="pre">VM.run_timesteps()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.AllocationError"><code class="docutils literal notranslate"><span class="pre">AllocationError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.SaveError"><code class="docutils literal notranslate"><span class="pre">SaveError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.LoadError"><code class="docutils literal notranslate"><span class="pre">LoadError</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vollo_torch.html">vollo_torch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vollo_torch.fx.html">vollo_torch.fx</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.fx.nnir.html">vollo_torch.fx.nnir</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vollo_torch.fx.nnir.html#vollo_torch.fx.nnir.to_nnir"><code class="docutils literal notranslate"><span class="pre">to_nnir()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.fx.html#vollo_torch.fx.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.fx.html#vollo_torch.fx.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_torch.nn.html">vollo_torch.nn</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.PaddedConv1d"><code class="docutils literal notranslate"><span class="pre">PaddedConv1d</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.LSTM"><code class="docutils literal notranslate"><span class="pre">LSTM</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.RecurrentStateLSTM"><code class="docutils literal notranslate"><span class="pre">RecurrentStateLSTM</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.LSTMCell"><code class="docutils literal notranslate"><span class="pre">LSTMCell</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.LSTMCell.forward"><code class="docutils literal notranslate"><span class="pre">LSTMCell.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.LSTMCell.reset"><code class="docutils literal notranslate"><span class="pre">LSTMCell.reset()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.Ones"><code class="docutils literal notranslate"><span class="pre">Ones</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.Zeros"><code class="docutils literal notranslate"><span class="pre">Zeros</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.Scan"><code class="docutils literal notranslate"><span class="pre">Scan</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.Scan.forward"><code class="docutils literal notranslate"><span class="pre">Scan.forward()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.RMSNorm"><code class="docutils literal notranslate"><span class="pre">RMSNorm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.RMSNorm.extra_repr"><code class="docutils literal notranslate"><span class="pre">RMSNorm.extra_repr()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">vollo_rt</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#vollo_rt.VolloRTContext"><code class="docutils literal notranslate"><span class="pre">VolloRTContext</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vollo_rt.VolloRTContext.accelerator_block_size"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.accelerator_block_size()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vollo_rt.VolloRTContext.accelerator_num_cores"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.accelerator_num_cores()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vollo_rt.VolloRTContext.add_accelerator"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.add_accelerator()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vollo_rt.VolloRTContext.add_job"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.add_job()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vollo_rt.VolloRTContext.add_job_bf16"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.add_job_bf16()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vollo_rt.VolloRTContext.add_job_f32"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.add_job_f32()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vollo_rt.VolloRTContext.add_vm"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.add_vm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vollo_rt.VolloRTContext.get_result"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.get_result()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vollo_rt.VolloRTContext.load_program"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.load_program()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vollo_rt.VolloRTContext.load_program_bytes"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.load_program_bytes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vollo_rt.VolloRTContext.model_input_shape"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.model_input_shape()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vollo_rt.VolloRTContext.model_input_streaming_dim"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.model_input_streaming_dim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vollo_rt.VolloRTContext.model_name"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.model_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vollo_rt.VolloRTContext.model_num_inputs"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.model_num_inputs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vollo_rt.VolloRTContext.model_num_outputs"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.model_num_outputs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vollo_rt.VolloRTContext.model_output_shape"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.model_output_shape()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vollo_rt.VolloRTContext.model_output_streaming_dim"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.model_output_streaming_dim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vollo_rt.VolloRTContext.num_models"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.num_models()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vollo_rt.VolloRTContext.poll"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.poll()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#vollo_rt.VolloRTContext.run"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Vollo Compiler</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">vollo_rt</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-vollo_rt">
+<span id="vollo-rt"></span><h1>vollo_rt<a class="headerlink" href="#module-vollo_rt" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="vollo_rt.VolloRTContext">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">vollo_rt.</span></span><span class="sig-name descname"><span class="pre">VolloRTContext</span></span><a class="headerlink" href="#vollo_rt.VolloRTContext" title="Link to this definition"></a></dt>
+<dd><p>A context for performing computation on Vollo</p>
+<p>This wraps the C bindings for the Vollo Runtime. In order for contexts to be
+properly garbage collected, <a class="reference internal" href="#vollo_rt.VolloRTContext" title="vollo_rt.VolloRTContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">VolloRTContext</span></code></a> is a context manager, and should be
+used in a <code class="docutils literal notranslate"><span class="pre">with</span></code> block. This ensures that the context id correctly destroyed
+after use. <a class="reference internal" href="#vollo_rt.VolloRTContext" title="vollo_rt.VolloRTContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">VolloRTContext</span></code></a> should not be nested, only a single context should
+be open at any given time.</p>
+<dl class="simple">
+<dt>The general order of operations is as follows:</dt><dd><ul class="simple">
+<li><p>Initialise context in a <code class="docutils literal notranslate"><span class="pre">with</span></code> statement</p></li>
+<li><p><a class="reference internal" href="#vollo_rt.VolloRTContext.add_accelerator" title="vollo_rt.VolloRTContext.add_accelerator"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_accelerator()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#vollo_rt.VolloRTContext.load_program" title="vollo_rt.VolloRTContext.load_program"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load_program()</span></code></a> / <a class="reference internal" href="#vollo_rt.VolloRTContext.load_program_bytes" title="vollo_rt.VolloRTContext.load_program_bytes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load_program_bytes()</span></code></a></p></li>
+<li><p>Gather metadata about the models available in the loaded program</p></li>
+<li><dl class="simple">
+<dt>Run inference with either:</dt><dd><ul>
+<li><p><a class="reference internal" href="#vollo_rt.VolloRTContext.run" title="vollo_rt.VolloRTContext.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a></p></li>
+<li><dl class="simple">
+<dt>Low level API:</dt><dd><ul>
+<li><p>Add jobs with <a class="reference internal" href="#vollo_rt.VolloRTContext.add_job" title="vollo_rt.VolloRTContext.add_job"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_job()</span></code></a>, <a class="reference internal" href="#vollo_rt.VolloRTContext.add_job_f32" title="vollo_rt.VolloRTContext.add_job_f32"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_job_f32()</span></code></a> or <a class="reference internal" href="#vollo_rt.VolloRTContext.add_job_bf16" title="vollo_rt.VolloRTContext.add_job_bf16"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_job_bf16()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#vollo_rt.VolloRTContext.poll" title="vollo_rt.VolloRTContext.poll"><code class="xref py py-meth docutils literal notranslate"><span class="pre">poll()</span></code></a> until a job is completed</p></li>
+<li><p><a class="reference internal" href="#vollo_rt.VolloRTContext.get_result" title="vollo_rt.VolloRTContext.get_result"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_result()</span></code></a> to retrieve the result of the computation</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<p>High level API example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ctx</span><span class="o">.</span><span class="n">add_accelerator</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">ctx</span><span class="o">.</span><span class="n">load_program</span><span class="p">(</span><span class="s2">&quot;program.vollo&quot;</span><span class="p">)</span>
+
+<span class="n">input_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">input_arr</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Low level API example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ctx</span><span class="o">.</span><span class="n">add_accelerator</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">ctx</span><span class="o">.</span><span class="n">load_program</span><span class="p">(</span><span class="s2">&quot;program.vollo&quot;</span><span class="p">)</span>
+
+<span class="c1"># add jobs</span>
+<span class="n">input_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+<span class="n">user_ctx_f32</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">add_job_f32</span><span class="p">(</span><span class="n">input_arr</span><span class="p">)</span>
+
+<span class="c1"># loop until the job is complete</span>
+<span class="n">completed_jobs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">while</span><span class="p">(</span><span class="n">user_ctx_f32</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">completed_jobs</span><span class="p">):</span>
+    <span class="n">completed_jobs</span> <span class="o">=</span> <span class="n">completed_jobs</span> <span class="o">+</span> <span class="n">ctx</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span>
+
+<span class="c1"># retrieve the results from each computation</span>
+<span class="n">output_f32</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">get_result</span><span class="p">(</span><span class="n">user_ctx_f32</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_rt.VolloRTContext.accelerator_block_size">
+<span class="sig-name descname"><span class="pre">accelerator_block_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">accelerator_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#vollo_rt.VolloRTContext.accelerator_block_size" title="Link to this definition"></a></dt>
+<dd><p>Get the block size of a Vollo accelerator.</p>
+<p>If used on a VM before loading a program, it will return 0, because the VM hardware config is determined by
+the requirements of the loaded program.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_rt.VolloRTContext.accelerator_num_cores">
+<span class="sig-name descname"><span class="pre">accelerator_num_cores</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">accelerator_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#vollo_rt.VolloRTContext.accelerator_num_cores" title="Link to this definition"></a></dt>
+<dd><p>Get the number of cores of a Vollo accelerator.
+For Vollo Trees bitstreams, this is the number of tree units.</p>
+<p>If used on a VM before loading a program, it will return 0, because the VM hardware config is determined by
+the requirements of the loaded program.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_rt.VolloRTContext.add_accelerator">
+<span class="sig-name descname"><span class="pre">add_accelerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">accelerator_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vollo_rt.VolloRTContext.add_accelerator" title="Link to this definition"></a></dt>
+<dd><p>Add an accelerator.
+The accelerator is specified by its index. The index refers to an accelerator in the sorted list
+of PCI addresses.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_rt.VolloRTContext.add_job">
+<span class="sig-name descname"><span class="pre">add_job</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vollo_rt.VolloRTContext.add_job" title="Link to this definition"></a></dt>
+<dd><p>Sets up a computation on the vollo where the inputs and outputs have
+type <code class="docutils literal notranslate"><span class="pre">numpy.float32</span></code>, <code class="docutils literal notranslate"><span class="pre">torch.float32</span></code>, or <code class="docutils literal notranslate"><span class="pre">torch.bfloat16</span></code>.
+Returns a user context, <code class="docutils literal notranslate"><span class="pre">user_ctx</span></code>. The <a class="reference internal" href="#vollo_rt.VolloRTContext.poll" title="vollo_rt.VolloRTContext.poll"><code class="xref py py-meth docutils literal notranslate"><span class="pre">poll()</span></code></a> function will
+return a list containing <code class="docutils literal notranslate"><span class="pre">user_ctx</span></code> once the job has been completed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The computation will be performed in bf16 but the driver will perform the conversion (if needed).</p></li>
+<li><p>The computation is only started on the next call to poll. This way it is possible
+to set up several computations that are kicked off at the same time.</p></li>
+</ul>
+</div>
+<p>Arg:</p>
+<blockquote>
+<div><p>inputs: One of:</p>
+<blockquote>
+<div><p>A float32 torch tensor (for single-input models)</p>
+<p>A float32 numpy array (for single-input models)</p>
+<p>A bfloat16 torch tensor (for single-input models)</p>
+<p>A Sequence of float32 torch tensors (for single-/multi-input models)</p>
+<p>A Sequence of float32 numpy arrays (for single-/multi-input models)</p>
+<p>A Sequence of bfloat16 torch tensors (for single-/multi-input models)</p>
+</div></blockquote>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A single tensor/array (for single-output models) or a tuple of tensors/arrays (for multi-output models).
+Whether they’re tensors or arrays, and the data type within them, is determined by the inputs.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_rt.VolloRTContext.add_job_bf16">
+<span class="sig-name descname"><span class="pre">add_job_bf16</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vollo_rt.VolloRTContext.add_job_bf16" title="Link to this definition"></a></dt>
+<dd><p>Sets up a computation on the vollo where the inputs and outputs have type <code class="docutils literal notranslate"><span class="pre">torch.bfloat16</span></code>.
+Returns a user context, <code class="docutils literal notranslate"><span class="pre">user_ctx</span></code>. The <code class="docutils literal notranslate"><span class="pre">poll</span></code> function will return a
+list containing <code class="docutils literal notranslate"><span class="pre">user_ctx</span></code> once the job has been completed.</p>
+<p>Note: The computation is only started on the next call to poll. This way it is possible
+to set up several computations that are kicked off at the same time.</p>
+<p>Arg:</p>
+<blockquote>
+<div><p>inputs: One of:</p>
+<blockquote>
+<div><p>A bfloat16 torch tensor (for single-input models)</p>
+<p>A Sequence of bfloat16 torch tensors (for single-/multi-input models)</p>
+</div></blockquote>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A single bfloat16 tensor (for single-output models) or a tuple of bfloat16 tensors (for multi-output models).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_rt.VolloRTContext.add_job_f32">
+<span class="sig-name descname"><span class="pre">add_job_f32</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#vollo_rt.VolloRTContext.add_job_f32" title="Link to this definition"></a></dt>
+<dd><p>Sets up a computation on the vollo where the inputs and outputs have type <code class="docutils literal notranslate"><span class="pre">numpy.float32</span></code> or <code class="docutils literal notranslate"><span class="pre">torch.float32</span></code>.
+Returns a user context, <code class="docutils literal notranslate"><span class="pre">user_ctx</span></code>. The <a class="reference internal" href="#vollo_rt.VolloRTContext.poll" title="vollo_rt.VolloRTContext.poll"><code class="xref py py-meth docutils literal notranslate"><span class="pre">poll()</span></code></a> function will return a
+list containing <code class="docutils literal notranslate"><span class="pre">user_ctx</span></code> once the job has been completed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>The computation will still be performed in bf16 but the driver will perform the conversion.</p></li>
+<li><p>The computation is only started on the next call to poll. This way it is possible
+to set up several computations that are kicked off at the same time.</p></li>
+</ul>
+</div>
+<p>Arg:</p>
+<blockquote>
+<div><p>inputs: One of:</p>
+<blockquote>
+<div><p>A float32 torch tensor (for single-input models)</p>
+<p>A float32 numpy array (for single-input models)</p>
+<p>A Sequence of float32 torch tensors (for single-/multi-input models)</p>
+<p>A Sequence of float32 numpy arrays (for single-/multi-input models)</p>
+</div></blockquote>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A single float32 tensor/array (for single-output models) or a tuple of float32 tensors/arrays (for
+multi-output models). Whether they’re tensors or arrays is determined by the inputs.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_rt.VolloRTContext.add_vm">
+<span class="sig-name descname"><span class="pre">add_vm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">accelerator_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bit_accurate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vollo_rt.VolloRTContext.add_vm" title="Link to this definition"></a></dt>
+<dd><p>Add a VM, to run a program in software simulation rather than on hardware.
+Allows testing the API without needing an accelerator or license, giving correct results but much slower.</p>
+<p>You can choose any <cite>accelerator_index</cite> to assign to the VM then use the rest of the API as though the VM
+is an accelerator. However, the VM hardware config is determined by the requirements of the loaded program,
+so until you call <cite>vollo_rt_load_program</cite> the values returned by <cite>accelerator_num_cores</cite> and
+<cite>accelerator_block_size</cite> will be 0.</p>
+<p>Cannot currently be used with Vollo Trees programs.</p>
+<p>This should be called before <cite>load_program</cite>.</p>
+<p>Arg:</p>
+<blockquote>
+<div><p>bit_accurate: Use a compute model that replicates the VOLLO accelerator with bit-accuracy. Disable
+to use single precision compute.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_rt.VolloRTContext.get_result">
+<span class="sig-name descname"><span class="pre">get_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_ctx</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vollo_rt.VolloRTContext.get_result" title="Link to this definition"></a></dt>
+<dd><p>Retrieve the result of the computation corresponding to <code class="docutils literal notranslate"><span class="pre">user_ctx</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_rt.VolloRTContext.load_program">
+<span class="sig-name descname"><span class="pre">load_program</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">program</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">PathLike</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vollo_rt.VolloRTContext.load_program" title="Link to this definition"></a></dt>
+<dd><p>Load a pre-compiled program onto the accelerator.</p>
+<p>Arg:</p>
+<blockquote>
+<div><p>program: One of:</p>
+<blockquote>
+<div><p>A path to a Vollo program (typically .vollo)</p>
+<p>A program straight from the Vollo Compiler or the Vollo Trees Compiler</p>
+</div></blockquote>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_rt.VolloRTContext.load_program_bytes">
+<span class="sig-name descname"><span class="pre">load_program_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">program_bytes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vollo_rt.VolloRTContext.load_program_bytes" title="Link to this definition"></a></dt>
+<dd><p>Load a pre-compiled Vollo program from a bytes object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_rt.VolloRTContext.model_input_shape">
+<span class="sig-name descname"><span class="pre">model_input_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#vollo_rt.VolloRTContext.model_input_shape" title="Link to this definition"></a></dt>
+<dd><p>Get the shape of a model input</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_rt.VolloRTContext.model_input_streaming_dim">
+<span class="sig-name descname"><span class="pre">model_input_streaming_dim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#vollo_rt.VolloRTContext.model_input_streaming_dim" title="Link to this definition"></a></dt>
+<dd><p>Get the input streaming dimension or None</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_rt.VolloRTContext.model_name">
+<span class="sig-name descname"><span class="pre">model_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#vollo_rt.VolloRTContext.model_name" title="Link to this definition"></a></dt>
+<dd><p>Get the name of a model if set</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_rt.VolloRTContext.model_num_inputs">
+<span class="sig-name descname"><span class="pre">model_num_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#vollo_rt.VolloRTContext.model_num_inputs" title="Link to this definition"></a></dt>
+<dd><p>Get the number of inputs the model uses.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_rt.VolloRTContext.model_num_outputs">
+<span class="sig-name descname"><span class="pre">model_num_outputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#vollo_rt.VolloRTContext.model_num_outputs" title="Link to this definition"></a></dt>
+<dd><p>Get the number of outputs the model uses.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_rt.VolloRTContext.model_output_shape">
+<span class="sig-name descname"><span class="pre">model_output_shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#vollo_rt.VolloRTContext.model_output_shape" title="Link to this definition"></a></dt>
+<dd><p>Get the shape of a model output</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_rt.VolloRTContext.model_output_streaming_dim">
+<span class="sig-name descname"><span class="pre">model_output_streaming_dim</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#vollo_rt.VolloRTContext.model_output_streaming_dim" title="Link to this definition"></a></dt>
+<dd><p>Get the output streaming dimension or None</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_rt.VolloRTContext.num_models">
+<span class="sig-name descname"><span class="pre">num_models</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#vollo_rt.VolloRTContext.num_models" title="Link to this definition"></a></dt>
+<dd><p>The number of models in the loaded program.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_rt.VolloRTContext.poll">
+<span class="sig-name descname"><span class="pre">poll</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#vollo_rt.VolloRTContext.poll" title="Link to this definition"></a></dt>
+<dd><p>Poll the vollo for completion.
+Returns a list of user contexts corresponding to completed jobs.</p>
+<p>Note: Polling also initiates transfers for new jobs, so you must poll before any progress
+on these new jobs can be made.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="vollo_rt.VolloRTContext.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_poll_iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sleep_duration_ms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#vollo_rt.VolloRTContext.run" title="Link to this definition"></a></dt>
+<dd><p>Run a single inference of a model on Vollo</p>
+<p>This is a simpler API to run single inferences without needing to
+use <a class="reference internal" href="#vollo_rt.VolloRTContext.add_job" title="vollo_rt.VolloRTContext.add_job"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_job()</span></code></a>, <a class="reference internal" href="#vollo_rt.VolloRTContext.poll" title="vollo_rt.VolloRTContext.poll"><code class="xref py py-meth docutils literal notranslate"><span class="pre">poll()</span></code></a> and <a class="reference internal" href="#vollo_rt.VolloRTContext.get_result" title="vollo_rt.VolloRTContext.get_result"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_result()</span></code></a> manually</p>
+<p>Arg:</p>
+<blockquote>
+<div><p>sleep_duration_ms: The number of milliseconds to wait between each poll. There will be no wait if set to None.</p>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="vollo_torch.nn.html" class="btn btn-neutral float-left" title="vollo_torch.nn" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Myrtle.ai.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vollo Compiler API Reference &mdash; Vollo Compiler 25.1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=4ab8bd86"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="vollo_compiler" href="vollo_compiler.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            Vollo Compiler
+              <img src="_static/vollo_logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="vollo_compiler.html">vollo_compiler</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config"><code class="docutils literal notranslate"><span class="pre">Config</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.ia_420f_c6b32"><code class="docutils literal notranslate"><span class="pre">Config.ia_420f_c6b32()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.ia_840f_c3b64"><code class="docutils literal notranslate"><span class="pre">Config.ia_840f_c3b64()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.ia_840f_c2b64d"><code class="docutils literal notranslate"><span class="pre">Config.ia_840f_c2b64d()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.nt400d11_c6b32"><code class="docutils literal notranslate"><span class="pre">Config.nt400d11_c6b32()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.v80_c6b32"><code class="docutils literal notranslate"><span class="pre">Config.v80_c6b32()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.fb4cgg3_c3b32"><code class="docutils literal notranslate"><span class="pre">Config.fb4cgg3_c3b32()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.ip_core"><code class="docutils literal notranslate"><span class="pre">Config.ip_core()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.save"><code class="docutils literal notranslate"><span class="pre">Config.save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.load"><code class="docutils literal notranslate"><span class="pre">Config.load()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.block_size"><code class="docutils literal notranslate"><span class="pre">Config.block_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.num_cores"><code class="docutils literal notranslate"><span class="pre">Config.num_cores</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.tensor_ram_depth"><code class="docutils literal notranslate"><span class="pre">Config.tensor_ram_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.tensor_descriptor_count"><code class="docutils literal notranslate"><span class="pre">Config.tensor_descriptor_count</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.weight_store_depth"><code class="docutils literal notranslate"><span class="pre">Config.weight_store_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.accum_store_depth"><code class="docutils literal notranslate"><span class="pre">Config.accum_store_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.cell_state_depth"><code class="docutils literal notranslate"><span class="pre">Config.cell_state_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.clamp_store_depth"><code class="docutils literal notranslate"><span class="pre">Config.clamp_store_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.max_read_size"><code class="docutils literal notranslate"><span class="pre">Config.max_read_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.io_size"><code class="docutils literal notranslate"><span class="pre">Config.io_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.fabric"><code class="docutils literal notranslate"><span class="pre">Config.fabric</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.NNIR"><code class="docutils literal notranslate"><span class="pre">NNIR</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.NNIR.from_onnx"><code class="docutils literal notranslate"><span class="pre">NNIR.from_onnx()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.NNIR.streaming_transform"><code class="docutils literal notranslate"><span class="pre">NNIR.streaming_transform()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.NNIR.to_program"><code class="docutils literal notranslate"><span class="pre">NNIR.to_program()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.NNIR.__new__"><code class="docutils literal notranslate"><span class="pre">NNIR.__new__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program"><code class="docutils literal notranslate"><span class="pre">Program</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.compute_duration_per_inference_us"><code class="docutils literal notranslate"><span class="pre">Program.compute_duration_per_inference_us()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.cycle_count_per_inference"><code class="docutils literal notranslate"><span class="pre">Program.cycle_count_per_inference()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.cycle_summary_per_inference"><code class="docutils literal notranslate"><span class="pre">Program.cycle_summary_per_inference()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.hw_config"><code class="docutils literal notranslate"><span class="pre">Program.hw_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.io_only_test"><code class="docutils literal notranslate"><span class="pre">Program.io_only_test()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.load"><code class="docutils literal notranslate"><span class="pre">Program.load()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.load_bytes"><code class="docutils literal notranslate"><span class="pre">Program.load_bytes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.metrics"><code class="docutils literal notranslate"><span class="pre">Program.metrics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.model_input_shape"><code class="docutils literal notranslate"><span class="pre">Program.model_input_shape()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.model_input_streaming_dim"><code class="docutils literal notranslate"><span class="pre">Program.model_input_streaming_dim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.model_num_inputs"><code class="docutils literal notranslate"><span class="pre">Program.model_num_inputs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.model_num_outputs"><code class="docutils literal notranslate"><span class="pre">Program.model_num_outputs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.model_output_shape"><code class="docutils literal notranslate"><span class="pre">Program.model_output_shape()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.model_output_streaming_dim"><code class="docutils literal notranslate"><span class="pre">Program.model_output_streaming_dim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.num_models"><code class="docutils literal notranslate"><span class="pre">Program.num_models()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.save"><code class="docutils literal notranslate"><span class="pre">Program.save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.save_bytes"><code class="docutils literal notranslate"><span class="pre">Program.save_bytes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.to_vm"><code class="docutils literal notranslate"><span class="pre">Program.to_vm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.transform_to_io_only_test"><code class="docutils literal notranslate"><span class="pre">Program.transform_to_io_only_test()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.ProgramBuilder"><code class="docutils literal notranslate"><span class="pre">ProgramBuilder</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.ProgramBuilder.add_nnir"><code class="docutils literal notranslate"><span class="pre">ProgramBuilder.add_nnir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.ProgramBuilder.to_program"><code class="docutils literal notranslate"><span class="pre">ProgramBuilder.to_program()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics"><code class="docutils literal notranslate"><span class="pre">Metrics</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.clamp_store_depth"><code class="docutils literal notranslate"><span class="pre">Metrics.clamp_store_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.clamp_store_used"><code class="docutils literal notranslate"><span class="pre">Metrics.clamp_store_used</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.input_bytes"><code class="docutils literal notranslate"><span class="pre">Metrics.input_bytes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.model_names"><code class="docutils literal notranslate"><span class="pre">Metrics.model_names</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.num_instrs"><code class="docutils literal notranslate"><span class="pre">Metrics.num_instrs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.num_micro_instructions"><code class="docutils literal notranslate"><span class="pre">Metrics.num_micro_instructions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.output_bytes"><code class="docutils literal notranslate"><span class="pre">Metrics.output_bytes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.tensor_ram_depth"><code class="docutils literal notranslate"><span class="pre">Metrics.tensor_ram_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.tensor_ram_used"><code class="docutils literal notranslate"><span class="pre">Metrics.tensor_ram_used</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.weight_store_depth"><code class="docutils literal notranslate"><span class="pre">Metrics.weight_store_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.weight_store_used"><code class="docutils literal notranslate"><span class="pre">Metrics.weight_store_used</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM"><code class="docutils literal notranslate"><span class="pre">VM</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM.compute_duration_us"><code class="docutils literal notranslate"><span class="pre">VM.compute_duration_us()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM.cycle_count"><code class="docutils literal notranslate"><span class="pre">VM.cycle_count()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM.metrics"><code class="docutils literal notranslate"><span class="pre">VM.metrics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM.run"><code class="docutils literal notranslate"><span class="pre">VM.run()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM.run_flat"><code class="docutils literal notranslate"><span class="pre">VM.run_flat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM.run_flat_timesteps"><code class="docutils literal notranslate"><span class="pre">VM.run_flat_timesteps()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM.run_timesteps"><code class="docutils literal notranslate"><span class="pre">VM.run_timesteps()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.AllocationError"><code class="docutils literal notranslate"><span class="pre">AllocationError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.SaveError"><code class="docutils literal notranslate"><span class="pre">SaveError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.LoadError"><code class="docutils literal notranslate"><span class="pre">LoadError</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vollo_torch.html">vollo_torch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vollo_torch.fx.html">vollo_torch.fx</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.fx.nnir.html">vollo_torch.fx.nnir</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vollo_torch.fx.nnir.html#vollo_torch.fx.nnir.to_nnir"><code class="docutils literal notranslate"><span class="pre">to_nnir()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.fx.html#vollo_torch.fx.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.fx.html#vollo_torch.fx.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_torch.nn.html">vollo_torch.nn</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.PaddedConv1d"><code class="docutils literal notranslate"><span class="pre">PaddedConv1d</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.LSTM"><code class="docutils literal notranslate"><span class="pre">LSTM</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.RecurrentStateLSTM"><code class="docutils literal notranslate"><span class="pre">RecurrentStateLSTM</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.LSTMCell"><code class="docutils literal notranslate"><span class="pre">LSTMCell</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.LSTMCell.forward"><code class="docutils literal notranslate"><span class="pre">LSTMCell.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.LSTMCell.reset"><code class="docutils literal notranslate"><span class="pre">LSTMCell.reset()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.Ones"><code class="docutils literal notranslate"><span class="pre">Ones</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.Zeros"><code class="docutils literal notranslate"><span class="pre">Zeros</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.Scan"><code class="docutils literal notranslate"><span class="pre">Scan</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.Scan.forward"><code class="docutils literal notranslate"><span class="pre">Scan.forward()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.RMSNorm"><code class="docutils literal notranslate"><span class="pre">RMSNorm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.RMSNorm.extra_repr"><code class="docutils literal notranslate"><span class="pre">RMSNorm.extra_repr()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vollo_rt.html">vollo_rt</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext"><code class="docutils literal notranslate"><span class="pre">VolloRTContext</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.accelerator_block_size"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.accelerator_block_size()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.accelerator_num_cores"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.accelerator_num_cores()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.add_accelerator"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.add_accelerator()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.add_job"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.add_job()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.add_job_bf16"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.add_job_bf16()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.add_job_f32"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.add_job_f32()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.add_vm"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.add_vm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.get_result"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.get_result()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.load_program"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.load_program()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.load_program_bytes"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.load_program_bytes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.model_input_shape"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.model_input_shape()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.model_input_streaming_dim"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.model_input_streaming_dim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.model_name"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.model_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.model_num_inputs"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.model_num_inputs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.model_num_outputs"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.model_num_outputs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.model_output_shape"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.model_output_shape()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.model_output_streaming_dim"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.model_output_streaming_dim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.num_models"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.num_models()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.poll"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.poll()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.run"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Vollo Compiler</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Vollo Compiler API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="vollo-compiler-api-reference">
+<h1>Vollo Compiler API Reference<a class="headerlink" href="#vollo-compiler-api-reference" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="vollo_compiler.html">vollo_compiler</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config"><code class="docutils literal notranslate"><span class="pre">Config</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.ia_420f_c6b32"><code class="docutils literal notranslate"><span class="pre">Config.ia_420f_c6b32()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.ia_840f_c3b64"><code class="docutils literal notranslate"><span class="pre">Config.ia_840f_c3b64()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.ia_840f_c2b64d"><code class="docutils literal notranslate"><span class="pre">Config.ia_840f_c2b64d()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.nt400d11_c6b32"><code class="docutils literal notranslate"><span class="pre">Config.nt400d11_c6b32()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.v80_c6b32"><code class="docutils literal notranslate"><span class="pre">Config.v80_c6b32()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.fb4cgg3_c3b32"><code class="docutils literal notranslate"><span class="pre">Config.fb4cgg3_c3b32()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.ip_core"><code class="docutils literal notranslate"><span class="pre">Config.ip_core()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.save"><code class="docutils literal notranslate"><span class="pre">Config.save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.load"><code class="docutils literal notranslate"><span class="pre">Config.load()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.block_size"><code class="docutils literal notranslate"><span class="pre">Config.block_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.num_cores"><code class="docutils literal notranslate"><span class="pre">Config.num_cores</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.tensor_ram_depth"><code class="docutils literal notranslate"><span class="pre">Config.tensor_ram_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.tensor_descriptor_count"><code class="docutils literal notranslate"><span class="pre">Config.tensor_descriptor_count</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.weight_store_depth"><code class="docutils literal notranslate"><span class="pre">Config.weight_store_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.accum_store_depth"><code class="docutils literal notranslate"><span class="pre">Config.accum_store_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.cell_state_depth"><code class="docutils literal notranslate"><span class="pre">Config.cell_state_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.clamp_store_depth"><code class="docutils literal notranslate"><span class="pre">Config.clamp_store_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.max_read_size"><code class="docutils literal notranslate"><span class="pre">Config.max_read_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.io_size"><code class="docutils literal notranslate"><span class="pre">Config.io_size</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Config.fabric"><code class="docutils literal notranslate"><span class="pre">Config.fabric</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.NNIR"><code class="docutils literal notranslate"><span class="pre">NNIR</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.NNIR.from_onnx"><code class="docutils literal notranslate"><span class="pre">NNIR.from_onnx()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.NNIR.streaming_transform"><code class="docutils literal notranslate"><span class="pre">NNIR.streaming_transform()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.NNIR.to_program"><code class="docutils literal notranslate"><span class="pre">NNIR.to_program()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.NNIR.__new__"><code class="docutils literal notranslate"><span class="pre">NNIR.__new__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program"><code class="docutils literal notranslate"><span class="pre">Program</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.compute_duration_per_inference_us"><code class="docutils literal notranslate"><span class="pre">Program.compute_duration_per_inference_us()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.cycle_count_per_inference"><code class="docutils literal notranslate"><span class="pre">Program.cycle_count_per_inference()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.cycle_summary_per_inference"><code class="docutils literal notranslate"><span class="pre">Program.cycle_summary_per_inference()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.hw_config"><code class="docutils literal notranslate"><span class="pre">Program.hw_config()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.io_only_test"><code class="docutils literal notranslate"><span class="pre">Program.io_only_test()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.load"><code class="docutils literal notranslate"><span class="pre">Program.load()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.load_bytes"><code class="docutils literal notranslate"><span class="pre">Program.load_bytes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.metrics"><code class="docutils literal notranslate"><span class="pre">Program.metrics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.model_input_shape"><code class="docutils literal notranslate"><span class="pre">Program.model_input_shape()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.model_input_streaming_dim"><code class="docutils literal notranslate"><span class="pre">Program.model_input_streaming_dim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.model_num_inputs"><code class="docutils literal notranslate"><span class="pre">Program.model_num_inputs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.model_num_outputs"><code class="docutils literal notranslate"><span class="pre">Program.model_num_outputs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.model_output_shape"><code class="docutils literal notranslate"><span class="pre">Program.model_output_shape()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.model_output_streaming_dim"><code class="docutils literal notranslate"><span class="pre">Program.model_output_streaming_dim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.num_models"><code class="docutils literal notranslate"><span class="pre">Program.num_models()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.save"><code class="docutils literal notranslate"><span class="pre">Program.save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.save_bytes"><code class="docutils literal notranslate"><span class="pre">Program.save_bytes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.to_vm"><code class="docutils literal notranslate"><span class="pre">Program.to_vm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Program.transform_to_io_only_test"><code class="docutils literal notranslate"><span class="pre">Program.transform_to_io_only_test()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.ProgramBuilder"><code class="docutils literal notranslate"><span class="pre">ProgramBuilder</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.ProgramBuilder.add_nnir"><code class="docutils literal notranslate"><span class="pre">ProgramBuilder.add_nnir()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.ProgramBuilder.to_program"><code class="docutils literal notranslate"><span class="pre">ProgramBuilder.to_program()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics"><code class="docutils literal notranslate"><span class="pre">Metrics</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.clamp_store_depth"><code class="docutils literal notranslate"><span class="pre">Metrics.clamp_store_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.clamp_store_used"><code class="docutils literal notranslate"><span class="pre">Metrics.clamp_store_used</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.input_bytes"><code class="docutils literal notranslate"><span class="pre">Metrics.input_bytes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.model_names"><code class="docutils literal notranslate"><span class="pre">Metrics.model_names</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.num_instrs"><code class="docutils literal notranslate"><span class="pre">Metrics.num_instrs</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.num_micro_instructions"><code class="docutils literal notranslate"><span class="pre">Metrics.num_micro_instructions</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.output_bytes"><code class="docutils literal notranslate"><span class="pre">Metrics.output_bytes</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.tensor_ram_depth"><code class="docutils literal notranslate"><span class="pre">Metrics.tensor_ram_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.tensor_ram_used"><code class="docutils literal notranslate"><span class="pre">Metrics.tensor_ram_used</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.weight_store_depth"><code class="docutils literal notranslate"><span class="pre">Metrics.weight_store_depth</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.Metrics.weight_store_used"><code class="docutils literal notranslate"><span class="pre">Metrics.weight_store_used</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM"><code class="docutils literal notranslate"><span class="pre">VM</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM.compute_duration_us"><code class="docutils literal notranslate"><span class="pre">VM.compute_duration_us()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM.cycle_count"><code class="docutils literal notranslate"><span class="pre">VM.cycle_count()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM.metrics"><code class="docutils literal notranslate"><span class="pre">VM.metrics()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM.run"><code class="docutils literal notranslate"><span class="pre">VM.run()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM.run_flat"><code class="docutils literal notranslate"><span class="pre">VM.run_flat()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM.run_flat_timesteps"><code class="docutils literal notranslate"><span class="pre">VM.run_flat_timesteps()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.VM.run_timesteps"><code class="docutils literal notranslate"><span class="pre">VM.run_timesteps()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.AllocationError"><code class="docutils literal notranslate"><span class="pre">AllocationError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.SaveError"><code class="docutils literal notranslate"><span class="pre">SaveError</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_compiler.html#vollo_compiler.LoadError"><code class="docutils literal notranslate"><span class="pre">LoadError</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vollo_torch.html">vollo_torch</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vollo_torch.fx.html">vollo_torch.fx</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.fx.html#vollo_torch.fx.save"><code class="docutils literal notranslate"><span class="pre">save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.fx.html#vollo_torch.fx.load"><code class="docutils literal notranslate"><span class="pre">load()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="vollo_torch.nn.html">vollo_torch.nn</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.PaddedConv1d"><code class="docutils literal notranslate"><span class="pre">PaddedConv1d</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.LSTM"><code class="docutils literal notranslate"><span class="pre">LSTM</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.RecurrentStateLSTM"><code class="docutils literal notranslate"><span class="pre">RecurrentStateLSTM</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.LSTMCell"><code class="docutils literal notranslate"><span class="pre">LSTMCell</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.LSTMCell.forward"><code class="docutils literal notranslate"><span class="pre">LSTMCell.forward()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.LSTMCell.reset"><code class="docutils literal notranslate"><span class="pre">LSTMCell.reset()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.Ones"><code class="docutils literal notranslate"><span class="pre">Ones</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.Zeros"><code class="docutils literal notranslate"><span class="pre">Zeros</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.Scan"><code class="docutils literal notranslate"><span class="pre">Scan</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.Scan.forward"><code class="docutils literal notranslate"><span class="pre">Scan.forward()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.RMSNorm"><code class="docutils literal notranslate"><span class="pre">RMSNorm</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="vollo_torch.nn.html#vollo_torch.nn.RMSNorm.extra_repr"><code class="docutils literal notranslate"><span class="pre">RMSNorm.extra_repr()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vollo_rt.html">vollo_rt</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext"><code class="docutils literal notranslate"><span class="pre">VolloRTContext</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.accelerator_block_size"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.accelerator_block_size()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.accelerator_num_cores"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.accelerator_num_cores()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.add_accelerator"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.add_accelerator()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.add_job"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.add_job()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.add_job_bf16"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.add_job_bf16()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.add_job_f32"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.add_job_f32()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.add_vm"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.add_vm()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.get_result"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.get_result()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.load_program"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.load_program()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.load_program_bytes"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.load_program_bytes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.model_input_shape"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.model_input_shape()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.model_input_streaming_dim"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.model_input_streaming_dim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.model_name"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.model_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.model_num_inputs"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.model_num_inputs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.model_num_outputs"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.model_num_outputs()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.model_output_shape"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.model_output_shape()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.model_output_streaming_dim"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.model_output_streaming_dim()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.num_models"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.num_models()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.poll"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.poll()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="vollo_rt.html#vollo_rt.VolloRTContext.run"><code class="docutils literal notranslate"><span class="pre">VolloRTContext.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="vollo_compiler.html" class="btn btn-neutral float-right" title="vollo_compiler" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Myrtle.ai.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
