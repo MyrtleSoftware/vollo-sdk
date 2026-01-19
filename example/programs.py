@@ -140,6 +140,8 @@ all_configs = {
     "ia_420f_c6b32": vollo_compiler.Config.ia_420f_c6b32(),
     "ia_840f_c3b64": vollo_compiler.Config.ia_840f_c3b64(),
     "ia_840f_c2b64d": vollo_compiler.Config.ia_840f_c2b64d(),
+    "nt400d11_c6b32": vollo_compiler.Config.nt400d11_c6b32(),
+    "fb4cgg3_c3b32": vollo_compiler.Config.fb4cgg3_c3b32(),
     "v80_c6b32": vollo_compiler.Config.v80_c6b32(),
 }
 
@@ -263,7 +265,9 @@ def compile_model(parser, args):
         expected_y.detach().numpy(), actual_y, atol=1e-02, rtol=1e-02
     )
     print(f"VM output matches expected output")
-    print(f"Took {vm.cycle_count()} cycles")
+    print(
+        f"Took {program.cycle_count_per_inference()} cycles ({program.compute_duration_per_inference_us():.2f} us)"
+    )
 
     program_name = args.program_out
     program.save(program_name)

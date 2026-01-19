@@ -1,4 +1,4 @@
-# Example 4: Multiple Models in a Vollo Program
+# Example 5: Multiple Models in a Vollo Program
 
 Vollo supports putting multiple models on a single accelerator.
 

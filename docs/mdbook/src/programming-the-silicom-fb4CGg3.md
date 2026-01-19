@@ -1,19 +1,5 @@
 # Programming the Silicom-fb4CGg3 FPGA
 
-## Download the bitstream for your FPGA
-
-The bitstream is available on the [Github Release page] alongside the Vollo SDK. For example to
-download the bitstream for the Silicom `fb4CGg3@VU09P-3` board with the `c3b32` configuration of
-Vollo:
-
-[Github Release page]: https://github.com/MyrtleSoftware/vollo-sdk/releases/
-
-```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v25.1.2/vollo-silicom-fb4CGg3@VU09P-3-c3b32-25.1.tar.gz
-mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-silicom-fb4CGg3@VU09P-3-c3b32-25.1.tar.gz -C $VOLLO_SDK/bitstream
-```
-
 ## Programming the FPGA over PCIe
 
 Unless something has gone wrong, you should always be able to program the FPGA over PCIe.
