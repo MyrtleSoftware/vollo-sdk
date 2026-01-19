@@ -36,7 +36,7 @@ static void single_shot_inference(vollo_rt_context_t ctx, const float* input, fl
     EXIT_ON_ERROR(vollo_rt_poll(ctx, &num_completed, &completed_buffer));
 
     poll_count++;
-    if (poll_count > 1000000) {
+    if (poll_count > 100000000) {
       EXIT_ON_ERROR("Timed out while polling");
     }
   }

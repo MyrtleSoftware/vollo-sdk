@@ -125,7 +125,12 @@ size_t vollo_rt_model_num_outputs(vollo_rt_context_t vollo, size_t model_index);
 /**
  * Get the shape for input at a given index
  *
- * The return value is a 0 terminated array of dims containing the input shape
+ * The return value is an array of dims containing the input shape
+ * Use `vollo_rt_model_input_shape_len` to get the number of axes in the shape.
+ *
+ * For backwards compatibility the array is also 0-terminated, but that should not be relied upon
+ * in order to correctly support shapes containing a 0 dimension
+ *
  * The value lives for as long as the model
  *
  * Requirements (panics otherwise):
@@ -137,9 +142,25 @@ const size_t* vollo_rt_model_input_shape(
   vollo_rt_context_t vollo, size_t model_index, size_t input_index);
 
 /**
+ * Get the number of axes in the shape for the input at a given index
+ *
+ * Requirements (panics otherwise):
+ * - a program was loaded with `vollo_rt_load_program`
+ * - `model_index < vollo_rt_num_models`
+ * - `input_index < vollo_rt_model_num_inputs`
+ */
+size_t vollo_rt_model_input_shape_len(
+  vollo_rt_context_t vollo, size_t model_index, size_t input_index);
+
+/**
  * Get the shape for output at a given index
  *
- * The return value is a 0 terminated array of dims containing the output shape
+ * The return value is an array of dims containing the output shape
+ * Use `vollo_rt_model_output_shape_len` to get the number of axes in the shape.
+ *
+ * For backwards compatibility the array is also 0-terminated, but that should not be relied upon
+ * in order to correctly support shapes containing a 0 dimension
+ *
  * The value lives for as long as the model
  *
  * Requirements (panics otherwise):
@@ -148,6 +169,17 @@ const size_t* vollo_rt_model_input_shape(
  * - `output_index < vollo_rt_model_num_outputs`
  */
 const size_t* vollo_rt_model_output_shape(
+  vollo_rt_context_t vollo, size_t model_index, size_t output_index);
+
+/**
+ * Get the number of axes in the shape for the output at a given index
+ *
+ * Requirements (panics otherwise):
+ * - a program was loaded with `vollo_rt_load_program`
+ * - `model_index < vollo_rt_num_models`
+ * - `output_index < vollo_rt_model_num_outputs`
+ */
+size_t vollo_rt_model_output_shape_len(
   vollo_rt_context_t vollo, size_t model_index, size_t output_index);
 
 /**
@@ -297,4 +329,76 @@ are completed.
  */
 vollo_rt_error_t vollo_rt_poll(
   vollo_rt_context_t vollo, size_t* num_completed, const uint64_t** returned_user_ctx);
+```
+
+## Partial updates
+
+To reduce the amount of data that needs to be transferred to/from the accelerator, is is possible to
+update specific indices of the input buffer stored on the accelerator.
+
+There are two functions to achieve this:
+
+- a simple one for a single bf16 input: `vollo_rt_add_job_bf16_partial_update`
+- a more general one for multiple inputs/outputs and fp32 data: `vollo_rt_add_job_partial_updates`
+
+```c
+/**
+ * Sets up a computation on the vollo accelerator where the inputs and outputs are in brain-float 16
+ * format.
+ *
+ * Takes the input from the previous job and updates individual values as provided and uses that as
+ * the new input. This can be more efficient due to smaller IO requirements.
+ *
+ * Limitations:
+ * - Only single model programs are supported
+ * - Only single input models are supported
+ * - Only inputs with up to 65536 elements supported (for now)
+ * - Currently not supported for a VM
+ *
+ * Note: The computation is only started on the next call to vollo_rt_poll. This way it is possible
+ * to set up several computations that are kicked off at the same time.
+ *
+ * - vollo:
+ *     the context that the computation should be run on
+ * - model_index:
+ *     the model to run
+ * - user_ctx:
+ *     a user context that will be returned on completion
+ * - num_input_updates:
+ *     The number of elements in the input array to be updated
+ *     It MUST be at most the number of input elements (see `vollo_rt_model_input_num_elements`),
+ *     although using `vollo_rt_add_job_bf16` will be more efficient when updating many elements
+ * - input_update_indices:
+ *     An array of indices (with `num_input_updates` elements) of the elements to update
+ *     Each index MUST be less than the number of input elements
+ *     (see `vollo_rt_model_input_num_elements`)
+ *     Updating multiple times the same index in a given update has undefined semantics
+ *     lifetime:
+ *       - The input_update_indices array needs to live until `vollo_rt_poll` returns with the
+ *         completion for this job
+ * - input_update_values:
+ *     An array of values (with `num_input_updates` elements) with the new values of the
+ *     elements to update
+ *     Values may not be NaN
+ *     lifetime:
+ *       - The input_update_values array needs to live until `vollo_rt_poll` returns with the
+ *         completion for this job
+ * - output_data:
+ *     a pointer to the start of an array with pointers to the start of the data to each output
+ *     buffer the number of outputs is given by `vollo_rt_model_num_outputs` each output length is
+ *     the product of the shape given by `vollo_rt_model_output_shape`
+ *     (or more convenient: `vollo_rt_model_output_num_elements`)
+ *     lifetime:
+ *       - The outer array only needs to live until `vollo_rt_add_job_bf16_partial_update` returns
+ *       - The output buffers need to live until `vollo_rt_poll` returns with the completion for
+ *         this job
+ */
+vollo_rt_error_t vollo_rt_add_job_bf16_partial_update(
+  vollo_rt_context_t vollo,
+  size_t model_index,
+  uint64_t user_ctx,
+  uint32_t num_input_updates,
+  const uint32_t* input_update_indices,
+  const bf16* input_update_values,
+  bf16* const* output_data);
 ```

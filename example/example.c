@@ -14,8 +14,6 @@
 #include <time.h>
 #include <vollo-rt.h>
 
-#define NUM_RANDOM_INPUT_VECTORS 32
-
 typedef struct ExampleOptions {
   // Path to program.vollo
   const char* program_path;
@@ -30,14 +28,18 @@ typedef struct ExampleOptions {
   // Time to wait in between each inference in nanoseconds (only for 1 concurrent job, defaults to
   // 0)
   size_t inference_spacing_ns;
-  // Use the fp32 version of the API (compute is still done in bf16)
+  // Provide all inputs/outputs as fp32 (these may get converted to bf16 by the runtime)
   bool fp32_api;
+  // Provide all inputs/outputs as bf16 (these may get converted to fp32 by the runtime)
+  bool bf16_api;
   // Use raw DMA buffers and skip input/output data copy
   bool raw_buffer_api;
   // Run the program in software simulation rather than on hardware
   bool run_in_vm;
   // The inputs are random numbers (as opposed to all 1.0), only when input_paths is not set
   bool random_input;
+  // The number of random input candidates to generate (defaults to 32)
+  size_t num_random_candidates;
   // Output detailed measurements in JSON
   bool json;
   // Paths to input files (.npy format with float32 as dtype)
@@ -223,42 +225,82 @@ static void vollo_example(ExampleOptions options) {
 
   // Number of input vectors
   // When random input is used, we randomly select a vector of random data for each inference
-  size_t num_test_inputs = options.random_input ? NUM_RANDOM_INPUT_VECTORS : 1;
-  bf16*** test_inputs = (bf16***)malloc(sizeof(bf16**) * num_test_inputs);
-  float*** test_inputs_fp32 = (float***)malloc(sizeof(float**) * num_test_inputs);
+  size_t num_test_inputs = options.random_input ? options.num_random_candidates : 1;
+  void*** test_inputs_dyn = (void***)malloc(sizeof(void**) * num_test_inputs);
+  number_format* input_buffer_formats
+    = (number_format*)malloc(sizeof(number_format) * model_num_inputs);
 
   for (size_t i = 0; i < num_test_inputs; i++) {
-    test_inputs[i] = (bf16**)malloc(sizeof(bf16*) * model_num_inputs);
-    test_inputs_fp32[i] = (float**)malloc(sizeof(float*) * model_num_inputs);
+    test_inputs_dyn[i] = (void**)malloc(sizeof(void*) * model_num_inputs);
 
     for (size_t j = 0; j < model_num_inputs; j++) {
       size_t num_input_elems = vollo_rt_model_input_num_elements(ctx, model_index, j);
+      number_format fmt;
+      if (options.fp32_api) {
+        fmt = number_format_fp32;
+      } else if (options.bf16_api) {
+        fmt = number_format_bf16;
+      } else {
+        fmt = vollo_rt_model_input_format(ctx, model_index, j);
+      }
+      input_buffer_formats[j] = fmt;
 
-      test_inputs[i][j] = options.raw_buffer_api ? vollo_rt_get_raw_buffer(ctx, num_input_elems)
-                                                 : (bf16*)malloc(sizeof(bf16) * num_input_elems);
-      test_inputs_fp32[i][j] = (float*)malloc(sizeof(float) * num_input_elems);
-
-      for (size_t k = 0; k < num_input_elems; k++) {
-        if (options.input_paths[0] != NULL) {
-          test_inputs[i][j][k] = float_to_bf16(input_arrays[j].buffer[k]);
-          test_inputs_fp32[i][j][k] = input_arrays[j].buffer[k];
-        } else {
-          test_inputs[i][j][k] = options.random_input ? rand_bf16() : 0x3f80;  // 1.0 as a bf16
-          test_inputs_fp32[i][j][k] = options.random_input ? rand_float() : 1.0f;
+      if (fmt == number_format_fp32) {
+        test_inputs_dyn[i][j]
+          = options.raw_buffer_api
+              ? vollo_rt_get_raw_buffer_bytes(ctx, sizeof(float) * num_input_elems)
+              : (void*)malloc(sizeof(float) * num_input_elems);
+        float* buf = (float*)test_inputs_dyn[i][j];
+        for (size_t k = 0; k < num_input_elems; k++) {
+          if (options.input_paths[0] != NULL) {
+            buf[k] = input_arrays[j].buffer[k];
+          } else {
+            buf[k] = options.random_input ? rand_float() : 1.0f;
+          }
+        }
+      } else {
+        test_inputs_dyn[i][j]
+          = options.raw_buffer_api
+              ? vollo_rt_get_raw_buffer_bytes(ctx, sizeof(bf16) * num_input_elems)
+              : (bf16*)malloc(sizeof(bf16) * num_input_elems);
+        bf16* buf = (bf16*)test_inputs_dyn[i][j];
+        for (size_t k = 0; k < num_input_elems; k++) {
+          if (options.input_paths[0] != NULL) {
+            buf[k] = float_to_bf16(input_arrays[j].buffer[k]);
+          } else {
+            buf[k] = options.random_input ? rand_bf16() : 0x3f80;  // 1.0 as a bf16
+          }
         }
       }
     }
   }
 
-  bf16** model_outputs = (bf16**)malloc(sizeof(bf16*) * model_num_outputs);
-  float** model_outputs_fp32 = (float**)malloc(sizeof(float*) * model_num_outputs);
+  void** model_outputs_dyn = (void**)malloc(sizeof(void*) * model_num_outputs);
+  number_format* output_buffer_formats
+    = (number_format*)malloc(sizeof(number_format) * model_num_outputs);
 
   for (size_t i = 0; i < model_num_outputs; i++) {
     size_t num_output_elems = vollo_rt_model_output_num_elements(ctx, model_index, i);
+    number_format fmt;
+    if (options.fp32_api) {
+      fmt = number_format_fp32;
+    } else if (options.bf16_api) {
+      fmt = number_format_bf16;
+    } else {
+      fmt = vollo_rt_model_output_format(ctx, model_index, i);
+    }
+    output_buffer_formats[i] = fmt;
 
-    model_outputs[i] = options.raw_buffer_api ? vollo_rt_get_raw_buffer(ctx, num_output_elems)
-                                              : (bf16*)malloc(sizeof(bf16) * num_output_elems);
-    model_outputs_fp32[i] = (float*)malloc(sizeof(float) * num_output_elems);
+    if (fmt == number_format_fp32) {
+      model_outputs_dyn[i]
+        = options.raw_buffer_api
+            ? vollo_rt_get_raw_buffer_bytes(ctx, sizeof(float) * num_output_elems)
+            : (void*)malloc(sizeof(float) * num_output_elems);
+    } else {
+      model_outputs_dyn[i] = options.raw_buffer_api
+                               ? vollo_rt_get_raw_buffer_bytes(ctx, sizeof(bf16) * num_output_elems)
+                               : (void*)malloc(sizeof(bf16) * num_output_elems);
+    }
   }
 
   struct timespec* start_times
@@ -295,19 +337,16 @@ static void vollo_example(ExampleOptions options) {
         clock_gettime(CLOCK_MONOTONIC, &start_times[inf_ix]);
       }
 
-      int input_ix = options.random_input ? rand() % NUM_RANDOM_INPUT_VECTORS : 0;
+      size_t input_ix = options.random_input ? (size_t)rand() % options.num_random_candidates : 0;
 
-      if (options.fp32_api) {
-        EXIT_ON_ERROR(vollo_rt_add_job_fp32(
-          ctx,
-          model_index,
-          user_ctx,
-          (const float* const*)test_inputs_fp32[input_ix],
-          model_outputs_fp32));
-      } else {
-        EXIT_ON_ERROR(vollo_rt_add_job_bf16(
-          ctx, model_index, user_ctx, (const bf16* const*)test_inputs[input_ix], model_outputs));
-      }
+      EXIT_ON_ERROR(vollo_rt_add_job(
+        ctx,
+        model_index,
+        user_ctx,
+        (const number_format*)input_buffer_formats,
+        (const void* const*)test_inputs_dyn[input_ix],
+        (const number_format*)output_buffer_formats,
+        model_outputs_dyn));
 
       inf_started++;
       outstanding_jobs++;
@@ -335,11 +374,15 @@ static void vollo_example(ExampleOptions options) {
 
             size_t num_output_elems = vollo_rt_model_output_num_elements(ctx, model_index, j);
 
+            number_format fmt = output_buffer_formats[j];
+
             for (size_t k = 0; k < num_output_elems; k++) {
-              if (options.fp32_api) {
-                output_arrays[j].buffer[k] = model_outputs_fp32[j][k];
+              if (fmt == number_format_fp32) {
+                float* buf = (float*)model_outputs_dyn[j];
+                output_arrays[j].buffer[k] = buf[k];
               } else {
-                output_arrays[j].buffer[k] = bf16_to_float(model_outputs[j][k]);
+                bf16* buf = (bf16*)model_outputs_dyn[j];
+                output_arrays[j].buffer[k] = bf16_to_float(buf[k]);
               }
             }
 
@@ -422,25 +465,22 @@ static void vollo_example(ExampleOptions options) {
 
   for (size_t i = 0; i < model_num_outputs; i++) {
     if (!options.raw_buffer_api) {
-      free(model_outputs[i]);
+      free(model_outputs_dyn[i]);
     }
-    free(model_outputs_fp32[i]);
   }
-  free(model_outputs);
-  free(model_outputs_fp32);
+  free(model_outputs_dyn);
+  free(output_buffer_formats);
 
   for (size_t i = 0; i < num_test_inputs; i++) {
     for (size_t j = 0; j < model_num_inputs; j++) {
       if (!options.raw_buffer_api) {
-        free(test_inputs[i][j]);
+        free(test_inputs_dyn[i][j]);
       }
-      free(test_inputs_fp32[i][j]);
     }
-    free(test_inputs[i]);
-    free(test_inputs_fp32[i]);
+    free(test_inputs_dyn[i]);
   }
-  free(test_inputs);
-  free(test_inputs_fp32);
+  free(test_inputs_dyn);
+  free(input_buffer_formats);
 
   vollo_rt_destroy(ctx);
 
@@ -480,7 +520,11 @@ void print_help(const char* example_program) {
     "\n"
 
     "    -F, --fp32-api\n"
-    "        Use the fp32 version of the API (compute is still done in bf16)\n"
+    "        Provide all inputs/outputs as fp32 (these may get converted to bf16 by the runtime)\n"
+    "\n"
+
+    "    -B, --bf16-api\n"
+    "        Provide all inputs/outputs as bf16 (these may get converted to fp32 by the runtime)\n"
     "\n"
 
     "    -R, --raw-buffer-api\n"
@@ -493,6 +537,10 @@ void print_help(const char* example_program) {
 
     "    -r, --random\n"
     "        Use random inputs instead of the constant 1.0\n"
+    "\n"
+
+    "    -n, --num-random-candidates\n"
+    "        The number of random input candidates to generate (defaults to 32)\n"
     "\n"
 
     "    -c, --max-concurrent-jobs\n"
@@ -545,8 +593,10 @@ int main(int argc, char** argv) {
   options.program_path = "";
   options.model_index = 0;
   options.fp32_api = false;
+  options.bf16_api = false;
   options.raw_buffer_api = false;
   options.random_input = false;
+  options.num_random_candidates = 32;
   options.run_in_vm = false;
   options.max_concurrent_jobs = 1;
   options.num_inferences = 10000;
@@ -564,9 +614,11 @@ int main(int argc, char** argv) {
     {"model-index", required_argument, 0, 'm'},
     {"num-inferences", required_argument, 0, 'i'},
     {"fp32-api", no_argument, 0, 'F'},
+    {"bf16-api", no_argument, 0, 'B'},
     {"raw-buffer-api", no_argument, 0, 'R'},
     {"run-in-vm", no_argument, 0, 'v'},
     {"random", no_argument, 0, 'r'},
+    {"num-random-candidates", required_argument, 0, 'n'},
     {"max-concurrent-jobs", required_argument, 0, 'c'},
     {"num-warmup-inferences", required_argument, 0, 'w'},
     {"inference-spacing-ns", required_argument, 0, 's'},
@@ -579,14 +631,17 @@ int main(int argc, char** argv) {
 
   int opt = 0;
   int long_index = 0;
-  while ((opt = getopt_long(argc, argv, "m:i:FRvrc:w:jf:o:h", long_options, &long_index)) != -1) {
+  while ((opt = getopt_long(argc, argv, "m:i:FBRvrn:c:w:jf:o:h", long_options, &long_index))
+         != -1) {
     switch (opt) {
     case 'm': options.model_index = (size_t)strtoul(optarg, NULL, 10); break;
     case 'i': options.num_inferences = (size_t)strtoul(optarg, NULL, 10); break;
     case 'F': options.fp32_api = true; break;
+    case 'B': options.bf16_api = true; break;
     case 'R': options.raw_buffer_api = true; break;
     case 'v': options.run_in_vm = true; break;
     case 'r': options.random_input = true; break;
+    case 'n': options.num_random_candidates = (size_t)strtoul(optarg, NULL, 10); break;
     case 'c': options.max_concurrent_jobs = (size_t)strtoul(optarg, NULL, 10); break;
     case 'w': options.num_warmup_inferences = (size_t)strtoul(optarg, NULL, 10); break;
     case 's': options.inference_spacing_ns = (size_t)strtoul(optarg, NULL, 10); break;
@@ -625,8 +680,8 @@ int main(int argc, char** argv) {
     exit(EXIT_FAILURE);
   }
 
-  if (options.fp32_api && options.raw_buffer_api) {
-    fprintf(stderr, "Options -F,--fp32-api and -R,--raw-buffer-api are not compatible\n");
+  if (options.fp32_api && options.bf16_api) {
+    fprintf(stderr, "Options -F,--fp32-api and -B,--bf16-api are not compatible\n");
     exit(EXIT_FAILURE);
   }
 

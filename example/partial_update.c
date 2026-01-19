@@ -369,7 +369,7 @@ static void partial_input_inference_start(
   assert(num_completed == 0);
 }
 
-#define MAX_POLL_COUNT 1000000
+#define MAX_POLL_COUNT 100000000
 
 static void block_until_completion(vollo_rt_context_t ctx) {
   // Poll until completion

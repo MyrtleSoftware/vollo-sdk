@@ -22,28 +22,24 @@ We demonstrate the model at a variety of batch sizes. The model has 295K paramet
 
 ## V80: 6 cores, block size 32
 
-> <div class="warning">
-> V80 PCIe optimisations underway, improvements coming in the next release
-> </div>
-
 | Model   |   Batch size |   Mean latency (us) |   99th percentile latency (us) |
 |---------|--------------|---------------------|--------------------------------|
-| mlp_b1  |            1 |                 2.8 |                            3.0 |
-| mlp_b4  |            4 |                 3.8 |                            4.0 |
-| mlp_b8  |            8 |                 5.9 |                            6.2 |
+| mlp_b1  |            1 |                 2.3 |                            2.5 |
+| mlp_b4  |            4 |                 2.8 |                            3.1 |
+| mlp_b8  |            8 |                 3.4 |                            4.0 |
 
 ## IA-840F: 3 cores, block size 64
 
-| Model  | Batch size | Mean latency (μs) | 99th Percentile latency (μs) |
-| ------ | ---------- | ----------------- | ---------------------------- |
-| mlp_b1 | 1          | 2.3               | 2.4                          |
-| mlp_b4 | 4          | 2.5               | 2.6                          |
-| mlp_b8 | 8          | 2.7               | 2.8                          |
+| Model   |   Batch size |   Mean latency (us) |   99th percentile latency (us) |
+|---------|--------------|---------------------|--------------------------------|
+| mlp_b1  |            1 |                 2.5 |                            2.6 |
+| mlp_b4  |            4 |                 2.7 |                            3.0 |
+| mlp_b8  |            8 |                 3.2 |                            3.5 |
 
 ## IA-420F: 6 core, block size 32
 
-| Model  | Batch size | Mean latency (μs) | 99th Percentile latency (μs) |
-| ------ | ---------- | ----------------- | ---------------------------- |
-| mlp_b1 | 1          | 2.9               | 3.0                          |
-| mlp_b4 | 4          | 3.0               | 3.1                          |
-| mlp_b8 | 8          | 3.4               | 3.5                          |
+| Model   |   Batch size |   Mean latency (us) |   99th percentile latency (us) |
+|---------|--------------|---------------------|--------------------------------|
+| mlp_b1  |            1 |                 2.5 |                            2.7 |
+| mlp_b4  |            4 |                 3.1 |                            3.3 |
+| mlp_b8  |            8 |                 4.1 |                            4.4 |

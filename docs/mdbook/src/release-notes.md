@@ -1,5 +1,35 @@
 # Release Notes
 
+## 26.0.0
+
+- V80 DMA optimizations
+- Support for a subset of operations at FP32
+  - `vollo-torch`
+    - Add `vollo_torch.Fp32Activations` context manager
+    - Add `inputs_precisions` and `output_precisions` arguments to
+      `vollo_torch.fx.nnir.to_nnir`
+  - `vollo-compiler`:
+    - Add `model_input_number_format` and `model_output_number_format` methods
+      to `vollo_compiler.Program`
+    - Add `vollo_compiler.NumberFormat` enum
+  - `vollo-rt` C/C++ API
+    - Add `vollo_rt_add_job`, `vollo_rt_add_job_partial_update`,
+      `vollo_rt_model_input_format`, `vollo_rt_model_output_format`,
+      `vollo_rt_get_raw_buffer_bytes` functions and `number_format` enum
+  - `vollo-rt` Python bindings
+    - Add `add_job`, `add_job_f32`, `model_output_format` methods to
+      `vollo_rt.VolloRTContext`
+- Memory usage and compilation time improvements in the compiler
+- Add `quick_compile` flag to `vollo_compiler.NNIR.to_program` for faster
+  compilation
+- Add `max_sparse_entries` option to `vollo_compiler.NNIR.to_program` to
+  configure the number of nonzero entries allowed in weights for non-standard
+  memory format MatMuls
+- Add `token-info` subcommand to `vollo-tool license` to show information about
+  a purchase token
+- Add info message to `vollo-tool license redeem-device` if the device being
+  redeemed for has been redeemed on an expired or nearly expiring token
+
 ## 25.1.2
 
 - Reduced memory usage of the compiler during compilation of large models
