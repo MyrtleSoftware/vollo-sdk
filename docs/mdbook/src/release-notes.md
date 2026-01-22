@@ -1,5 +1,10 @@
 # Release Notes
 
+## 26.0.1
+
+- Make `vollo-tool license` use the system's CA certificates
+- Fix bug in FP32 partial updates
+
 ## 26.0.0
 
 - V80 DMA optimizations
