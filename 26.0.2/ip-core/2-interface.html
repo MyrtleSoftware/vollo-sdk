@@ -1,0 +1,365 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>IP Core Interface - Vollo SDK User Guide</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="../assets/vollo-favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <a href=".././">
+                  <img class="sidebar-logo">
+                  </img>
+                </a>
+
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="../installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="../key-features.html"><strong aria-hidden="true">2.</strong> Key Features</a></li><li class="chapter-item expanded "><a href="../getting-started.html"><strong aria-hidden="true">3.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="../vollo-compiler.html"><strong aria-hidden="true">4.</strong> Vollo Compiler</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../api.html"><strong aria-hidden="true">4.1.</strong> API Reference</a></li><li class="chapter-item expanded "><a href="../supported-models.html"><strong aria-hidden="true">4.2.</strong> Supported Models</a></li><li class="chapter-item expanded "><a href="../example-1-mlp.html"><strong aria-hidden="true">4.3.</strong> Example 1: MLP</a></li><li class="chapter-item expanded "><a href="../example-2-cnn.html"><strong aria-hidden="true">4.4.</strong> Example 2: CNN</a></li><li class="chapter-item expanded "><a href="../example-3-lstm.html"><strong aria-hidden="true">4.5.</strong> Example 3: LSTM</a></li><li class="chapter-item expanded "><a href="../example-4-mixed-precision.html"><strong aria-hidden="true">4.6.</strong> Example 4: Mixed Precision</a></li><li class="chapter-item expanded "><a href="../example-5-multi-model.html"><strong aria-hidden="true">4.7.</strong> Example 5: Multiple Models in a Vollo Program</a></li><li class="chapter-item expanded "><a href="../vollo-onnx.html"><strong aria-hidden="true">4.8.</strong> ONNX Support</a></li></ol></li><li class="chapter-item expanded "><a href="../benchmark.html"><strong aria-hidden="true">5.</strong> Benchmarks</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../benchmark-mlp.html"><strong aria-hidden="true">5.1.</strong> MLP</a></li><li class="chapter-item expanded "><a href="../benchmark-cnn.html"><strong aria-hidden="true">5.2.</strong> CNN</a></li><li class="chapter-item expanded "><a href="../benchmark-lstm.html"><strong aria-hidden="true">5.3.</strong> LSTM</a></li><li class="chapter-item expanded "><a href="../benchmark-io.html"><strong aria-hidden="true">5.4.</strong> IO Round Trip</a></li></ol></li><li class="chapter-item expanded "><a href="../accelerator-setup.html"><strong aria-hidden="true">6.</strong> Accelerator Setup</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../system-requirements.html"><strong aria-hidden="true">6.1.</strong> System Requirements</a></li><li class="chapter-item expanded "><a href="../programming-the-agilex.html"><strong aria-hidden="true">6.2.</strong> Programming the Agilex</a></li><li class="chapter-item expanded "><a href="../programming-the-silicom-fb4CGg3.html"><strong aria-hidden="true">6.3.</strong> Programming the Silicom fb4CGg3</a></li><li class="chapter-item expanded "><a href="../programming-the-v80.html"><strong aria-hidden="true">6.4.</strong> Programming the V80</a></li><li class="chapter-item expanded "><a href="../licensing.html"><strong aria-hidden="true">6.5.</strong> Licensing</a></li><li class="chapter-item expanded "><a href="../running-an-example.html"><strong aria-hidden="true">6.6.</strong> Running an Example</a></li><li class="chapter-item expanded "><a href="../running-the-benchmark.html"><strong aria-hidden="true">6.7.</strong> Running the Benchmark</a></li></ol></li><li class="chapter-item expanded "><a href="../vollo-runtime.html"><strong aria-hidden="true">7.</strong> Vollo Runtime</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../c-api.html"><strong aria-hidden="true">7.1.</strong> C API</a></li><li class="chapter-item expanded "><a href="../vollo-rt-example.html"><strong aria-hidden="true">7.2.</strong> C Example</a></li><li class="chapter-item expanded "><a href="../vollo-rt-python-example.html"><strong aria-hidden="true">7.3.</strong> Python Example</a></li></ol></li><li class="chapter-item expanded "><a href="../ip-core/0-intro.html"><strong aria-hidden="true">8.</strong> Vollo IP Core</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../ip-core/1-selecting-an-ip-core.html"><strong aria-hidden="true">8.1.</strong> Selecting an IP Core</a></li><li class="chapter-item expanded "><a href="../ip-core/2-interface.html" class="active"><strong aria-hidden="true">8.2.</strong> IP Core Interface</a></li><li class="chapter-item expanded "><a href="../ip-core/3-quartus-integration.html"><strong aria-hidden="true">8.3.</strong> Quartus Integration</a></li><li class="chapter-item expanded "><a href="../ip-core/4-config.html"><strong aria-hidden="true">8.4.</strong> Runtime configuration</a></li><li class="chapter-item expanded "><a href="../ip-core/5-example-design.html"><strong aria-hidden="true">8.5.</strong> Example design</a></li></ol></li><li class="chapter-item expanded "><a href="../versions.html"><strong aria-hidden="true">9.</strong> Versions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../release-notes.html"><strong aria-hidden="true">9.1.</strong> Release Notes</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Vollo SDK User Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="ip-core-interface"><a class="header" href="#ip-core-interface">IP Core Interface</a></h1>
+<p>The Vollo IP Core is programmed with a neural network model (Vollo program) via a configuration bus. Once this is done, the IP Core
+can run the model by streaming input data to the IP Core and receiving the output data.</p>
+<p><img src="../assets/vollo-ip-core.svg" alt="Vollo IP Core" /></p>
+<p>The IP Core has the following interfaces:</p>
+<ul>
+<li>Config clock and reset signals. This a clock which is expected to be at a frequency of around 100MHz. It is only used for
+configuration and not for running the model.</li>
+<li>Config bus. This is a 32-bit wide AXI4-Lite bus used to activate the device with a license key and to configure the IP Core. It is synchronous to the config clock.</li>
+<li>Compute clock and reset signals. This is the clock used for running the model. In the example design this clock frequency is
+set to 320MHz.</li>
+<li>Input data bus. This a AXI4-Stream bus used to stream input data to the IP Core. It size varies depending on the size of the
+cores in the IP. For a 32-block size design, this is 512 wide (16 bits per value using brainfloat 16). It is synchronous to the compute clock.</li>
+<li>Model selection bus. This is an AXI4-Stream interface for providing the model index to be run if the IP core has been configured
+with multiple models. If the IP Core has been configured with a single model, providing the index is optional. It is synchronous to the compute clock.</li>
+<li>Output data bus. This a AXI4-Stream bus used to stream output data from the IP Core. It is synchronous to the compute clock.</li>
+</ul>
+<h2 id="configuration-bus"><a class="header" href="#configuration-bus">Configuration bus</a></h2>
+<p>The configuration bus is a 32-bit wide AXI4-Lite bus. The normal rules for AXI4-Lite buses
+should be followed with the following exceptions:</p>
+<ul>
+<li>Write strobe: The write strobe should either be fully asserted or fully deasserted. Partially asserted write strobes are not supported.</li>
+<li>The protection signals, <code>config_awprot</code> and <code>config_arprot</code>, are unused and ignored.</li>
+</ul>
+<p>Verilog signals:</p>
+<pre><code class="language-verilog">    // Config interface clock and active-high synchronous reset:
+      input  logic          config_clock
+    , input  logic          config_reset
+
+    // Config AXI4-Lite interface.
+    // The config_awprot and config_arprot inputs are unused
+    // and ignored.
+    , input  logic          config_awvalid
+    , output logic          config_awready
+    , input  logic [20:0]   config_awaddr
+    , input  logic [2:0]    config_awprot
+
+    , input  logic          config_wvalid
+    , output logic          config_wready
+    , input  logic [31:0]   config_wdata
+    , input  logic [3:0]    config_wstrb
+
+    , input  logic          config_arvalid
+    , output logic          config_arready
+    , input  logic [20:0]   config_araddr
+    , input  logic [2:0]    config_arprot
+
+    , output logic          config_rvalid
+    , input  logic          config_rready
+    , output logic [31:0]   config_rdata
+    , output logic [1:0]    config_rresp
+
+    , output logic          config_bvalid
+    , input  logic          config_bready
+    , output logic [1:0]    config_bresp
+
+</code></pre>
+<p>The AXI4-Lite interface is used to configure the Vollo IP Core and to do so must be accessible from
+the host system. The configuration can then be done by providing functions to communicate with the
+bus to <a href="4-config.html">Vollo configuration API</a>.</p>
+<h2 id="input-and-output-streams"><a class="header" href="#input-and-output-streams">Input and Output Streams</a></h2>
+<p>The input and output streams are AXI4-Stream interfaces. The input and output are packed as flattened tensor and
+padded to the next multiple of block-size. The data should be packed in <em>little-endian</em> format. The output stream
+includes <code>tkeep</code> and <code>tlast</code> signals to indicate when the end of the packet and which bytes are valid (i.e. not padding).</p>
+<p>For example, an input of tensor dimension <code>[62]</code> to an ip-core with block size 32 should be provided as two
+words, the first with a full 32 brainfloat values, and the second with the remaining 30 brainfloat values and 2 padding values.
+They should be packed as follows:</p>
+<div class="table-wrapper"><table><thead><tr><th>Word</th><th>511:496</th><th>495:480</th><th>479:464</th><th>...</th><th>31:16</th><th>15:0</th></tr></thead><tbody>
+<tr><td>0</td><td><code>input[31]</code></td><td><code>input[30]</code></td><td><code>input[29]</code></td><td>...</td><td><code>input[1]</code></td><td><code>input[0]</code></td></tr>
+<tr><td>1</td><td><code>X</code></td><td><code>X</code></td><td><code>input[61]</code></td><td>...</td><td><code>input[33]</code></td><td><code>input[32]</code></td></tr>
+</tbody></table>
+</div>
+<p>Verilog signals:</p>
+<pre><code class="language-verilog">
+    // Core clock and active-high synchronous reset:
+    , input  logic          compute_clock
+    , input  logic          compute_reset
+
+    // Input AXI4-Stream interface:
+    , input  logic          input_tvalid
+    , output logic          input_tready
+    , input  logic [511:0]  input_tdata
+
+    // Output AXI4-Stream interface:
+    , output logic          output_tvalid
+    , input  logic          output_tready
+    , output logic          output_tlast
+    , output logic [63:0]   output_tkeep
+    , output logic [511:0]  output_tdat
+
+</code></pre>
+<h2 id="model-selection"><a class="header" href="#model-selection">Model Selection</a></h2>
+<blockquote>
+<p>⚠️ The IP Core does not currently support multiple models. This feature is planned for a future release.
+The model selection bus is ignored and can be driven with any value.</p>
+</blockquote>
+<p>The model selection bus can be used to select between multiple models that have been configured into the IP Core. This selection
+can be provided ahead of the data stream. The model selection bus is a 16-bit wide AXI4-Stream interface.</p>
+<p>For single model Vollo programs, it is not required to drive the model selection bus, however the IP Core
+will accept the value if it is driven.</p>
+<pre><code class="language-verilog">
+    // Model select AXI4-Stream interface:
+    , input  logic         model_select_tvalid
+    , output logic         model_select_tready
+    , input  logic [15:0]  model_select_tdata
+
+</code></pre>
+<h2 id="verilog-instantiation"><a class="header" href="#verilog-instantiation">Verilog instantiation</a></h2>
+<p>The complete component interface is as follows:</p>
+<pre><code class="language-sv">
+module vollo_ip_core
+  (
+    // Config interface clock and active-high synchronous reset:
+      input  logic          config_clock
+    , input  logic          config_reset
+
+    // Config AXI4-Lite interface.
+    // The config_awprot and config_arprot inputs are unused
+    // and ignored.
+    , input  logic          config_awvalid
+    , output logic          config_awready
+    , input  logic [20:0]   config_awaddr
+    , input  logic [2:0]    config_awprot
+
+    , input  logic          config_wvalid
+    , output logic          config_wready
+    , input  logic [31:0]   config_wdata
+    , input  logic [3:0]    config_wstrb
+
+    , input  logic          config_arvalid
+    , output logic          config_arready
+    , input  logic [20:0]   config_araddr
+    , input  logic [2:0]    config_arprot
+
+    , output logic          config_rvalid
+    , input  logic          config_rready
+    , output logic [31:0]   config_rdata
+    , output logic [1:0]    config_rresp
+
+    , output logic          config_bvalid
+    , input  logic          config_bready
+    , output logic [1:0]    config_bresp
+
+    // Core clock and active-high synchronous reset:
+    , input  logic          compute_clock
+    , input  logic          compute_reset
+
+    // Model select AXI4-Stream interface:
+    , input  logic          model_select_tvalid
+    , output logic          model_select_tready
+    , input  logic [15:0]   model_select_tdata
+
+    // Input AXI4-Stream interface:
+    , input  logic          input_tvalid
+    , output logic          input_tready
+    , input  logic [511:0]  input_tdata
+
+    // Output AXI4-Stream interface:
+    , output logic          output_tvalid
+    , input  logic          output_tready
+    , output logic          output_tlast
+    , output logic [63:0]   output_tkeep
+    , output logic [511:0]  output_tdata
+  );
+
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../ip-core/1-selecting-an-ip-core.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="../ip-core/3-quartus-integration.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../ip-core/1-selecting-an-ip-core.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="../ip-core/3-quartus-integration.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </body>
+</html>
