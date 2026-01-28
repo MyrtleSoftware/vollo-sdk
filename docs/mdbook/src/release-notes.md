@@ -1,5 +1,16 @@
 # Release Notes
 
+## 26.0.2
+
+- Update example/partial_update.c to allow multiple inputs and mixed precision
+- Fix bug in FP32/multi-input partial updates
+- Speed up model compilation
+
+## 26.0.1
+
+- Make `vollo-tool license` use the system's CA certificates
+- Fix bug in FP32 partial updates
+
 ## 26.0.0
 
 - V80 DMA optimizations

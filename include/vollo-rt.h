@@ -599,7 +599,7 @@ vollo_rt_error_t vollo_rt_add_job_bf16_partial_update(
  *     a user context that will be returned on completion
  * - num_input_updates:
  *     The number of update entries in the input_partial_updates array
- *     It MUST be at most the number of input elements (see `vollo_rt_model_input_num_elements`),
+ *     It MUST be at most the number of model inputs (see `vollo_rt_model_num_inputs`),
  *     although using `vollo_rt_add_job_bf16` will be more efficient when updating many elements
  * - input_partial_updates:
  *     An array of partial_update_input structs (with `num_input_updates` elements) describing
@@ -651,7 +651,7 @@ vollo_rt_error_t vollo_rt_poll(
 
 /**
  * Get access to a raw DMA buffer for a number of bf16 elements. This function may be deprecated
- * in the future in favour of `vollo_rt_get_raw_buffer_bytes`.
+ * in the future in favor of `vollo_rt_get_raw_buffer_bytes`.
  *
  * This buffer can be used as either an input or an output buffer in `vollo_rt_add_job_bf16`.
  * When such a buffer is used, the DMA will use the buffer directly without first copying the data.
