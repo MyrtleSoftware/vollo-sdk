@@ -16,9 +16,17 @@
 #include <time.h>
 #include <vollo-rt.h>
 
-static void full_input_inference_start(vollo_rt_context_t, const bf16*, bf16**);
+// Helper to determine byte size of a given number format
+static size_t format_size(number_format format) {
+  return (format == number_format_bf16) ? sizeof(bf16) : sizeof(float);
+}
+
+static void full_input_inference_start(
+  vollo_rt_context_t, const number_format*, const void* const*, const number_format*, void* const*);
+
 static void partial_input_inference_start(
-  vollo_rt_context_t, uint32_t, const uint32_t*, const bf16*, bf16**);
+  vollo_rt_context_t, uint32_t, const struct partial_update_input*, void* const*);
+
 static void block_until_completion(vollo_rt_context_t);
 
 void print_help(const char* prog) {
@@ -116,52 +124,75 @@ int main(int argc, char** argv) {
   assert(vollo_rt_num_models(ctx) == 1);
   size_t model_index = 0;
 
-  // Assert model only has a single input
-  assert(vollo_rt_model_num_inputs(ctx, model_index) == 1);
-
-  size_t num_input_elements = vollo_rt_model_input_num_elements(ctx, model_index, 0);
-
+  size_t model_num_inputs = vollo_rt_model_num_inputs(ctx, model_index);
   size_t model_num_outputs = vollo_rt_model_num_outputs(ctx, model_index);
 
-  bf16* input_tensor = vollo_rt_get_raw_buffer(ctx, num_input_elements);
-  bf16** output_tensors = (bf16**)malloc(model_num_outputs * sizeof(bf16*));
-  for (size_t i = 0; i < model_num_outputs; i++) {
-    size_t num_output_elements = vollo_rt_model_output_num_elements(ctx, model_index, i);
-    output_tensors[i] = vollo_rt_get_raw_buffer(ctx, num_output_elements);
+  // Metadata and buffer arrays for each input
+  number_format* input_formats = malloc(model_num_inputs * sizeof(number_format));
+  size_t* input_elem_counts = malloc(model_num_inputs * sizeof(size_t));
+  void** input_tensors = malloc(model_num_inputs * sizeof(void*));
+
+  for (size_t i = 0; i < model_num_inputs; i++) {
+    input_formats[i] = vollo_rt_model_input_format(ctx, model_index, i);
+    input_elem_counts[i] = vollo_rt_model_input_num_elements(ctx, model_index, i);
+    size_t bytes = input_elem_counts[i] * format_size(input_formats[i]);
+    input_tensors[i] = vollo_rt_get_raw_buffer_bytes(ctx, bytes);
   }
 
-  bf16*** outputs = NULL;
+  // Metadata and buffer arrays for each output
+  number_format* output_formats = malloc(model_num_outputs * sizeof(number_format));
+  void** output_tensors = malloc(model_num_outputs * sizeof(void*));
+  for (size_t i = 0; i < model_num_outputs; i++) {
+    output_formats[i] = vollo_rt_model_output_format(ctx, model_index, i);
+    size_t num_elements = vollo_rt_model_output_num_elements(ctx, model_index, i);
+    output_tensors[i]
+      = vollo_rt_get_raw_buffer_bytes(ctx, num_elements * format_size(output_formats[i]));
+  }
+
+  void*** outputs = NULL;
   if (output_dir != NULL) {
-    outputs = (bf16***)malloc(num_inferences * sizeof(bf16**));
-
+    outputs = (void***)malloc(num_inferences * sizeof(void**));
     for (size_t i = 0; i < num_inferences; i++) {
-      outputs[i] = (bf16**)malloc(model_num_outputs * sizeof(bf16*));
-
+      outputs[i] = (void**)malloc(model_num_outputs * sizeof(void*));
       for (size_t j = 0; j < model_num_outputs; j++) {
-        size_t num_output_elements = vollo_rt_model_output_num_elements(ctx, model_index, j);
-        outputs[i][j] = (bf16*)malloc(num_output_elements * sizeof(bf16));
+        size_t num_elements = vollo_rt_model_output_num_elements(ctx, model_index, j);
+        outputs[i][j] = malloc(num_elements * format_size(output_formats[j]));
       }
     }
   }
 
-  // Allocating num_input_elements is excessive for partial updates
-  // (when updating all inputs it is more efficient to use the full input API)
-  //
-  // However we do this for the example to simplify the random index selection (with no duplicates)
-  uint32_t num_partial_updates = 0;
-  uint32_t* partial_update_indices = (uint32_t*)malloc(num_input_elements * sizeof(uint32_t));
-  bf16* partial_update_values = (bf16*)malloc(num_input_elements * sizeof(bf16));
+  // Update configuration buffers for all inputs
+  uint32_t* num_partial_updates = malloc(model_num_inputs * sizeof(uint32_t));
+  uint32_t** partial_update_indices = malloc(model_num_inputs * sizeof(uint32_t*));
+  void** partial_update_values = malloc(model_num_inputs * sizeof(void*));
+  struct partial_update_input* update_configs
+    = malloc(model_num_inputs * sizeof(struct partial_update_input));
+
+  for (size_t i = 0; i < model_num_inputs; i++) {
+    // Allocating input_elem_counts[i] is excessive for partial updates
+    // (when updating all inputs it is more efficient to use the full input API)
+    //
+    // However we do this for the example to simplify the random index selection (with no
+    // duplicates)
+    partial_update_indices[i] = (uint32_t*)malloc(input_elem_counts[i] * sizeof(uint32_t));
+    partial_update_values[i] = malloc(input_elem_counts[i] * format_size(input_formats[i]));
+
+    for (size_t j = 0; j < input_elem_counts[i]; j++) {
+      if (input_formats[i] == number_format_bf16) {
+        ((bf16*)input_tensors[i])[j] = rand_bf16();
+      } else {
+        ((float*)input_tensors[i])[j] = rand_float();
+      }
+      partial_update_indices[i][j]
+        = (uint32_t)j;  // initialise update indices to ensure no duplicates
+    }
+  }
 
   double* latencies = (double*)malloc(sizeof(double) * num_inferences);
   struct timespec start_time, completed_time;
 
   // Seed the randomness to be able to compare runs
   srand(0);
-
-  for (size_t i = 0; i < num_input_elements; i++) {
-    input_tensor[i] = rand_bf16();
-    partial_update_indices[i] = (uint32_t)i;  // initialise update indices to ensure no duplicates
-  }
 
   //////////////////////////////////////////////////
   // Run inferences
@@ -174,25 +205,36 @@ int main(int argc, char** argv) {
     }
 
     //////////////////////////////////////////////////
-    // Random update to the input for the next inference
+    // Random update preparation for all inputs
 
-    uint32_t extra_magnitude = (uint32_t)rand();
-    uint32_t extra = 1 << 4;
-    while ((extra_magnitude & extra) == 0 && extra != 0) {
-      extra <<= 1;
-    }
-    num_partial_updates = (uint32_t)rand() & (extra - 1);
+    uint32_t total_updates = 0;
+    for (size_t k = 0; k < model_num_inputs; k++) {
+      uint32_t extra_magnitude = (uint32_t)rand();
+      uint32_t extra = 1 << 4;
+      while ((extra_magnitude & extra) == 0 && extra != 0) {
+        extra <<= 1;
+      }
+      num_partial_updates[k] = (uint32_t)rand() & (extra - 1);
 
-    if (num_partial_updates > num_input_elements) {
-      num_partial_updates = (uint32_t)num_input_elements;
-    }
+      if (num_partial_updates[k] > input_elem_counts[k]) {
+        num_partial_updates[k] = (uint32_t)input_elem_counts[k];
+      }
+      total_updates += num_partial_updates[k];
 
-    partial_rand_shuffle(num_partial_updates, num_input_elements, partial_update_indices);
-    for (size_t j = 0; j < num_partial_updates; j++) {
-      partial_update_values[j] = rand_bf16();
+      partial_rand_shuffle(num_partial_updates[k], input_elem_counts[k], partial_update_indices[k]);
 
-      // Apply random update to input tensor
-      input_tensor[partial_update_indices[j]] = partial_update_values[j];
+      for (size_t j = 0; j < num_partial_updates[k]; j++) {
+        if (input_formats[k] == number_format_bf16) {
+          ((bf16*)partial_update_values[k])[j] = rand_bf16();
+        } else {
+          ((float*)partial_update_values[k])[j] = rand_float();
+        }
+      }
+
+      update_configs[k].input_arg_num = (uint32_t)k;
+      update_configs[k].num_updates = num_partial_updates[k];
+      update_configs[k].update_indices = partial_update_indices[k];
+      update_configs[k].update_values = partial_update_values[k];
     }
 
     //////////////////////////////////////////////////
@@ -202,27 +244,40 @@ int main(int argc, char** argv) {
     // updates exceeds the threshold
     bool do_full_input_inference
       = i == 0
-        || (threshold_partial_updates >= 0 && threshold_partial_updates < num_partial_updates);
+        || (threshold_partial_updates >= 0 && (long)total_updates > threshold_partial_updates);
 
     // Start an inference
     clock_gettime(CLOCK_MONOTONIC, &start_time);
 
     if (do_full_input_inference) {
-      // Apply the input updates to input tensor
-      for (size_t j = 0; j < num_partial_updates; j++) {
-        input_tensor[partial_update_indices[j]] = partial_update_values[j];
+      for (size_t k = 0; k < model_num_inputs; k++) {
+        for (size_t j = 0; j < num_partial_updates[k]; j++) {
+          uint32_t idx = partial_update_indices[k][j];
+          if (input_formats[k] == number_format_bf16) {
+            ((bf16*)input_tensors[k])[idx] = ((bf16*)partial_update_values[k])[j];
+          } else {
+            ((float*)input_tensors[k])[idx] = ((float*)partial_update_values[k])[j];
+          }
+        }
       }
-
-      full_input_inference_start(ctx, input_tensor, output_tensors);
+      full_input_inference_start(
+        ctx, input_formats, (const void* const*)input_tensors, output_formats, output_tensors);
 
     } else {
       partial_input_inference_start(
-        ctx, num_partial_updates, partial_update_indices, partial_update_values, output_tensors);
+        ctx, (uint32_t)model_num_inputs, update_configs, output_tensors);
 
       // Apply the input updates to input tensor for future inferences with full inputs while we
-      // compute the current inference with partially update input
-      for (size_t j = 0; j < num_partial_updates; j++) {
-        input_tensor[partial_update_indices[j]] = partial_update_values[j];
+      // compute the current inference with partial update
+      for (size_t k = 0; k < model_num_inputs; k++) {
+        for (size_t j = 0; j < num_partial_updates[k]; j++) {
+          uint32_t idx = partial_update_indices[k][j];
+          if (input_formats[k] == number_format_bf16) {
+            ((bf16*)input_tensors[k])[idx] = ((bf16*)partial_update_values[k])[j];
+          } else {
+            ((float*)input_tensors[k])[idx] = ((float*)partial_update_values[k])[j];
+          }
+        }
       }
     }
 
@@ -284,7 +339,11 @@ int main(int argc, char** argv) {
         }
 
         for (size_t k = 0; k < num_output_elements; k++) {
-          output_array.buffer[k] = bf16_to_float(outputs[j][i][k]);
+          if (output_formats[i] == number_format_bf16) {
+            output_array.buffer[k] = bf16_to_float(((bf16*)outputs[j][i])[k]);
+          } else {
+            output_array.buffer[k] = ((float*)outputs[j][i])[k];
+          }
         }
 
         write_npy(output_path, output_array);
@@ -306,28 +365,38 @@ int main(int argc, char** argv) {
     }
     free(outputs);
   }
+  for (size_t i = 0; i < model_num_inputs; i++) {
+    free(partial_update_indices[i]);
+    free(partial_update_values[i]);
+  }
+  free(input_formats);
+  free(input_elem_counts);
+  free(input_tensors);
+  free(output_formats);
   free(output_tensors);
-
   free(latencies);
+  free(num_partial_updates);
   free(partial_update_indices);
   free(partial_update_values);
+  free(update_configs);
 
   vollo_rt_destroy(ctx);
-
   return 0;
 }
 
-static void full_input_inference_start(vollo_rt_context_t ctx, const bf16* input, bf16** outputs) {
+static void full_input_inference_start(
+  vollo_rt_context_t ctx,
+  const number_format* input_formats,
+  const void* const* inputs,
+  const number_format* output_formats,
+  void* const* outputs) {
   size_t model_index = 0;
-
-  const bf16* input_data[1] = {input};
 
   // user_ctx is not needed when doing single shot inferences
   // it can be used when doing multiple jobs concurrently to keep track of which jobs completed
   uint64_t user_ctx = 0;
-
-  // Register a new job
-  EXIT_ON_ERROR(vollo_rt_add_job_bf16(ctx, model_index, user_ctx, input_data, outputs));
+  EXIT_ON_ERROR(
+    vollo_rt_add_job(ctx, model_index, user_ctx, input_formats, inputs, output_formats, outputs));
 
   // Single poll to start new job
   size_t num_completed = 0;
@@ -341,24 +410,16 @@ static void full_input_inference_start(vollo_rt_context_t ctx, const bf16* input
 static void partial_input_inference_start(
   vollo_rt_context_t ctx,
   uint32_t num_input_updates,
-  const uint32_t* input_update_indices,
-  const bf16* input_update_values,
-  bf16** outputs) {
+  const struct partial_update_input* input_partial_updates,
+  void* const* outputs) {
   size_t model_index = 0;
 
   // user_ctx is not needed when doing single shot inferences
   // it can be used when doing multiple jobs concurrently to keep track of which jobs completed
   uint64_t user_ctx = 0;
 
-  // Register a new job with partial update input
-  EXIT_ON_ERROR(vollo_rt_add_job_bf16_partial_update(
-    ctx,
-    model_index,
-    user_ctx,
-    num_input_updates,
-    input_update_indices,
-    input_update_values,
-    outputs));
+  EXIT_ON_ERROR(vollo_rt_add_job_partial_update(
+    ctx, model_index, user_ctx, num_input_updates, input_partial_updates, outputs));
 
   // Single poll to start new job
   size_t num_completed = 0;

@@ -16,6 +16,7 @@
     vollo_rt_error_t _err = (expr);         \
     if (_err != NULL) {                     \
       fprintf(stderr, "error: %s\n", _err); \
+      vollo_rt_destroy_err(_err);           \
       exit(EXIT_FAILURE);                   \
     }                                       \
   } while (0)
