@@ -1,5 +1,19 @@
 # Changelog
 
+## 26.1.0
+
+- Fix DMA bug introduced on V80 in Vollo SDK 26.0.0
+- Add Alveo V80LL bitstream and `vollo_compiler.Config.v80ll_c6b32` hardware
+  config
+- Add support for `Linear` layers where the contracted dimension is not the
+  data dimension via the `allow_dynamic_weights` flag for
+  `vollo_compiler.NNIR.to_program`
+- Add support for multiple inputs to `vollo_torch.nn.Scan`
+- Add support for indexing with negative indices in: `torch.stack`,
+  `torch.sum`, `torch.permute`, `torch.squeeze`, `torch.unsqueeze`
+- Add support for `torch.nn.functional.linear`
+- Add optional `bias` argument to `vollo_torch.nn.PaddedConv1d`
+
 ## 26.0.2
 
 - Update example/partial_update.c to allow multiple inputs and mixed precision

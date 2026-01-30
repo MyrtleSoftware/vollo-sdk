@@ -14,7 +14,8 @@ performance of Vollo programs.
 ## Installation
 
 Set up Vollo environment variables by [sourcing
-`setup.sh`](accelerator-setup.md#environment-variable-setup) in `bash`.
+`setup.sh`](accelerator-setup.md#environment-variable-setup) in `bash`
+from the Vollo SDK root directory.
 
 Install the wheel files for the Vollo compiler libraries. It's recommended that
 you install these into a [virtual

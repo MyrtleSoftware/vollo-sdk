@@ -1,5 +1,11 @@
 # C API
 
+Make sure the `VOLLO_SDK` environment variable is set by sourcing setup.sh from the Vollo SDK.
+
+```bash
+source <path-to-VOLLO_SDK>/setup.sh
+```
+
 The Vollo runtime API is a C API with simple types and functions in order to be
 straight forward to use from any language with a C FFI.
 

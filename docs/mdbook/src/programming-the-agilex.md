@@ -1,14 +1,23 @@
 # Programming the Agilex FPGA
 
+This section assumes that the Vollo SDK is already installed and setup on the machine that you are using. If you
+haven't done so already, instructions for how to do that may be found at: [Vollo SDK Installation](https://vollo.myrtle.ai/latest/installation.html).
+
+Make sure the `VOLLO_SDK` environment variable is set by sourcing setup.sh from the Vollo SDK.
+
+```bash
+source <path-to-VOLLO_SDK>/setup.sh
+```
+
 ## Download the bitstream for your FPGA
 
 The bitstream is available on the [Github Release page](https://github.com/MyrtleSoftware/vollo-sdk/releases/) alongside the Vollo SDK.
 For example to download the bitstream for the Agilex `ia840f` board with the `c2b64d` configuration of Vollo:
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v26.0.2/vollo-ia840f-c2b64d-26.0.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v26.1.0/vollo-ia840f-c2b64d-26.1.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-ia840f-c2b64d-26.0.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-ia840f-c2b64d-26.1.tar.gz -C $VOLLO_SDK/bitstream
 ```
 
 The Agilex-based boards that are currently supported are:
@@ -104,7 +113,6 @@ require a USB programming cable or for Quartus Programmer to be installed.
 5. Navigate to the directory containing the `jic` file:
 
     ```sh
-    source setup.sh
     cd $VOLLO_SDK/bitstream
     ```
 
