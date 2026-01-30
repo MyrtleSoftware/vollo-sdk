@@ -1,24 +1,33 @@
 # Programming the V80 FPGA
 
+This section assumes that the Vollo SDK is already installed and setup on the machine that you are using. If you
+haven't done so already, instructions for how to do that may be found at: [Vollo SDK Installation](https://vollo.myrtle.ai/latest/installation.html)
+
+Make sure the `VOLLO_SDK` environment variable is set by sourcing setup.sh from the Vollo SDK.
+
+```bash
+source <path-to-VOLLO_SDK>/setup.sh
+```
+
 ## Download the bitstream for your FPGA
 
 The bitstream is available on the [Github Release page] alongside the Vollo SDK. For example to
-download the bitstream for the AMD `v80` board with the `c6b32` configuration of Vollo:
+download the bitstream for the AMD `V80` board with the `c6b32` configuration of Vollo:
 
 [Github Release page]: https://github.com/MyrtleSoftware/vollo-sdk/releases/
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v26.0.2/vollo-amd-v80-c6b32-26.0.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v26.1.0/vollo-amd-v80-c6b32-26.1.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-amd-v80-c6b32-26.0.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-amd-v80-c6b32-26.1.tar.gz -C $VOLLO_SDK/bitstream
 ```
 
-Alternatively, for the AMD `v80-LL`, use:
+Alternatively, for the AMD `V80LL`, use:
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v26.0.2/vollo-amd-v80-ll-c6b32-26.0.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v26.1.0/vollo-amd-v80ll-c6b32-26.1.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-amd-v80-ll-c6b32-26.0.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-amd-v80ll-c6b32-26.1.tar.gz -C $VOLLO_SDK/bitstream
 ```
 
 ## Programming the FPGA via JTAG

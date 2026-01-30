@@ -143,6 +143,7 @@ all_configs = {
     "nt400d11_c6b32": vollo_compiler.Config.nt400d11_c6b32(),
     "fb4cgg3_c3b32": vollo_compiler.Config.fb4cgg3_c3b32(),
     "v80_c6b32": vollo_compiler.Config.v80_c6b32(),
+    "v80ll_c6b32": vollo_compiler.Config.v80ll_c6b32(),
 }
 
 # The number of timesteps in the streaming dimension of the model
