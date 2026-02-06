@@ -1,5 +1,19 @@
 # Release Notes
 
+## 26.1.2
+
+- Optimize handling of biases in `Linear` layers when using `allow_dynamic_weights`
+- Speed up model compilation
+- Add `random_seeds` argument to `vollo_compiler.NNIR.to_program`
+
+## 26.1.1
+
+- Fix V80LL initialization bitstream so that the V80LL memory can be flashed over JTAG
+- Optimize handling of biases in `Linear` layers when using
+  `allow_dynamic_weights`
+- Add support for multiple outputs to `vollo_torch.nn.Scan`
+- Speed up loading `.vollo` programs
+
 ## 26.1.0
 
 - Fix DMA bug introduced on V80 in Vollo SDK 26.0.0
