@@ -17,7 +17,7 @@ download the bitstream for the AMD `V80` board with the `c6b32` configuration of
 [Github Release page]: https://github.com/MyrtleSoftware/vollo-sdk/releases/
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v26.1.1/vollo-amd-v80-c6b32-26.1.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v26.1.2/vollo-amd-v80-c6b32-26.1.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
 tar -xzf vollo-amd-v80-c6b32-26.1.tar.gz -C $VOLLO_SDK/bitstream
 ```
@@ -25,7 +25,7 @@ tar -xzf vollo-amd-v80-c6b32-26.1.tar.gz -C $VOLLO_SDK/bitstream
 Alternatively, for the AMD `V80LL`, use:
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v26.1.1/vollo-amd-v80ll-c6b32-26.1.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v26.1.2/vollo-amd-v80ll-c6b32-26.1.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
 tar -xzf vollo-amd-v80ll-c6b32-26.1.tar.gz -C $VOLLO_SDK/bitstream
 ```
