@@ -60,7 +60,7 @@ precisions of data you will be providing to the runtime. If these precisions do 
 by the runtime, which can be slow.
 
 ```python
-config = vollo_compiler.Config.ia_420f_c6b32()
+config = vollo_compiler.Config.v80_c6b32()
 program = nnir.to_program(config)
 ```
 
