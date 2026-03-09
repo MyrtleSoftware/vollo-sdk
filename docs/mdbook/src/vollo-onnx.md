@@ -120,7 +120,7 @@ Tensors are expected to be in `float32` format, unless they are used as indices 
 | `LSTM`                    | LSTM without explicit hidden or cell state initialisation                                                                      |
 | `Gather`                  | With a 0d/1d tensor of indices                                                                                                 |
 | `Slice`                   | `step` size 1 with constant `starts`, `ends` and `axes`.                                                                       |
-| `ReduceSum`, `ReduceMean` | With constant axes, `keepdims = 1` required on data dimension                                                                  |
+| `ReduceSum`, `ReduceMean` | With constant axes, `keepdims = 1` required on [data dimension](data-dimension.md)                                             |
 | `Where`                   | If the `Where` condition is an inequality comparison                                                                           |
 | `Concat`                  |                                                                                                                                |
 | `Transpose`               | See [tensor memory format](supported-models.md#tensor-memory-format)                                                           |
@@ -136,4 +136,4 @@ Tensors are expected to be in `float32` format, unless they are used as indices 
 | `Softplus`                |                                                                                                                                |
 | `Sigmoid`                 |                                                                                                                                |
 | `Expand`                  |                                                                                                                                |
-| `Reshape`                 | The stride of the data dimension must be unchanged                                                                             |
+| `Reshape`                 | The stride of the [data dimension](data-dimension.md) must be unchanged                                                        |

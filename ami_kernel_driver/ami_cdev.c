@@ -202,12 +202,6 @@ long dev_unlocked_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		struct ami_ioc_data_payload data = { 0 };
 		uint8_t *buf = NULL;
 
-		/* Check PF - currently only PF0 supported for this command. */
-		if (pf_dev->pcie_function_num != 0) {
-			ret = -ENODEV;
-			goto done;
-		}
-
 		/* Read data payload from user. */
 		if (copy_from_user(&data, (struct ami_ioc_data_payload*)arg, sizeof(data))) {
 			ret = -EFAULT; /* Bad address */
@@ -274,12 +268,6 @@ long dev_unlocked_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		 */
 		struct ami_ioc_data_payload data = { 0 };
 
-		/* Check PF - currently only PF0 supported for this command. */
-		if (pf_dev->pcie_function_num != 0) {
-			ret = -ENODEV;
-			goto done;
-		}
-
 		/* Read data payload from user. */
 		if (copy_from_user(&data, (struct ami_ioc_data_payload*)arg, sizeof(data))) {
 			ret = -EFAULT; /* Bad address */
@@ -304,12 +292,6 @@ long dev_unlocked_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		 * Only the `partition` field should be populated.
 		 */
 		struct ami_ioc_data_payload data = { 0 };
-
-		/* Check PF - currently only PF0 supported for this command. */
-		if (pf_dev->pcie_function_num != 0) {
-			ret = -ENODEV;
-			goto done;
-		}
 
 		/* Read data payload from user. */
 		if (copy_from_user(&data, (struct ami_ioc_data_payload*)arg, sizeof(data))) {
