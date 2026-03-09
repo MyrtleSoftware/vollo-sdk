@@ -1,5 +1,21 @@
 # Changelog
 
+## 26.2.0
+
+- Support for FP8 (E4M3) weights on Versal devices using
+  `vollo_torch.Fp8Weights` context manager
+- Support for `torch.exp`, `torch.exp2` at FP32 precision using
+  `vollo_torch.Fp32Activations` context manager
+- Support for `matmul` operations where both inputs are dynamic (non-constant)
+  tensors, when using `allow_dynamic_weights`
+- Optimize accumulations on Versal devices, improving performance of layers
+  such as `LayerNorm` and `RMSNorm`, and `Linear` layers with small output
+  features
+- Add support for multiple state tensors in `vollo_torch.nn.Scan`
+- Add `allow_unserializable` flag to `vollo_compiler.NNIR.to_program` for testing
+  programs which can't be serialized
+- Fix multi-model programs that use dynamic weights
+
 ## 26.1.2
 
 - Optimize handling of biases in `Linear` layers when using `allow_dynamic_weights`

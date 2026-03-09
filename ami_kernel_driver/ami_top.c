@@ -279,8 +279,7 @@ static int create_pf_dev_data(struct pci_dev *dev)
 	 * Attempt sensor discovery only if AMC was initialised correctly.
 	 * COMPAT MODE: No sensor data and no hwmon entries.
 	 */
-	if ((pf_dev->pcie_function_num == 0) && pf_dev->amc_ctrl_ctxt &&
-	    !(pf_dev->amc_ctrl_ctxt->compat_mode)) {
+	if (pf_dev->amc_ctrl_ctxt && !(pf_dev->amc_ctrl_ctxt->compat_mode)) {
 		/* We don't bail out if the sensor discover fails - the user
 		 * should still be able to access the device regardless. We do
 		 * bail out, however, if the hwmon init fails as this should not
