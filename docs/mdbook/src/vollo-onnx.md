@@ -123,7 +123,7 @@ Tensors are expected to be in `float32` format, unless they are used as indices 
 | `ReduceSum`, `ReduceMean` | With constant axes, `keepdims = 1` required on [data dimension](data-dimension.md)                                             |
 | `Where`                   | If the `Where` condition is an inequality comparison                                                                           |
 | `Concat`                  |                                                                                                                                |
-| `Transpose`               | See [tensor memory format](supported-models.md#tensor-memory-format)                                                           |
+| `Transpose`               | See [data dimension][data-dimension.md)                                                                                        |
 | `Softmax`                 |                                                                                                                                |
 | `LayerNormalization`      | With `axis = -1`. Supported in onnx opset versions >= 17                                                                       |
 | `BatchNormalization`      | Where input scale, bias, mean and var are constants                                                                            |

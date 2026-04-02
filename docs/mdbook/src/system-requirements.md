@@ -2,10 +2,7 @@
 
 ## CPU Requirements
 
-The minimum CPU specification for the system is shown below.
-
-- Single Socket 6 core Intel Xeon CPU at 2.0 GHz, equivalent AMD processor or better.
-- 8 GB RAM
+An x86-64 CPU is required to run the Vollo runtime.
 
 ## Accelerator Card Requirements
 
@@ -17,8 +14,10 @@ It currently supports the following accelerator cards:
 | BittWare IA-420f     | Intel Agilex AGF014   | 3.1 Million         |
 | BittWare IA-840f     | Intel Agilex AGF027   | 8.4 Million         |
 | Napatech NT400D11    | Intel Agilex AGF014   | 3.1 Million         |
-| AMD Alveo V80        | AMD Versal XCV80      | 25.2 Million        |
+| AMD Alveo V80        | AMD Versal XCV80      | 25.2 Million[^note] |
 
 ## Operating System Requirements
 
 Vollo is compatible with Ubuntu 20.04 and later.
+
+[^note]: 50.3 Million if using FP8 weights.

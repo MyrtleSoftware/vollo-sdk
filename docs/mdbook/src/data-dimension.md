@@ -110,24 +110,29 @@ Non data-dimension reduction (generally slower):
 
 Note: `keepdim` must be used in the former and is optional in the latter.
 
-## Contraction
+## Matrix multiplication
 
-These operations transform the data dimension in non-obvious ways.
+These operations transform the data dimension in non-obvious ways, here we use
+`*` do denote any number of commensurate broadcast dimensions, none of which
+are allowed to be the data dimension.
 
 With one side a compile-time constant, in this case the LHS (WLOG):
 
 ```txt
-[b i j] @ [b j! k] -> [b i! k]
+[* i j] @ [* j! k] -> [* i! k]
 ```
 
 That is, the data dimension must be along the contracted dimension of the
 runtime tensor. The output data dimension is along the "replaced" index.
 
+Note: a linear layer is a special case of the above with the `k` dimension
+squeezed out.
+
 If the contraction is not along the data dimension of the non-constant
 (requires `allow_dynamic_weights`):
 
 ```txt
-[b i j] @ [b j k!] -> [b i k!]
+[* i j] @ [* j k!] -> [* i k!]
 ```
 
 That is, the data dimension of non-constant is preserved in the output. This
@@ -137,7 +142,7 @@ along the data dimension.
 With both sides runtime tensors (also requires `allow_dynamic_weights`):
 
 ```txt
-[i! j] @ [j! k] -> [i! k]
+[* i! j] @ [* j! k] -> [* i! k]
 ```
 
 That is, the contracted dimension must be the data dimension of exactly one of
@@ -145,11 +150,21 @@ the input tensors (in this case the RHS WLOG). The output data dimension is
 that of the side whose data dimension was not contracted, for example:
 
 ```txt
-[b! i j] @ [b j! k] -> [b! i k]
+[* i j!] @ [* j k!] -> [* i k!]
 ```
 
 This uses more tensor RAM and potentially has a higher latency than
 contractions with a constant.
+
+## Transpose
+
+Tensors can be transposed without restriction. If one of the transposed
+dimensions is the data dimension, the data dimension is transposed to that
+dimension:
+
+```txt
+[a! b c d].transpose(0, 2) -> [c b a! d]
+```
 
 ## Reshape
 

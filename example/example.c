@@ -28,6 +28,11 @@ typedef struct ExampleOptions {
   // Time to wait in between each inference in nanoseconds (only for 1 concurrent job, defaults to
   // 0)
   size_t inference_spacing_ns;
+  // Maximum duration for the compute phase in milliseconds (defaults to 0 = no limit)
+  size_t max_duration_ms;
+  // Maximum duration for the warmup phase in milliseconds (defaults 0 = no limit)
+  size_t max_warmup_duration_ms;
+
   // Provide all inputs/outputs as fp32 (these may get converted to bf16 by the runtime)
   bool fp32_api;
   // Provide all inputs/outputs as bf16 (these may get converted to fp32 by the runtime)
@@ -312,10 +317,15 @@ static void vollo_example(ExampleOptions options) {
 
   fprintf(stderr, "Starting %ld inferences\n", options.num_inferences);
 
-  size_t total_inferences = options.num_warmup_inferences + options.num_inferences;
+  size_t num_warmup = options.num_warmup_inferences;
+  size_t total_inferences = num_warmup + options.num_inferences;
   size_t outstanding_jobs = 0;
   size_t inf_started = 0;
   size_t inf_completed = 0;
+
+  // Defer printing error messages until after all inferences
+  bool max_warmup_duration_reached = false;
+  bool max_compute_duration_reached = false;
 
   // We don't need a user context here
   // Since we're only using 1 model, the inferences are guaranteed to complete
@@ -329,12 +339,36 @@ static void vollo_example(ExampleOptions options) {
     // Add jobs
 
     while (outstanding_jobs < options.max_concurrent_jobs && inf_started < total_inferences) {
+      struct timespec now;
+      clock_gettime(CLOCK_MONOTONIC, &now);
+
+      // Check warmup time limit
+      if (
+        options.max_warmup_duration_ms > 0 && inf_started < num_warmup
+        && diff_timespec_ns(start_warmup_time, now) / 1e6
+             >= (double)options.max_warmup_duration_ms) {
+        total_inferences -= (num_warmup - inf_started);
+        num_warmup = inf_started;
+        max_warmup_duration_reached = true;
+      }
+
+      // Check compute time limit
+      // Note strict greater than (>) comparison to ensure that start_times[0] is valid.
+      // This also means we will always start at least one compute inference.
+      if (
+        options.max_duration_ms > 0 && inf_started > num_warmup
+        && diff_timespec_ns(start_times[0], now) / 1e6 >= (double)options.max_duration_ms) {
+        total_inferences = inf_started;
+        max_compute_duration_reached = true;
+        break;
+      }
+
       size_t inf_ix = 0;
 
       // if it is not warmup
-      if (inf_started >= options.num_warmup_inferences) {
-        inf_ix = inf_started - options.num_warmup_inferences;
-        clock_gettime(CLOCK_MONOTONIC, &start_times[inf_ix]);
+      if (inf_started >= num_warmup) {
+        inf_ix = inf_started - num_warmup;
+        start_times[inf_ix] = now;
       }
 
       size_t input_ix = options.random_input ? (size_t)rand() % options.num_random_candidates : 0;
@@ -391,8 +425,8 @@ static void vollo_example(ExampleOptions options) {
         }
 
         // if it is not warmup
-        if (inf_completed >= options.num_warmup_inferences) {
-          size_t ix = inf_completed - options.num_warmup_inferences;
+        if (inf_completed >= num_warmup) {
+          size_t ix = inf_completed - num_warmup;
 
           latencies[ix] = diff_timespec_ns(start_times[ix], job_completed_time);
         }
@@ -415,15 +449,25 @@ static void vollo_example(ExampleOptions options) {
   start_compute_time = start_times[0];
   clock_gettime(CLOCK_MONOTONIC, &end_time);
 
+  if (max_warmup_duration_reached) {
+    fprintf(stderr, "Warmup time limit reached after %ld inferences\n", num_warmup);
+  }
+  if (max_compute_duration_reached) {
+    fprintf(
+      stderr, "Compute time limit reached after %ld inferences\n", total_inferences - num_warmup);
+  }
+
+  size_t actual_num_inferences = inf_completed - num_warmup;
+
   //////////////////////////////////////////////////
   // Summarize latencies
 
-  latency_summary summary = summarize_latencies(options.num_inferences, latencies);
+  latency_summary summary = summarize_latencies(actual_num_inferences, latencies);
 
   double setup_time = diff_timespec_ns(start_setup_time, start_warmup_time) / NANOSECONDS;
   double warmup_time = diff_timespec_ns(start_warmup_time, start_compute_time) / NANOSECONDS;
   double compute_time = diff_timespec_ns(start_compute_time, end_time) / NANOSECONDS;
-  double throughput = (double)options.num_inferences / compute_time;
+  double throughput = (double)actual_num_inferences / compute_time;
 
   fprintf(stderr, "Done\n");
 
@@ -431,7 +475,7 @@ static void vollo_example(ExampleOptions options) {
     printf("{\n");
     printf("  \"options\": {\n");
     printf("    \"max_concurrent_jobs\": %ld,\n", options.max_concurrent_jobs);
-    printf("    \"num_inferences\": %ld,\n", options.num_inferences);
+    printf("    \"num_inferences\": %ld,\n", actual_num_inferences);
     printf("    \"raw_buffer_api\": %d,\n", options.raw_buffer_api);
     printf("    \"inference_spacing_ns\": %ld\n", options.inference_spacing_ns);
     printf("  },\n");
@@ -451,7 +495,7 @@ static void vollo_example(ExampleOptions options) {
     printf("  }\n");
     printf("}\n");
   } else {
-    printf("Ran %ld inferences in %f s with:\n", options.num_inferences, compute_time);
+    printf("Ran %ld inferences in %f s with:\n", actual_num_inferences, compute_time);
     printf("  mean latency of %f us\n", summary.mean_latency_ns / 1000);
     printf("  99%% latency of %f us\n", summary.p99_latency_ns / 1000);
     printf("  throughput of %f inf/s\n", throughput);
@@ -558,6 +602,16 @@ void print_help(const char* example_program) {
     "        Defaults to 0\n"
     "\n"
 
+    "    --max-duration-ms\n"
+    "        Maximum duration for the compute phase in milliseconds (0 = no limit)\n"
+    "        Defaults to 0\n"
+    "\n"
+
+    "    --max-warmup-duration-ms\n"
+    "        Maximum duration for the warmup phase in milliseconds (0 = no limit)\n"
+    "        Defaults to 0\n"
+    "\n"
+
     "    -j, --json\n"
     "        Output detailed measurements in JSON\n"
     "\n"
@@ -579,6 +633,12 @@ void print_help(const char* example_program) {
     "\n",
     example_program);
 }
+
+// Long-only option IDs (no short alias)
+enum {
+  OPT_MAX_DURATION_MS = 256,
+  OPT_MAX_WARMUP_DURATION_MS,
+};
 
 #define MAX_INPUT_PATH_COUNT 10
 #define MAX_OUTPUT_PATH_COUNT 10
@@ -602,6 +662,8 @@ int main(int argc, char** argv) {
   options.num_inferences = 10000;
   options.num_warmup_inferences = 10000;
   options.inference_spacing_ns = 0;
+  options.max_duration_ms = 0;
+  options.max_warmup_duration_ms = 0;
   options.json = false;
   options.input_paths = input_paths;
   options.output_paths = output_paths;
@@ -622,6 +684,8 @@ int main(int argc, char** argv) {
     {"max-concurrent-jobs", required_argument, 0, 'c'},
     {"num-warmup-inferences", required_argument, 0, 'w'},
     {"inference-spacing-ns", required_argument, 0, 's'},
+    {"max-duration-ms", required_argument, 0, OPT_MAX_DURATION_MS},
+    {"max-warmup-duration-ms", required_argument, 0, OPT_MAX_WARMUP_DURATION_MS},
     {"json", no_argument, 0, 'j'},
     {"input", required_argument, 0, 'f'},
     {"output", required_argument, 0, 'o'},
@@ -645,6 +709,10 @@ int main(int argc, char** argv) {
     case 'c': options.max_concurrent_jobs = (size_t)strtoul(optarg, NULL, 10); break;
     case 'w': options.num_warmup_inferences = (size_t)strtoul(optarg, NULL, 10); break;
     case 's': options.inference_spacing_ns = (size_t)strtoul(optarg, NULL, 10); break;
+    case OPT_MAX_DURATION_MS: options.max_duration_ms = (size_t)strtoul(optarg, NULL, 10); break;
+    case OPT_MAX_WARMUP_DURATION_MS:
+      options.max_warmup_duration_ms = (size_t)strtoul(optarg, NULL, 10);
+      break;
     case 'j': options.json = true; break;
     case 'f':
       input_paths[input_paths_count] = optarg;

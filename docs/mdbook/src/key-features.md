@@ -9,11 +9,11 @@ typically found in financial trading or fraud detection systems such as:
 - Portfolio optimisation
 
 Vollo is able to process of range of models, including models which maintain
-state while streaming such as convolutional models.
+state while streaming such as recurrent models and convolutional models.
 
 Key characteristics of Vollo are:
 
-- Low latency inference of machine learning models, typically between 5-10μs.
+- Low latency inference of machine learning models, typically between 2-10μs.
 - High accuracy inference through use of Brain Floating Point 16 (bfloat16)
   numerical format.
 - High density processing in a 1U server form factor suitable for co-located

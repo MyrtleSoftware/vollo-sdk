@@ -1,5 +1,18 @@
 # Changelog
 
+## 27.0.0
+
+- IO optimization using MMIO
+- Add experimental support for specifying which cores to allocate PyTorch
+  operations to using `vollo_torch.CorePartition`
+- Add support for specifying which cores to allocate models to in a multi-model
+  program by passing `core_indices` to `vollo_compiler.ProgramBuilder.add_nnir`
+- Optimize sigmoid and SiLU activation functions
+- Improve spaced latency for some stateful models that use dynamic weights
+- Reduce tensor RAM usage of state in stateful models
+- `vollo_torch.Fp8Weights` now errors if used on operations which require
+  bf16 weights, such as dynamic weights
+
 ## 26.2.0
 
 - Support for FP8 (E4M3) weights on Versal devices using
