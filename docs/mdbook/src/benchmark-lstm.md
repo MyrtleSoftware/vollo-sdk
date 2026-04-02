@@ -34,20 +34,20 @@ Note that Vollo's current performance, as shown in the tables below, is signific
 
 | Model         |   Layers |   Hidden size | Parameters   |   Mean latency (us) |   99th percentile latency (us) |
 |---------------|----------|---------------|--------------|---------------------|--------------------------------|
-| lstm_tiny     |        2 |           128 | 268K         |                 2.4 |                            2.7 |
-| lstm_small    |        3 |           256 | 1.6M         |                 2.8 |                            3.0 |
-| lstm_med      |        3 |           480 | 5.6M         |                 3.9 |                            4.2 |
-| lstm_med_deep |        6 |           320 | 4.9M         |                 4.2 |                            4.5 |
-| lstm_large    |        3 |           960 | 22.2M        |                 8.1 |                            8.4 |
+| lstm_tiny     |        2 |           128 | 268K         |                 1.4 |                            1.4 |
+| lstm_small    |        3 |           256 | 1.6M         |                 2.0 |                            2.0 |
+| lstm_med      |        3 |           480 | 5.6M         |                 3.2 |                            3.2 |
+| lstm_med_deep |        6 |           320 | 4.9M         |                 3.3 |                            3.4 |
+| lstm_large    |        3 |           960 | 22.2M        |                 7.3 |                            7.4 |
 
 ## IA-840F: 3 core, block size 64
 
 | Model         |   Layers |   Hidden size | Parameters   |   Mean latency (us) |   99th percentile latency (us) |
 |---------------|----------|---------------|--------------|---------------------|--------------------------------|
-| lstm_tiny     |        2 |           128 | 268K         |                 2.2 |                            2.3 |
-| lstm_small    |        3 |           256 | 1.6M         |                 2.9 |                            3.0 |
-| lstm_med      |        3 |           480 | 5.6M         |                 3.5 |                            3.6 |
-| lstm_med_deep |        6 |           320 | 4.9M         |                 3.8 |                            4.0 |
+| lstm_tiny     |        2 |           128 | 268K         |                 1.7 |                            1.8 |
+| lstm_small    |        3 |           256 | 1.6M         |                 2.1 |                            2.2 |
+| lstm_med      |        3 |           480 | 5.6M         |                 2.7 |                            2.9 |
+| lstm_med_deep |        6 |           320 | 4.9M         |                 3.1 |                            3.2 |
 
 The large model is not supported on the IA-840F accelerator card as it is too large to fit in the accelerator memory.
 
@@ -55,7 +55,7 @@ The large model is not supported on the IA-840F accelerator card as it is too la
 
 | Model      |   Layers |   Hidden size | Parameters   |   Mean latency (us) |   99th percentile latency (us) |
 |------------|----------|---------------|--------------|---------------------|--------------------------------|
-| lstm_tiny  |        2 |           128 | 268K         |                 2.2 |                            2.3 |
-| lstm_small |        3 |           256 | 1.6M         |                 3.1 |                            3.2 |
+| lstm_tiny  |        2 |           128 | 268K         |                 1.7 |                            1.8 |
+| lstm_small |        3 |           256 | 1.6M         |                 2.3 |                            2.4 |
 
 The medium and large models are not supported on the IA-420F accelerator card as they are too large to fit in the accelerator memory.

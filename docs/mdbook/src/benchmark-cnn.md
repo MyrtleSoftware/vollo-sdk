@@ -34,22 +34,22 @@ Consecutive inferences are run with spacing between them to minimise latency.
 
 | Model     |   Layers |   Channels | Parameters   |   Mean latency (us) |   99th percentile latency (us) |
 |-----------|----------|------------|--------------|---------------------|--------------------------------|
-| cnn_tiny  |        3 |        128 | 393K         |                 2.5 |                            2.8 |
-| cnn_small |        3 |        256 | 1.6M         |                 2.4 |                            2.7 |
-| cnn_med   |        6 |        256 | 3.1M         |                 3.3 |                            3.4 |
+| cnn_tiny  |        3 |        128 | 393K         |                 1.5 |                            1.8 |
+| cnn_small |        3 |        256 | 1.6M         |                 1.8 |                            2.0 |
+| cnn_med   |        6 |        256 | 3.1M         |                 2.4 |                            2.7 |
 
 ## IA-840F: 3 cores, block size 64
 
 | Model     |   Layers |   Channels | Parameters   |   Mean latency (us) |   99th percentile latency (us) |
 |-----------|----------|------------|--------------|---------------------|--------------------------------|
-| cnn_tiny  |        3 |        128 | 393K         |                 2.1 |                            2.3 |
-| cnn_small |        3 |        256 | 1.6M         |                 2.5 |                            2.7 |
-| cnn_med   |        6 |        256 | 3.1M         |                 3.1 |                            3.3 |
+| cnn_tiny  |        3 |        128 | 393K         |                 1.7 |                            1.8 |
+| cnn_small |        3 |        256 | 1.6M         |                 1.9 |                            2.0 |
+| cnn_med   |        6 |        256 | 3.1M         |                 2.5 |                            2.5 |
 
 ## IA-420F: 6 cores, block size 32
 
 | Model     |   Layers |   Channels | Parameters   |   Mean latency (us) |   99th percentile latency (us) |
 |-----------|----------|------------|--------------|---------------------|--------------------------------|
-| cnn_tiny  |        3 |        128 | 393K         |                 2.2 |                            2.3 |
-| cnn_small |        3 |        256 | 1.6M         |                 2.7 |                            2.9 |
-| cnn_med   |        6 |        256 | 3.1M         |                 3.4 |                            3.6 |
+| cnn_tiny  |        3 |        128 | 393K         |                 1.7 |                            1.9 |
+| cnn_small |        3 |        256 | 1.6M         |                 2.0 |                            2.1 |
+| cnn_med   |        6 |        256 | 3.1M         |                 2.8 |                            2.9 |

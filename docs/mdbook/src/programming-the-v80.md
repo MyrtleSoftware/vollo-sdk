@@ -17,17 +17,17 @@ download the bitstream for the AMD `V80` board with the `c6b32` configuration of
 [Github Release page]: https://github.com/MyrtleSoftware/vollo-sdk/releases/
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v26.2.0/vollo-amd-v80-c6b32-26.2.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v27.0.0/vollo-amd-v80-c6b32-27.0.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-amd-v80-c6b32-26.2.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-amd-v80-c6b32-27.0.tar.gz -C $VOLLO_SDK/bitstream
 ```
 
 Alternatively, for the AMD `V80LL`, use:
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v26.2.0/vollo-amd-v80ll-c6b32-26.2.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v27.0.0/vollo-amd-v80ll-c6b32-27.0.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-amd-v80ll-c6b32-26.2.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-amd-v80ll-c6b32-27.0.tar.gz -C $VOLLO_SDK/bitstream
 ```
 
 ## Programming the FPGA via JTAG
@@ -80,7 +80,7 @@ system so that the device can be programmed over JTAG.
       Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
       ```
 
-2. Run the `program_v80_fpt.tcl` script to program the V80 board:
+2. Run the `program_versal_fpt.tcl` script to program the V80 board:
 
     ```sh
     sudo $VIVADO_DIR/2025.2/Vivado_Lab/bin/vivado_lab -mode batch -source ./flash_vollo-amd-v80-c6b32.tcl

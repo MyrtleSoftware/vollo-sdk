@@ -16,9 +16,27 @@ info "creating work directory"
 mkdir -p work
 cd work
 
+python_cmd=""
+
+# Search for the newest python3 version available (from 3.12 down to standard python3)
+for py in python3.{12..7} python3; do
+    if command -v "$py" >/dev/null 2>&1; then
+        python_cmd="$py"
+        break
+    fi
+done
+
+if [ -z "$python_cmd" ]; then
+    echo "ERROR: Could not find a suitable Python 3 installation."
+    echo "Please install Python 3.7 or newer to run this benchmark."
+    exit 1
+fi
+
+echo "Using python: $python_cmd"
+
 if [ ! -f vollo-venv/bin/activate ]; then
   info "creating vollo-venv virtual environment"
-  python3 -m venv vollo-venv
+  $python_cmd -m venv vollo-venv
 fi
 
 
@@ -48,9 +66,9 @@ echo
 
 cmd="example/vollo-example"
 
-for m in $(python3 "$VOLLO_SDK"/example/programs.py list-models); do
+for m in $($python_cmd "$VOLLO_SDK"/example/programs.py list-models); do
   info "Compiling program for $m example"
-  python3 "$VOLLO_SDK"/example/programs.py compile-model -m "$m" -c hw_config.json 2>/dev/null || echo "Could not compile $m for config"
+  $python_cmd "$VOLLO_SDK"/example/programs.py compile-model -m "$m" -c hw_config.json 2>/dev/null || echo "Could not compile $m for config"
   echo
 done
 
@@ -65,19 +83,19 @@ for spacing_ns in 0 20000; do
     metrics_csv="$model_type-$spacing-latency-metrics.csv"
 
     # Write csv header (consists of a model_type dependent description and latency metrics)
-    for m in $(python3 "$VOLLO_SDK"/example/programs.py list-models --model-type $model_type); do
-      python3 "$VOLLO_SDK"/example/programs.py compile-model --describe-only -m "$m" -c hw_config.json \
+    for m in $($python_cmd "$VOLLO_SDK"/example/programs.py list-models --model-type $model_type); do
+      $python_cmd "$VOLLO_SDK"/example/programs.py compile-model --describe-only -m "$m" -c hw_config.json \
         | jq -r 'keys_unsorted | . + ["Mean latency (us)", "99th percentile latency (us)"] | join(",")' > $metrics_csv
       # Only need to do this once per model type
       break
     done
 
     # Write csv rows
-    for m in $(python3 "$VOLLO_SDK"/example/programs.py list-models --model-type $model_type); do
+    for m in $($python_cmd "$VOLLO_SDK"/example/programs.py list-models --model-type $model_type); do
       # Skip models that couldn't be compiled
       [[ ! -f "$m.vollo" ]] && continue
 
-      model_description_json=$(python3 "$VOLLO_SDK"/example/programs.py compile-model --describe-only -m "$m" -c hw_config.json)
+      model_description_json=$($python_cmd "$VOLLO_SDK"/example/programs.py compile-model --describe-only -m "$m" -c hw_config.json)
       model_description_row=$(echo "$model_description_json" | jq -r 'join(",")')
 
       latency_json=$($cmd --inference-spacing-ns $spacing_ns --json "$m.vollo" | tee /dev/stderr)
@@ -91,7 +109,7 @@ for spacing_ns in 0 20000; do
 done
 
 # cleanup
-for m in $(python3 "$VOLLO_SDK"/example/programs.py list-models); do
+for m in $($python_cmd "$VOLLO_SDK"/example/programs.py list-models); do
   if [[ -f "$m.vollo" ]]; then
     rm "$m.vollo"
   fi
@@ -103,17 +121,19 @@ if [[ -n "$RUN_IO_TEST" ]]; then
   echo "------------------------------------------------------------------"
   echo
 
-  echo "input values, output values, mean latency (us), 99th percentile latency (us)" > io-test-metrics.csv
+  echo "input bytes, output bytes, mean latency (us), 99th percentile latency (us)" > io-test-metrics.csv
 
-  for input_size_pow in $(seq 5 1 13); do
-    input_size=$((2 ** input_size_pow))
-    for output_size_pow in $(seq 5 1 13); do
-      output_size=$((2 ** output_size_pow))
-      info "Compiling program for IO only test: input_size=$input_size, output_size=$output_size"
-      m=$(python3 "$VOLLO_SDK"/example/io-test-programs.py -c hw_config.json "$input_size" "$output_size")
+  for input_size_pow in $(seq 6 1 14); do
+    input_size_bytes=$((2 ** input_size_pow))
+    input_size_values=$((input_size_bytes / 2))
+    for output_size_pow in $(seq 6 1 14); do
+      output_size_bytes=$((2 ** output_size_pow))
+      output_size_values=$((output_size_bytes / 2))
+      info "Compiling program for IO only test: input_size_bytes=$input_size_bytes, output_size_bytes=$output_size_bytes"
+      m=$($python_cmd "$VOLLO_SDK"/example/io-test-programs.py -c hw_config.json "$input_size_values" "$output_size_values")
 
       info "Program compiled $m, now running inference"
-      echo -n "$input_size,$output_size," >> io-test-metrics.csv
+      echo -n "$input_size_bytes B,$output_size_bytes B," >> io-test-metrics.csv
       $cmd --num-inferences=100000 --json "$m" | tee /dev/stderr | jq -r '.metrics.latency_us | [.mean, .p99] | join(",")' >> io-test-metrics.csv
       echo
 

@@ -24,22 +24,22 @@ We demonstrate the model at a variety of batch sizes. The model has 295K paramet
 
 | Model   |   Batch size |   Mean latency (us) |   99th percentile latency (us) |
 |---------|--------------|---------------------|--------------------------------|
-| mlp_b1  |            1 |                 2.3 |                            2.5 |
-| mlp_b4  |            4 |                 2.8 |                            3.1 |
-| mlp_b8  |            8 |                 3.4 |                            4.0 |
+| mlp_b1  |            1 |                 1.5 |                            1.8 |
+| mlp_b4  |            4 |                 1.9 |                            2.2 |
+| mlp_b8  |            8 |                 2.7 |                            2.9 |
 
 ## IA-840F: 3 cores, block size 64
 
 | Model   |   Batch size |   Mean latency (us) |   99th percentile latency (us) |
 |---------|--------------|---------------------|--------------------------------|
-| mlp_b1  |            1 |                 2.5 |                            2.6 |
-| mlp_b4  |            4 |                 2.7 |                            3.0 |
-| mlp_b8  |            8 |                 3.2 |                            3.5 |
+| mlp_b1  |            1 |                 1.8 |                            1.9 |
+| mlp_b4  |            4 |                 2.4 |                            2.5 |
+| mlp_b8  |            8 |                 3.4 |                            3.6 |
 
 ## IA-420F: 6 core, block size 32
 
 | Model   |   Batch size |   Mean latency (us) |   99th percentile latency (us) |
 |---------|--------------|---------------------|--------------------------------|
-| mlp_b1  |            1 |                 2.5 |                            2.7 |
-| mlp_b4  |            4 |                 3.1 |                            3.3 |
-| mlp_b8  |            8 |                 4.1 |                            4.4 |
+| mlp_b1  |            1 |                 1.8 |                            2.0 |
+| mlp_b4  |            4 |                 2.8 |                            2.9 |
+| mlp_b8  |            8 |                 4.1 |                            4.3 |
