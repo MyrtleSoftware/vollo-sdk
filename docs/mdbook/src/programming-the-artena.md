@@ -1,6 +1,6 @@
-# Programming the V80 FPGA
+# Programming the Artena FPGA
 
-This section assumes that the Vollo SDK is already installed and set up on the machine that you are using. If you
+This section assumes that the Vollo SDK is already installed and setup on the machine that you are using. If you
 haven't done so already, instructions for how to do that may be found at: [Vollo SDK Installation](https://vollo.myrtle.ai/latest/installation.html)
 
 Make sure the `VOLLO_SDK` environment variable is set by sourcing setup.sh from the Vollo SDK.
@@ -12,27 +12,28 @@ source <path-to-VOLLO_SDK>/setup.sh
 ## Download the bitstream for your FPGA
 
 The bitstream is available on the [Github Release page] alongside the Vollo SDK. For example to
-download the bitstream for the AMD `V80` board with the `c6b32` configuration of Vollo:
+download the bitstream for the AMD `Artena` board with the `c8b32` configuration of Vollo:
 
 [Github Release page]: https://github.com/MyrtleSoftware/vollo-sdk/releases/
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v27.0.1/vollo-amd-v80-c6b32-27.0.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v27.0.1/vollo-amd-artena-c8b32-27.0.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-amd-v80-c6b32-27.0.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-amd-artena-c8b32-27.0.tar.gz -C $VOLLO_SDK/bitstream
 ```
 
-Alternatively, for the AMD `V80LL`, use:
+An LSTM-only image is available for the Artena which runs at a slightly higher clock frequency than the full-featured-Vollo
+c8b32 version. This may be downloaded as follows:
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v27.0.1/vollo-amd-v80ll-c6b32-27.0.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v27.0.1/vollo-amd-artena-c8b32lstm-27.0.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-amd-v80ll-c6b32-27.0.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-amd-artena-c8b32lstm-27.0.tar.gz -C $VOLLO_SDK/bitstream
 ```
 
 ## Programming the FPGA via JTAG
 
-Programming a V80 board over JTAG is necessary if the board does not yet have a Vollo image loaded on it
+Programming an Artena board over JTAG is necessary if the board does not yet have a Vollo image loaded on it
 or if the device does not enumerate correctly. [Programming over PCIe](#programming-the-fpga-over-pcie) is
 preferred. If the board does not enumerate or there is some other issue with PCIe programming then JTAG
 programming is the only option.
@@ -80,10 +81,10 @@ system so that the device can be programmed over JTAG.
       Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
       ```
 
-2. Run the `flash_vollo-amd-v80-c6b32.tcl` script to program the V80 board:
+2. Run the `flash_vollo-amd-artena-c8b32.tcl` script to program the Artena board:
 
     ```sh
-    sudo $VIVADO_DIR/2025.2/Vivado_Lab/bin/vivado_lab -mode batch -source ./flash_vollo-amd-v80-c6b32.tcl
+    sudo $VIVADO_DIR/2025.2/Vivado_Lab/bin/vivado_lab -mode batch -source ./flash_vollo-amd-artena-c8b32.tcl
     ```
 
    This prints out a lot of lines while programming and takes about 10 minutes.
@@ -97,12 +98,6 @@ system so that the device can be programmed over JTAG.
    Make sure that you ran `vivado_lab` with `sudo` and that the USB cable is plugged in.
 
    After programming you must power cycle the host for the new bitstream to be loaded.
-
-   <div class="warning">
-   Sometimes a V80 host machine will hang on boot. You may need to force another power cycle of the
-   host to bring it back. Occasionally a power cycle isn't enough and you may need to turn the power
-   off for several minutes before turning it back on.
-   </div>
 
 3. If successful the device should now enumerate as a Myrtle.ai Vollo device:
 
@@ -123,38 +118,25 @@ $ lspci -d 1ed9:
 01:00.1 Processing accelerators: Myrtle.ai Device 100a
 ```
 
-If the device has not been programmed with the Vollo bitstream then you will need to program the board
+If the device has not been programmed with the vollo bitstream then you will need to program the board
 over JTAG. See [Programming the FPGA via JTAG](#programming-the-fpga-via-jtag).
 
-Programming over PCIe is the preferred method of programming the board as it is faster than
-programming over JTAG, and does not require a USB programming cable or for Vivado to be installed.
+The following instructions will program the Vollo bitstream over PCIe:
 
-1. Build and insert the ami driver.
-
-   ```sh
-   cd ami_kernel_driver
-   make
-   sudo insmod ami.ko
-   ```
-
-   There may be compilation issues with your version of Linux. This has been checked with Rocky Linux
-   8.10 and Ubuntu 22.04. If there is an issue with your system, please contact us.
-
-2. Once the kernel driver is loaded you can program the flash with `vollo-tool` (which uses
-   `ami_tool`). If you only have one board, `device_index` is `0`.
+1. First load the kernel driver.
 
    ```sh
-   sudo $VOLLO_SDK/bin/vollo-tool fpga-config overwrite-partition ${device_index:?} $VOLLO_SDK/bitstream/vollo-amd-v80-c6b32.pdi USER_IMAGE
+   sudo ./load-kernel-driver.sh vfio
    ```
 
-   There will be a progress bar and it should take around 5 minutes to program the flash. You will
+2. Once the kernel driver is loaded you can program the flash with `vollo-tool`:
+
+   ```sh
+   sudo $VOLLO_SDK/bin/vollo-tool fpga-config overwrite-partition ${device_index:?} $VOLLO_SDK/bitstream/vollo-amd-artena-c8b32.pdi USER_IMAGE
+   ```
+
+   The progress will be displayed and it should take a couple of minutes to program the flash. You will
    need to power cycle the host for the new bitstream to be loaded.
-
-   <div class="warning">
-   Sometimes a V80 host machine will hang on boot. You may need to force another power cycle of the
-   host to bring it back. Occasionally a power cycle isn't enough and you may need to turn the power
-   off for several minutes before turning it back on.
-   </div>
 
 3. If successful the device should now enumerate as a Myrtle.ai Vollo device:
 
@@ -163,7 +145,3 @@ programming over JTAG, and does not require a USB programming cable or for Vivad
    01:00.0 Processing accelerators: Myrtle.ai Device 000a
    01:00.1 Processing accelerators: Myrtle.ai Device 100a
    ```
-
-## Troubleshooting
-
-Some troubleshooting recommendations may be found in [Troubleshooting the V80](./troubleshooting-the-v80.md)
