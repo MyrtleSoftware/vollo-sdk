@@ -1,5 +1,11 @@
 # Release Notes
 
+## 27.0.1
+
+- Reduce tensor ram usage in certain models
+- Add experimental `vollo_rt_prepare_raw_buffer_output_completion` and `vollo_rt_check_raw_buffer_output_completion`
+  functions to Vollo RT for completion detection from a different thread to the one holding the `vollo_rt_context`
+
 ## 27.0.0
 
 - IO optimization when using MMIO
