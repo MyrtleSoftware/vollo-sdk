@@ -599,7 +599,7 @@ vollo_rt_error_t vollo_rt_add_job_bf16_partial_update(
  *     a user context that will be returned on completion
  * - num_input_updates:
  *     The number of update entries in the input_partial_updates array
- *     It MUST be at most the number of input elements (see `vollo_rt_model_input_num_elements`),
+ *     It MUST be at most the number of model inputs (see `vollo_rt_model_num_inputs`),
  *     although using `vollo_rt_add_job_bf16` will be more efficient when updating many elements
  * - input_partial_updates:
  *     An array of partial_update_input structs (with `num_input_updates` elements) describing
@@ -651,7 +651,7 @@ vollo_rt_error_t vollo_rt_poll(
 
 /**
  * Get access to a raw DMA buffer for a number of bf16 elements. This function may be deprecated
- * in the future in favour of `vollo_rt_get_raw_buffer_bytes`.
+ * in the future in favor of `vollo_rt_get_raw_buffer_bytes`.
  *
  * This buffer can be used as either an input or an output buffer in `vollo_rt_add_job_bf16`.
  * When such a buffer is used, the DMA will use the buffer directly without first copying the data.
@@ -690,8 +690,38 @@ bf16* vollo_rt_get_raw_buffer(vollo_rt_context_t vollo, size_t num_elements);
  *   (multiple outputs reusing the same buffer)
  * - A raw buffer MAY be allocated for more elements than needed
  *   For example if the buffer is to be reused for different jobs with different requirements
- * - The amount of memory that can be allocated with `vollo_rt_get_raw_buffer_bytes` is limited
+ * - The amount of memory that can be allocated with `vollo_rt_get_raw_buffer_bytes` can be
+ *   increased by setting `VOLLO_DMA_ALLOC_SIZE_MB` environment variable.
  * - All allocated raw buffers are freed when destroying the `vollo_rt_context_t` with
  * `vollo_rt_destroy`
  */
 void* vollo_rt_get_raw_buffer_bytes(vollo_rt_context_t vollo, size_t num_bytes);
+
+/**
+ * Setup a completion check single output of a raw buffer. You can then check for completion for
+ * the next job this buffer is used in using `vollo_rt_check_raw_buffer_output_completion`. This
+ * can be called from a different thread than the one containing the `vollo_rt_context`.
+ *
+ * This must be called before submitting the job using this buffer. The `transfer_size_bytes` must
+ * match the number of bytes of the output this buffer is used for. After calling this, you must
+ * not modify this buffer until after the corresponding job has been polled to completion.
+ *
+ * This is an experimental API and may be removed or changed in the future.
+ */
+void vollo_rt_prepare_raw_buffer_output_completion(void* buffer, size_t transfer_size_bytes);
+
+/**
+ * Check if the output for this buffer is complete. This check can be performed on a different
+ * thread than the one containing the vollo_rt_context. If you have multiple outputs, this may
+ * return before other outputs are complete.
+ *
+ * You first need to call `vollo_rt_prepare_raw_buffer_output_completion` on this output buffer
+ * before submitting the job using this buffer.
+ *
+ * Once this returns true, the output for this buffer data can be used. The buffer itself is still
+ * owned by the vollo_rt_context and cannot be reused or registered for completion again until the
+ * poll on vollo_rt_context marks the job as complete.
+ *
+ * This is an experimental API and may be changed or removed in the future.
+ */
+bool vollo_rt_check_raw_buffer_output_completion(const void* buffer, size_t transfer_size_bytes);

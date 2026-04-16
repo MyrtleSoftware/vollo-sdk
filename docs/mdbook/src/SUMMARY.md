@@ -23,6 +23,7 @@
 - [Accelerator Setup](accelerator-setup.md)
   - [System Requirements](system-requirements.md)
   - [Programming the Agilex](programming-the-agilex.md)
+  - [Programming the Artena](programming-the-artena.md)
   - [Programming the V80](programming-the-v80.md)
   - [Troubleshooting the V80](troubleshooting-the-v80.md)
   - [Licensing](licensing.md)
