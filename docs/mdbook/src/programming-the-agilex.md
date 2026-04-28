@@ -15,9 +15,9 @@ The bitstream is available on the [Github Release page](https://github.com/Myrtl
 For example to download the bitstream for the Agilex `ia840f` board with the `c2b64d` configuration of Vollo:
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v27.1.0/vollo-ia840f-c2b64d-27.1.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v27.1.0/vollo-bittware-ia840f-c2b64d-27.1.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-ia840f-c2b64d-27.1.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-bittware-ia840f-c2b64d-27.1.tar.gz -C $VOLLO_SDK/bitstream
 ```
 
 The Agilex-based boards that are currently supported are:
@@ -133,19 +133,19 @@ require a USB programming cable or for Quartus Programmer to be installed.
     minutes. For the IA840F:
 
     ```sh
-    quartus_pgm -c "IA-840F [1-5.2]" -m JTAG -o "ipv;vollo-ia840f-c3b64.jic"
+    quartus_pgm -c "IA-840F [1-5.2]" -m JTAG -o "ipv;vollo-bittware-ia840f-c3b64.jic"
     ```
 
     or, for the IA420F:
 
     ```sh
-    quartus_pgm -c "IA-420F [1-5.2]" -m JTAG -o "ipv;vollo-ia420f-c6b32.jic"
+    quartus_pgm -c "IA-420F [1-5.2]" -m JTAG -o "ipv;vollo-bittware-ia420f-c6b32.jic"
     ```
 
     or, for the NT400D11:
 
     ```sh
-    quartus_pgm -c "USB-BlasterII [1-5]" -m JTAG -o "ipv;vollo-nt400d1-c6b32.jic"
+    quartus_pgm -c "USB-BlasterII [1-5]" -m JTAG -o "ipv;vollo-napatech-nt400d11-c6b32.jic"
     ```
 
 8. Go back to 6 and program any other devices.

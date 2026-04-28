@@ -16,7 +16,7 @@ chmod +x vollo-sdk-<version>.run
 ./vollo-sdk-<version>.run
 ```
 
-The FPGA images, e.g. `vollo-ia420f-c6b32-<version>.tar.gz`, are downloadable
+The FPGA images, e.g. `vollo-bittware-ia420f-c6b32-<version>.tar.gz`, are downloadable
 as separate files, also from the [GitHub Releases page][GitHub Releases].
 
 [GitHub Releases]: https://github.com/MyrtleSoftware/vollo-sdk/releases
