@@ -205,6 +205,15 @@ However:
 
 Is invalid because the stride of the data dimension is `c` before but `1` after.
 
+If the output shape has multiple candidate dimensions with the input data dimension's
+stride (note that these candidate dimensions are all consecutive and all but the
+leftmost have extent 1), the leftmost of them will be chosen as the output data
+dimension:
+
+```text
+[a! b] -> [a! 1 b]
+```
+
 A reshape that doesn't change the extent of the data dimension is free (no compute).
 
 Note: the strides discussed in this subsection are conceptual and not related

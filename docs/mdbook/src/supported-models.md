@@ -1,3 +1,4 @@
+<!-- markdownlint-disable MD060 -->
 # Supported Models
 
 The Vollo compiler supports PyTorch models that use the following operations:
@@ -29,6 +30,7 @@ The Vollo compiler supports PyTorch models that use the following operations:
 | `softplus`               | `torch.nn.functional.softplus`, `torch.nn.Softplus`                                                                    | ❌                                     |
 | `softmax`                | `torch.softmax`, `torch.nn.Softmax`                                                                                    | ❌                                     |
 | `sigmoid`                | `torch.sigmoid`, `torch.nn.functional.sigmoid`, `torch.nn.Sigmoid`                                                     | ❌                                     |
+| `gelu`                   | `torch.nn.functional.gelu`, `torch.nn.GELU`                                                                            | ❌                                     |
 
 Models that take multiple input tensors and return multiple output tensors
 (i.e. a tuple of tensors) are supported.

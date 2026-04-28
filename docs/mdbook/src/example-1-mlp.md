@@ -58,7 +58,7 @@ import vollo_compiler
 
 # Replace the Config in the line below with the Config for the accelerator you
 # are using
-config = vollo_compiler.Config.v80_c6b32()
+config = vollo_compiler.Config.amd_v80_c6b32()
 program = nnir.to_program(config)
 ```
 

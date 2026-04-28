@@ -5,6 +5,7 @@ should cover the most commonly used parts of the API.
 
 <!-- markdown-link-check-disable -->
 
-A more complete API reference can be found [here](./api-reference).
+The [API Reference](./api-reference) contains a more complete list of all
+available classes and methods.
 
 <!-- markdown-link-check-enable -->

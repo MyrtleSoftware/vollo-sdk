@@ -1,19 +1,19 @@
 """
-    CLI to generate and compile Vollo IO only programs
+CLI to generate and compile Vollo IO only programs
 """
 
 import vollo_compiler
 
 
 all_configs = {
-    "ia_420f_c6b32": vollo_compiler.Config.ia_420f_c6b32(),
-    "ia_840f_c3b64": vollo_compiler.Config.ia_840f_c3b64(),
-    "ia_840f_c2b64d": vollo_compiler.Config.ia_840f_c2b64d(),
-    "nt400d11_c6b32": vollo_compiler.Config.nt400d11_c6b32(),
-    "v80_c6b32": vollo_compiler.Config.v80_c6b32(),
-    "v80ll_c6b32": vollo_compiler.Config.v80ll_c6b32(),
-    "artena_c8b32": vollo_compiler.Config.artena_c8b32(),
-    "artena_c8b32lstm": vollo_compiler.Config.artena_c8b32lstm(),
+    "ia_420f_c6b32": vollo_compiler.Config.bittware_ia420f_c6b32(),
+    "ia_840f_c3b64": vollo_compiler.Config.bittware_ia840f_c3b64(),
+    "ia_840f_c2b64d": vollo_compiler.Config.bittware_ia840f_c2b64d(),
+    "nt400d11_c6b32": vollo_compiler.Config.napatech_nt400d11_c6b32(),
+    "v80_c6b32": vollo_compiler.Config.amd_v80_c6b32(),
+    "v80ll_c6b32": vollo_compiler.Config.amd_v80ll_c6b32(),
+    "artena_c8b32": vollo_compiler.Config.silicom_artena_c8b32(),
+    "artena_c8b32lstm": vollo_compiler.Config.silicom_artena_c8b32lstm(),
 }
 
 

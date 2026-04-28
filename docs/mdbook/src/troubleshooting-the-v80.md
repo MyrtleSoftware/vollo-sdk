@@ -111,4 +111,4 @@ The suggested solution for stateful failures like this is to:
 5. Power up the host machine again.
 6. Re-attempt PCIe programming following the steps provided in [Programming the FPGA over PCIe](./programming-the-v80.md#programming-the-fpga-over-pcie).
 
-This unorthodox solution has been found to work in many cases and is indeed the recommended solution to these problems as provided by AMD [here](https://adaptivesupport.amd.com/s/question/0D5KZ00000aZz790AC/unable-to-recover-the-v80-fpga?language=en_US).
+This unorthodox solution has been found to work in many cases and is indeed the recommended solution to these problems as provided by AMD [in their support forum](https://adaptivesupport.amd.com/s/question/0D5KZ00000aZz790AC/unable-to-recover-the-v80-fpga?language=en_US).

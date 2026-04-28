@@ -62,7 +62,7 @@ precisions of data you will be providing to the runtime. If these precisions do 
 by the runtime, which can be slow.
 
 ```python
-config = vollo_compiler.Config.v80_c6b32()
+config = vollo_compiler.Config.amd_v80_c6b32()
 program = nnir.to_program(config)
 ```
 
@@ -118,7 +118,7 @@ input = torch.randn(input_size)
 (model, expected_output) = vollo_torch.fx.prepare_shape(model, input)
 nnir = vollo_torch.fx.nnir.to_nnir(model)
 
-config = vollo_compiler.Config.v80_c6b32()
+config = vollo_compiler.Config.amd_v80_c6b32()
 program = nnir.to_program(config)
 
 print(program.metrics())
@@ -147,7 +147,7 @@ input = torch.randn(input_size)
 (model, _expected_output) = vollo_torch.fx.prepare_shape(model, input)
 nnir = vollo_torch.fx.nnir.to_nnir(model)
 
-config = vollo_compiler.Config.v80_c6b32()
+config = vollo_compiler.Config.amd_v80_c6b32()
 try:
     program = nnir.to_program(config, allow_dynamic_weights=True)
 except Exception as e:

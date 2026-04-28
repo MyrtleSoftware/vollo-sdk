@@ -12,23 +12,23 @@ source <path-to-VOLLO_SDK>/setup.sh
 ## Download the bitstream for your FPGA
 
 The bitstream is available on the [Github Release page] alongside the Vollo SDK. For example to
-download the bitstream for the AMD `Artena` board with the `c8b32` configuration of Vollo:
+download the bitstream for the Silicom `Artena` board with the `c8b32` configuration of Vollo:
 
 [Github Release page]: https://github.com/MyrtleSoftware/vollo-sdk/releases/
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v27.0.1/vollo-amd-artena-c8b32-27.0.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v27.1.0/vollo-silicom-artena-c8b32-27.1.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-amd-artena-c8b32-27.0.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-silicom-artena-c8b32-27.1.tar.gz -C $VOLLO_SDK/bitstream
 ```
 
 An LSTM-only image is available for the Artena which runs at a slightly higher clock frequency than the full-featured-Vollo
 c8b32 version. This may be downloaded as follows:
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v27.0.1/vollo-amd-artena-c8b32lstm-27.0.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v27.1.0/vollo-silicom-artena-c8b32lstm-27.1.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-amd-artena-c8b32lstm-27.0.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-silicom-artena-c8b32lstm-27.1.tar.gz -C $VOLLO_SDK/bitstream
 ```
 
 ## Programming the FPGA via JTAG
@@ -81,10 +81,10 @@ system so that the device can be programmed over JTAG.
       Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
       ```
 
-2. Run the `flash_vollo-amd-artena-c8b32.tcl` script to program the Artena board:
+2. Run the `flash_vollo-silicom-artena-c8b32.tcl` script to program the Artena board:
 
     ```sh
-    sudo $VIVADO_DIR/2025.2/Vivado_Lab/bin/vivado_lab -mode batch -source ./flash_vollo-amd-artena-c8b32.tcl
+    sudo $VIVADO_DIR/2025.2/Vivado_Lab/bin/vivado_lab -mode batch -source ./flash_vollo-silicom-artena-c8b32.tcl
     ```
 
    This prints out a lot of lines while programming and takes about 10 minutes.
@@ -132,7 +132,7 @@ The following instructions will program the Vollo bitstream over PCIe:
 2. Once the kernel driver is loaded you can program the flash with `vollo-tool`:
 
    ```sh
-   sudo $VOLLO_SDK/bin/vollo-tool fpga-config overwrite-partition ${device_index:?} $VOLLO_SDK/bitstream/vollo-amd-artena-c8b32.pdi USER_IMAGE
+   sudo $VOLLO_SDK/bin/vollo-tool fpga-config overwrite-partition ${device_index:?} $VOLLO_SDK/bitstream/vollo-silicom-artena-c8b32.pdi USER_IMAGE
    ```
 
    The progress will be displayed and it should take a couple of minutes to program the flash. You will

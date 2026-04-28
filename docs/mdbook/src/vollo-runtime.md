@@ -20,8 +20,8 @@ convenient than the C API for e.g. testing Vollo against PyTorch models.
 
 <!-- markdown-link-check-disable -->
 
-The API for the Python bindings can be found [here](./api-reference/vollo_rt.html).
+Here is the [API for the Python bindings](./api-reference/vollo_rt.html).
 
 <!-- markdown-link-check-enable -->
 
-A small example of using the Python bindings is provided [here](./vollo-rt-python-example.md).
+And a [small example of using the Python bindings](./vollo-rt-python-example.md).

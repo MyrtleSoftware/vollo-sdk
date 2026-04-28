@@ -14,8 +14,7 @@ The IP Core has the following interfaces:
   set to 320MHz.
 - Input data bus. This a AXI4-Stream bus used to stream input data to the IP Core. It size varies depending on the size of the
   cores in the IP. For a 32-block size design, this is 512 wide (16 bits per value using brainfloat 16). It is synchronous to the compute clock.
-- Model selection bus. This is an AXI4-Stream interface for providing the model index to be run if the IP core has been configured
-  with multiple models. If the IP Core has been configured with a single model, providing the index is optional. It is synchronous to the compute clock.
+- Model selection bus. This is an AXI4-Stream interface for providing the model index. It is synchronous to the compute clock.
 - Output data bus. This a AXI4-Stream bus used to stream output data from the IP Core. It is synchronous to the compute clock.
 
 ## Configuration bus
@@ -62,24 +61,30 @@ Verilog signals:
 
 ```
 
-The AXI4-Lite interface is used to configure the Vollo IP Core and to do so must be accessible from
-the host system. The configuration can then be done by providing functions to communicate with the
-bus to [Vollo configuration API](4-config.md).
+The AXI4-Lite interface is used to configure the Vollo IP Core with a Vollo program. It must
+accessible from a system running the `vollo_cfg` software that can drive the config bus (usually the
+host). See [Vollo configuration API](4-config.md).
+
+You can load a new program by re-running the configuration.
 
 ## Input and Output Streams
 
-The input and output streams are AXI4-Stream interfaces. The input and output are packed as flattened tensor and
-padded to the next multiple of block-size. The data should be packed in *little-endian* format. The output stream
-includes `tkeep` and `tlast` signals to indicate when the end of the packet and which bytes are valid (i.e. not padding).
+The input and output streams are AXI4-Stream interfaces. Each input and output is packed as
+a flattened tensor and padded to the next multiple of block-size. The data should be packed in
+*little-endian* format. The output stream includes `tkeep` and `tlast` signals to indicate when the
+end of the packet and which bytes are valid (i.e. not padding).
 
-For example, an input of tensor dimension `[62]` to an ip-core with block size 32 should be provided as two
-words, the first with a full 32 brainfloat values, and the second with the remaining 30 brainfloat values and 2 padding values.
-They should be packed as follows:
+For example, an input of tensor dimension `[62]` to an ip-core with block size 32 should be provided
+as two words, the first with a full 32 brainfloat values, and the second with the remaining 30
+brainfloat values and 2 padding values. They should be packed as follows:
 
 | Word | 511:496     | 495:480     | 479:464     | ... | 31:16       | 15:0        |
 | ---- | ----------- | ----------- | ----------- | --- | ----------- | ----------- |
 | 0    | `input[31]` | `input[30]` | `input[29]` | ... | `input[1]`  | `input[0]`  |
 | 1    | `X`         | `X`         | `input[61]` | ... | `input[33]` | `input[32]` |
+
+When a model has multiple inputs or outputs, they should be in order, and each input or output
+padded to the next multiple of block size.
 
 Verilog signals:
 
@@ -105,14 +110,10 @@ Verilog signals:
 
 ## Model Selection
 
-> :warning: The IP Core does not currently support multiple models. This feature is planned for a future release.
-> The model selection bus is ignored and can be driven with any value.
-
-The model selection bus can be used to select between multiple models that have been configured into the IP Core. This selection
-can be provided ahead of the data stream. The model selection bus is a 16-bit wide AXI4-Stream interface.
-
-For single model Vollo programs, it is not required to drive the model selection bus, however the IP Core
-will accept the value if it is driven.
+The model_select bus picks which model is to be used for the next compute job, and should be
+provided once per job. It can be driven before or after driving data to the IP Core. Even if the
+IP Core is programmed with a single model, there will be no output for a job until the model index
+is provided.
 
 ```verilog
 
