@@ -637,6 +637,26 @@ vollo_rt_error_t vollo_rt_add_job_partial_update(
   void* const* output_data);
 
 /**
+ * Resets a model to its initial state.
+ *
+ * The model must have been compiled with `generate_state_reset = True`.
+ *
+ * Unlike `vollo_rt_add_job`, this function does not take in a `user_ctx`, because there is no
+ * output to receive. Consequently, `vollo_rt_poll` will not notify you when a reset job is
+ * done, but it will be done before any subsequent jobs for that model.
+ *
+ * Note: The reset is only started on the next call to `vollo_rt_poll`. This way it is possible
+ * to set up several computations that are kicked off at the same time. Reset jobs are in the
+ * same queue as regular jobs.
+ *
+ * - vollo:
+ *     the context that the model should be reset on
+ * - model_index:
+ *     the model to reset
+ */
+vollo_rt_error_t vollo_rt_add_reset_job(vollo_rt_context_t vollo, size_t model_index);
+
+/**
  * Poll the vollo accelerator for completion.
  *
  * Note: Polling also initiates transfers for new jobs, so poll must be called before any progress

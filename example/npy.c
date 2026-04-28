@@ -1,6 +1,23 @@
+// NOTE: this implementation assumes a little-endian host. The NPY dtype
+// descriptor is hard-coded to '<f4' (little-endian float32) and the float
+// payload is read from / written to disk without any byte swapping, so on a
+// big-endian host the file contents would be misinterpreted. Vollo only
+// targets little-endian architectures (x86_64) so this
+// is sufficient in practice.
+
+// utils.h transitively pulls in <time.h> via its own declarations, which
+// require a POSIX feature test macro on older glibc for struct timespec to
+// be visible. Match the guard used in example.c / partial_update.c.
+#if __STDC_VERSION__ >= 199901L
+#define _XOPEN_SOURCE 600
+#else
+#define _XOPEN_SOURCE 500
+#endif /* __STDC_VERSION__ */
+
 #include "npy.h"
 
-#include <assert.h>
+#include "utils.h"
+
 #include <ctype.h>
 #include <errno.h>
 #include <limits.h>
@@ -11,9 +28,7 @@
 #include <string.h>
 
 void free_npy(NpyArray array) {
-  if (array.buffer_len > 0 && array.buffer != NULL) {
-    free(array.buffer);
-  }
+  free(array.buffer);
 }
 
 // Read a NPY file
@@ -22,19 +37,19 @@ NpyArray read_npy(const char* file_path) {
   NpyArray array;
   size_t num_elements = 1;
 
-  FILE* fptr = fopen(file_path, "r");
+  FILE* fptr = fopen(file_path, "rb");
 
   if (fptr == NULL) {
     fprintf(stderr, "Could not open %s, error: %s\n", file_path, strerror(errno));
     exit(EXIT_FAILURE);
   }
 
-  char init_header[10];
+  unsigned char init_header[10];
   size_t bytes;
 
   bytes = fread(init_header, 1, 10, fptr);
 
-  if (bytes < 10) {
+  if (bytes != 10) {
     fprintf(stderr, "read_npy: Could not read header\n");
     exit(EXIT_FAILURE);
   }
@@ -51,10 +66,17 @@ NpyArray read_npy(const char* file_path) {
 
   uint16_t header_len
     = (uint16_t)(((uint16_t)init_header[8]) | (uint16_t)(((uint16_t)init_header[9]) << 8));
+  // The shortest possible valid NPY header dict is longer than 10 bytes; anything
+  // shorter can never be parsed successfully and indicates a corrupt file.
+  ALWAYS_ASSERT(header_len >= 10);
   char* header = (char*)malloc(sizeof(char) * header_len);
+  if (header == NULL) {
+    fprintf(stderr, "read_npy: Could not allocate header buffer\n");
+    exit(EXIT_FAILURE);
+  }
   bytes = fread(header, 1, header_len, fptr);
 
-  if (bytes < header_len) {
+  if (bytes != header_len) {
     fprintf(stderr, "read_npy: Could not read header (descr)\n");
     exit(EXIT_FAILURE);
   }
@@ -121,22 +143,27 @@ NpyArray read_npy(const char* file_path) {
       array.shape_len = 0;
 
       while (!TRY(")", 1)) {
-        assert(array.shape_len < NPY_MAX_SHAPE_LEN);
+        ALWAYS_ASSERT(array.shape_len < NPY_MAX_SHAPE_LEN);
 
         char* start = &header[offset];
         char* end = start;
+        errno = 0;
         size_t x = strtoull(start, &end, 10);
 
-        if (start >= end) {
-          fprintf(stderr, "read_npy: Couldn't parse shape");
+        if (start == end) {
+          fprintf(stderr, "read_npy: Couldn't parse shape\n");
           exit(EXIT_FAILURE);
         }
 
-        if ((x == 0 && errno == EINVAL) || (x == ULLONG_MAX && errno == ERANGE)) {
-          fprintf(stderr, "read_npy: couldn't parse shape dim");
+        if (errno == ERANGE) {
+          fprintf(stderr, "read_npy: shape dim out of range\n");
           exit(EXIT_FAILURE);
         }
 
+        if (x != 0 && num_elements > SIZE_MAX / x) {
+          fprintf(stderr, "read_npy: shape would overflow size_t\n");
+          exit(EXIT_FAILURE);
+        }
         num_elements *= x;
 
         array.shape[array.shape_len] = x;
@@ -150,13 +177,11 @@ NpyArray read_npy(const char* file_path) {
           SKIP_SPACES();
         } else {
           // No comma, it must be the end of shape
-          SKIP_SPACES();
-          MATCH_CHAR(")");
           break;
         }
       }
 
-      offset++;
+      MATCH_CHAR(")");
       SKIP_SPACES();
 
     } else {
@@ -193,11 +218,15 @@ NpyArray read_npy(const char* file_path) {
 
   if (num_elements > 0) {
     array.buffer = (float*)malloc(sizeof(float) * num_elements);
+    if (array.buffer == NULL) {
+      fprintf(stderr, "read_npy: Could not allocate array buffer\n");
+      exit(EXIT_FAILURE);
+    }
 
     bytes = fread(array.buffer, sizeof(float), num_elements, fptr);
 
-    if (bytes < num_elements) {
-      fprintf(stderr, "read_npy: Could not read data");
+    if (bytes != num_elements) {
+      fprintf(stderr, "read_npy: Could not read data\n");
       exit(EXIT_FAILURE);
     }
   } else {
@@ -205,14 +234,14 @@ NpyArray read_npy(const char* file_path) {
   }
 
   free(header);
-  fclose(fptr);
+  ALWAYS_ASSERT(fclose(fptr) == 0);
 
   return array;
 }
 
 // Write a NPY file
 void write_npy(const char* file_path, NpyArray array) {
-  FILE* fptr = fopen(file_path, "w");
+  FILE* fptr = fopen(file_path, "wb");
 
   if (fptr == NULL) {
     fprintf(stderr, "Could not open %s, error: %s\n", file_path, strerror(errno));
@@ -245,7 +274,7 @@ void write_npy(const char* file_path, NpyArray array) {
   size_t num_elems = 1;
 
   if (array.shape_len > 0) {
-    WRITE_NPY_CHUNK("%ld", array.shape[0]);
+    WRITE_NPY_CHUNK("%zu", array.shape[0]);
     num_elems *= array.shape[0];
 
     if (array.shape_len == 1) {
@@ -253,25 +282,34 @@ void write_npy(const char* file_path, NpyArray array) {
       WRITE_NPY_CHUNK(",");
     }
 
-    for (int i = 1; i < array.shape_len; i++) {
-      WRITE_NPY_CHUNK(", %ld", array.shape[i]);
+    for (uint8_t i = 1; i < array.shape_len; i++) {
+      WRITE_NPY_CHUNK(", %zu", array.shape[i]);
       num_elems *= array.shape[i];
     }
   }
 
   WRITE_NPY_CHUNK("), }");
 
+  if (num_elems != array.buffer_len) {
+    fprintf(
+      stderr,
+      "write_npy: shape implies %zu elements but buffer_len is %zu\n",
+      num_elems,
+      array.buffer_len);
+    exit(EXIT_FAILURE);
+  }
+
 #undef WRITE_NPY_CHUNK
 
   HEADER[offset] = '\x20';  // Replace '\0' by a space as per the spec
   HEADER[127] = '\n';       // Terminate HEADER with a newline
 
-  fwrite(HEADER, 1, sizeof(HEADER), fptr);
+  ALWAYS_ASSERT(fwrite(HEADER, 1, sizeof(HEADER), fptr) == sizeof(HEADER));
 
   if (num_elems > 0) {
-    assert(array.buffer != NULL);
-    fwrite(array.buffer, sizeof(float), num_elems, fptr);
+    ALWAYS_ASSERT(array.buffer != NULL);
+    ALWAYS_ASSERT(fwrite(array.buffer, sizeof(float), num_elems, fptr) == num_elems);
   }
 
-  fclose(fptr);
+  ALWAYS_ASSERT(fclose(fptr) == 0);
 }

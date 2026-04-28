@@ -1,16 +1,13 @@
-#include <assert.h>
+#if __STDC_VERSION__ >= 199901L
+#define _XOPEN_SOURCE 600
+#else
+#define _XOPEN_SOURCE 500
+#endif /* __STDC_VERSION__ */
+
+#include "utils.h"
+
 #include <stdio.h>
 #include <vollo-rt.h>
-
-// Helper to exit when an error is encountered
-#define EXIT_ON_ERROR(expr)                 \
-  do {                                      \
-    vollo_rt_error_t _err = (expr);         \
-    if (_err != NULL) {                     \
-      fprintf(stderr, "error: %s\n", _err); \
-      exit(EXIT_FAILURE);                   \
-    }                                       \
-  } while (0)
 
 // A small wrapper around the asynchronous Vollo RT API to block on a single inference
 // This assume a single model with a single input and output tensor
@@ -37,7 +34,8 @@ static void single_shot_inference(vollo_rt_context_t ctx, const float* input, fl
 
     poll_count++;
     if (poll_count > 100000000) {
-      EXIT_ON_ERROR("Timed out while polling");
+      fprintf(stderr, "timed out while polling\n");
+      exit(EXIT_FAILURE);
     }
   }
 }
@@ -68,11 +66,11 @@ int main(void) {
   size_t model_index = 0;
 
   // Assert model only has a single input and a single output tensor
-  assert(vollo_rt_model_num_inputs(ctx, model_index) == 1);
-  assert(vollo_rt_model_num_outputs(ctx, model_index) == 1);
+  ALWAYS_ASSERT(vollo_rt_model_num_inputs(ctx, model_index) == 1);
+  ALWAYS_ASSERT(vollo_rt_model_num_outputs(ctx, model_index) == 1);
 
-  assert(vollo_rt_model_input_num_elements(ctx, model_index, 0) == 128);
-  assert(vollo_rt_model_output_num_elements(ctx, model_index, 0) == 128);
+  ALWAYS_ASSERT(vollo_rt_model_input_num_elements(ctx, model_index, 0) == 128);
+  ALWAYS_ASSERT(vollo_rt_model_output_num_elements(ctx, model_index, 0) == 128);
 
   float input_tensor[128];
   float output_tensor[128];

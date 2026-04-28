@@ -7,8 +7,8 @@ platforms.
 ## Evaluation
 
 You can easily discover the latency Vollo can achieve for your models, without
-needing an FPGA or a Vollo license. Use the online Vollo Sandbox
-[here](https://sandbox.vollo.myrtle.ai).
+needing an FPGA or a Vollo license. Use the online
+[Vollo Sandbox](https://sandbox.vollo.myrtle.ai).
 
 Alternatively, you can download and install the Vollo SDK on your own computer
 if you wish to evaluate Vollo offline. You won't need an FPGA or a Vollo

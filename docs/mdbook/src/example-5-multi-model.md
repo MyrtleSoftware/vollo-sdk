@@ -60,7 +60,7 @@ cnn_nnir = vollo_torch.fx.nnir.to_nnir(cnn_model)
 import vollo_compiler
 # Replace the Config in the line below with the Config for the accelerator you
 # are using
-program_builder = vollo_compiler.ProgramBuilder(vollo_compiler.Config.v80_c6b32())
+program_builder = vollo_compiler.ProgramBuilder(vollo_compiler.Config.amd_v80_c6b32())
 program_builder.add_nnir(mlp_nnir)
 program_builder.add_nnir(cnn_nnir)
 multi_model_program = program_builder.to_program()

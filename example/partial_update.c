@@ -6,7 +6,6 @@
 #include "npy.h"
 #include "utils.h"
 
-#include <assert.h>
 #include <getopt.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -84,8 +83,8 @@ int main(int argc, char** argv) {
   while ((opt = getopt_long(argc, argv, "o:i:t:h", long_options, &long_index)) != -1) {
     switch (opt) {
     case 'o': output_dir = optarg; break;
-    case 'i': num_inferences = (size_t)strtoul(optarg, NULL, 10); break;
-    case 't': threshold_partial_updates = strtol(optarg, NULL, 10); break;
+    case 'i': num_inferences = parse_size_arg(optarg, "--num-inferences"); break;
+    case 't': threshold_partial_updates = parse_long_arg(optarg, "--threshold-partial"); break;
     default: print_help(argv[0]); exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
     }
   }
@@ -93,7 +92,7 @@ int main(int argc, char** argv) {
   if (optind == (argc - 1)) {
     program_path = argv[optind];
     fprintf(stderr, "Using program: \"%s\"\n", program_path);
-    fprintf(stderr, "  num-inferences: %ld\n", num_inferences);
+    fprintf(stderr, "  num-inferences: %zu\n", num_inferences);
     fprintf(stderr, "  threshold-partial: %ld\n", threshold_partial_updates);
     if (output_dir != NULL) {
       fprintf(stderr, "  output dir: \"%s\"\n", output_dir);
@@ -121,7 +120,7 @@ int main(int argc, char** argv) {
   // Setup inputs and outputs
 
   // Assert it is a single model program (partial update not supported otherwise)
-  assert(vollo_rt_num_models(ctx) == 1);
+  ALWAYS_ASSERT(vollo_rt_num_models(ctx) == 1);
   size_t model_index = 0;
 
   size_t model_num_inputs = vollo_rt_model_num_inputs(ctx, model_index);
@@ -129,44 +128,58 @@ int main(int argc, char** argv) {
 
   // Metadata and buffer arrays for each input
   number_format* input_formats = malloc(model_num_inputs * sizeof(number_format));
+  ALWAYS_ASSERT(input_formats != NULL);
   size_t* input_elem_counts = malloc(model_num_inputs * sizeof(size_t));
+  ALWAYS_ASSERT(input_elem_counts != NULL);
   void** input_tensors = malloc(model_num_inputs * sizeof(void*));
+  ALWAYS_ASSERT(input_tensors != NULL);
 
   for (size_t i = 0; i < model_num_inputs; i++) {
     input_formats[i] = vollo_rt_model_input_format(ctx, model_index, i);
     input_elem_counts[i] = vollo_rt_model_input_num_elements(ctx, model_index, i);
     size_t bytes = input_elem_counts[i] * format_size(input_formats[i]);
     input_tensors[i] = vollo_rt_get_raw_buffer_bytes(ctx, bytes);
+    ALWAYS_ASSERT(input_tensors[i] != NULL);
   }
 
   // Metadata and buffer arrays for each output
   number_format* output_formats = malloc(model_num_outputs * sizeof(number_format));
+  ALWAYS_ASSERT(output_formats != NULL);
   void** output_tensors = malloc(model_num_outputs * sizeof(void*));
+  ALWAYS_ASSERT(output_tensors != NULL);
   for (size_t i = 0; i < model_num_outputs; i++) {
     output_formats[i] = vollo_rt_model_output_format(ctx, model_index, i);
     size_t num_elements = vollo_rt_model_output_num_elements(ctx, model_index, i);
     output_tensors[i]
       = vollo_rt_get_raw_buffer_bytes(ctx, num_elements * format_size(output_formats[i]));
+    ALWAYS_ASSERT(output_tensors[i] != NULL);
   }
 
   void*** outputs = NULL;
   if (output_dir != NULL) {
     outputs = (void***)malloc(num_inferences * sizeof(void**));
+    ALWAYS_ASSERT(outputs != NULL);
     for (size_t i = 0; i < num_inferences; i++) {
       outputs[i] = (void**)malloc(model_num_outputs * sizeof(void*));
+      ALWAYS_ASSERT(outputs[i] != NULL);
       for (size_t j = 0; j < model_num_outputs; j++) {
         size_t num_elements = vollo_rt_model_output_num_elements(ctx, model_index, j);
         outputs[i][j] = malloc(num_elements * format_size(output_formats[j]));
+        ALWAYS_ASSERT(outputs[i][j] != NULL);
       }
     }
   }
 
   // Update configuration buffers for all inputs
   uint32_t* num_partial_updates = malloc(model_num_inputs * sizeof(uint32_t));
+  ALWAYS_ASSERT(num_partial_updates != NULL);
   uint32_t** partial_update_indices = malloc(model_num_inputs * sizeof(uint32_t*));
+  ALWAYS_ASSERT(partial_update_indices != NULL);
   void** partial_update_values = malloc(model_num_inputs * sizeof(void*));
+  ALWAYS_ASSERT(partial_update_values != NULL);
   struct partial_update_input* update_configs
     = malloc(model_num_inputs * sizeof(struct partial_update_input));
+  ALWAYS_ASSERT(update_configs != NULL);
 
   for (size_t i = 0; i < model_num_inputs; i++) {
     // Allocating input_elem_counts[i] is excessive for partial updates
@@ -175,7 +188,9 @@ int main(int argc, char** argv) {
     // However we do this for the example to simplify the random index selection (with no
     // duplicates)
     partial_update_indices[i] = (uint32_t*)malloc(input_elem_counts[i] * sizeof(uint32_t));
+    ALWAYS_ASSERT(partial_update_indices[i] != NULL);
     partial_update_values[i] = malloc(input_elem_counts[i] * format_size(input_formats[i]));
+    ALWAYS_ASSERT(partial_update_values[i] != NULL);
 
     for (size_t j = 0; j < input_elem_counts[i]; j++) {
       if (input_formats[i] == number_format_bf16) {
@@ -189,6 +204,7 @@ int main(int argc, char** argv) {
   }
 
   double* latencies = (double*)malloc(sizeof(double) * num_inferences);
+  ALWAYS_ASSERT(latencies != NULL);
   struct timespec start_time, completed_time;
 
   // Seed the randomness to be able to compare runs
@@ -317,6 +333,7 @@ int main(int argc, char** argv) {
 
       NpyArray output_array = {0};
       output_array.buffer = (float*)malloc(num_output_elements * sizeof(float));
+      ALWAYS_ASSERT(output_array.buffer != NULL);
       output_array.buffer_len = num_output_elements;
       {
         const size_t* output_shape = vollo_rt_model_output_shape(ctx, model_index, i);
@@ -332,7 +349,7 @@ int main(int argc, char** argv) {
 
       for (size_t j = 0; j < num_inferences; j++) {
         char output_path[1024];
-        int ret = snprintf(output_path, 1024, "%s/output_%05ld_%05ld.npy", output_dir, i, j);
+        int ret = snprintf(output_path, 1024, "%s/output_%05zu_%05zu.npy", output_dir, i, j);
         if (ret < 0 || ret >= 1024) {
           fprintf(stderr, "Error creating the output file");
           exit(EXIT_FAILURE);
@@ -404,7 +421,7 @@ static void full_input_inference_start(
   EXIT_ON_ERROR(vollo_rt_poll(ctx, &num_completed, &completed_buffer));
 
   // This example doesn't expect to have any concurrently started jobs reaching completion now
-  assert(num_completed == 0);
+  ALWAYS_ASSERT(num_completed == 0);
 }
 
 static void partial_input_inference_start(
@@ -427,7 +444,7 @@ static void partial_input_inference_start(
   EXIT_ON_ERROR(vollo_rt_poll(ctx, &num_completed, &completed_buffer));
 
   // This example doesn't expect to have any concurrently started jobs reaching completion now
-  assert(num_completed == 0);
+  ALWAYS_ASSERT(num_completed == 0);
 }
 
 #define MAX_POLL_COUNT 100000000
@@ -443,7 +460,8 @@ static void block_until_completion(vollo_rt_context_t ctx) {
 
     poll_count++;
     if (poll_count > MAX_POLL_COUNT) {
-      EXIT_ON_ERROR("Timed out while polling");
+      fprintf(stderr, "timed out while polling\n");
+      exit(EXIT_FAILURE);
     }
   }
 }

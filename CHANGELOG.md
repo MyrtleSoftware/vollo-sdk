@@ -1,5 +1,16 @@
 # Changelog
 
+## 27.1.0
+
+- State reset with `vollo_rt_add_reset_job` (for models compiled with `generate_state_reset = True`)
+- Support for non-zero LSTM initial state
+- Support GELU (exact and tanh approximation)
+- Faster SiLU
+- Improve operator fusion in some cases
+- Fix a bug handling strides in slices
+- Fix HwConfig info (`vollo-tool read-hw-config`) of Artena bitstreams
+- Standardize naming of `vollo_compiler.Config` presets
+
 ## 27.0.1
 
 - Reduce tensor ram usage in certain models
