@@ -8,7 +8,7 @@
 
 
         <!-- Custom HTML head -->
-
+        
         <!-- Google Tag Manager -->
         <script>
             (function (w, d, s, l, i) {
@@ -108,7 +108,7 @@
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                <div id="menu-bar-hover-placeholder"></div>
+                                <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky bordered">
                     <div class="left-buttons">
                         <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
@@ -660,8 +660,16 @@ torch.testing.assert_close(
 )
 print(f"latency (compute): {program.compute_duration_per_inference_us():.1f}us")
 </code></pre>
+<h2 id="resetting-model-state"><a class="header" href="#resetting-model-state">Resetting model state</a></h2>
+<p>When running a model, it can be reset to its initial state if it was compiled with
+<code>generate_state_reset = True</code>. Note that this causes the program to use additional
+resources, so may affect latency or cause the model to no longer fit.</p>
+<pre><code class="language-python">program = nnir.to_program(vollo_compiler.Config.amd_v80_c6b32(), generate_state_reset=True)
+</code></pre>
+<p>See the <a href="./vollo-rt-example.html#resetting-model-state">Vollo RT Example</a> for an example of how to then
+reset the model when running inferences.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="example-4-mixed-precision"><a class="header" href="#example-4-mixed-precision">Example 4: Mixed Precision</a></h1>
-<p>By default, operations on Vollo run in <code>bfloat16 (BF16)</code> format<sup class="footnote-reference" id="fr-note-1"><a href="#footnote-note">1</a></sup>, but there is support for some operations to be run in float32 (FP32) and for weights to be stored in 8-bit floating point (FP8, specifically E4M3).</p>
+<p>By default, operations on Vollo run in <code>bfloat16 (BF16)</code> format<sup class="footnote-reference"><a href="#note">1</a></sup>, but there is support for some operations to be run in float32 (FP32) and for weights to be stored in 8-bit floating point (FP8, specifically E4M3).</p>
 <h2 id="fp32-activations"><a class="header" href="#fp32-activations">FP32 Activations</a></h2>
 <p>See <a href="supported-models.html">Supported Models</a> for a list of which operations have FP32 support.</p>
 <p>To run operations in FP32, the operations should be placed in a <code>vollo_torch.Fp32Activations</code> context. The following example
@@ -792,12 +800,11 @@ except Exception as e:
 else:
     raise Exception("`to_program` expected to throw an exception")
 </code></pre>
-<hr>
-<ol class="footnote-definition"><li id="footnote-note">
+<div class="footnote-definition" id="note"><sup class="footnote-definition-label">1</sup>
 <p>This is true of most operations, however intermediate values in layer calculations are sometimes stored in higher precision,
-e.g. in the accumulation of dot products. <a href="#fr-note-1">↩</a></p>
-</li>
-</ol><div style="break-before: page; page-break-before: always;"></div><h1 id="example-5-multiple-models-in-a-vollo-program"><a class="header" href="#example-5-multiple-models-in-a-vollo-program">Example 5: Multiple Models in a Vollo Program</a></h1>
+e.g. in the accumulation of dot products.</p>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="example-5-multiple-models-in-a-vollo-program"><a class="header" href="#example-5-multiple-models-in-a-vollo-program">Example 5: Multiple Models in a Vollo Program</a></h1>
 <p>Vollo supports putting multiple models on a single accelerator.</p>
 <p>Multiple NNIRs can be compiled into a single program:</p>
 <pre><code class="language-python"><span class="boring">import torch
@@ -1399,16 +1406,15 @@ It currently supports the following accelerator cards:</p>
 <tr><td>BittWare IA-420f</td><td>Intel Agilex AGF014</td><td>3.1 Million</td></tr>
 <tr><td>BittWare IA-840f</td><td>Intel Agilex AGF027</td><td>8.4 Million</td></tr>
 <tr><td>Napatech NT400D11</td><td>Intel Agilex AGF014</td><td>3.1 Million</td></tr>
-<tr><td>AMD Alveo V80</td><td>AMD Versal XCV80</td><td>25.2 Million<sup class="footnote-reference" id="fr-note-1"><a href="#footnote-note">1</a></sup></td></tr>
+<tr><td>AMD Alveo V80</td><td>AMD Versal XCV80</td><td>25.2 Million<sup class="footnote-reference"><a href="#note">1</a></sup></td></tr>
 </tbody></table>
 </div>
 <h2 id="operating-system-requirements"><a class="header" href="#operating-system-requirements">Operating System Requirements</a></h2>
 <p>Vollo is compatible with Ubuntu 20.04 and later.</p>
-<hr>
-<ol class="footnote-definition"><li id="footnote-note">
-<p>50.3 Million if using FP8 weights. <a href="#fr-note-1">↩</a></p>
-</li>
-</ol><div style="break-before: page; page-break-before: always;"></div><h1 id="programming-the-agilex-fpga"><a class="header" href="#programming-the-agilex-fpga">Programming the Agilex FPGA</a></h1>
+<div class="footnote-definition" id="note"><sup class="footnote-definition-label">1</sup>
+<p>50.3 Million if using FP8 weights.</p>
+</div>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="programming-the-agilex-fpga"><a class="header" href="#programming-the-agilex-fpga">Programming the Agilex FPGA</a></h1>
 <p>This section assumes that the Vollo SDK is already installed and setup on the machine that you are using. If you
 haven't done so already, instructions for how to do that may be found at: <a href="https://vollo.myrtle.ai/latest/installation.html">Vollo SDK Installation</a>.</p>
 <p>Make sure the <code>VOLLO_SDK</code> environment variable is set by sourcing setup.sh from the Vollo SDK.</p>
@@ -2466,7 +2472,7 @@ vollo_rt_error_t vollo_rt_add_job_bf16_partial_update(
   const bf16* input_update_values,
   bf16* const* output_data);
 </code></pre>
-<h2 id="state-reset"><a class="header" href="#state-reset">State reset</a></h2>
+<h2 id="resetting-model-state-1"><a class="header" href="#resetting-model-state-1">Resetting model state</a></h2>
 <p>Stateful models can have their state reset with <code>vollo_rt_add_reset_job</code>. The model must have been
 compiled with <code>generate_state_reset = True</code>.</p>
 <pre><code class="language-c">/**
@@ -2607,6 +2613,28 @@ printf("\n]\n");
 //////////////////////////////////////////////////
 // Release resources / Cleanup
 vollo_rt_destroy(ctx);
+</code></pre>
+<h2 id="resetting-model-state-2"><a class="header" href="#resetting-model-state-2">Resetting model state</a></h2>
+<p>If the model was compiled with <code>generate_state_reset = True</code>, we can reset the state of the
+model before starting an inference:</p>
+<pre><code class="language-c">// Reset the state of the model, if desired
+if (
+  options.state_reset_spacing != 0
+  &amp;&amp; inf_started % options.state_reset_spacing == 0
+  // No need to reset before the first inference
+  &amp;&amp; inf_started != 0) {
+  EXIT_ON_ERROR(vollo_rt_add_reset_job(ctx, model_index));
+}
+
+// Add an inference
+EXIT_ON_ERROR(vollo_rt_add_job(
+  ctx,
+  model_index,
+  user_ctx,
+  (const number_format*)input_buffer_formats,
+  (const void* const*)test_inputs_dyn[input_ix],
+  (const number_format*)output_buffer_formats,
+  model_outputs_dyn));
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="vollo-rt-python-example"><a class="header" href="#vollo-rt-python-example">Vollo RT Python Example</a></h1>
 <p>The Vollo RT Python bindings are provided for convenience, the runtime
