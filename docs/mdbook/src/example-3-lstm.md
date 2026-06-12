@@ -114,3 +114,16 @@ torch.testing.assert_close(
 )
 print(f"latency (compute): {program.compute_duration_per_inference_us():.1f}us")
 ```
+
+## Resetting model state
+
+When running a model, it can be reset to its initial state if it was compiled with
+`generate_state_reset = True`. Note that this causes the program to use additional
+resources, so may affect latency or cause the model to no longer fit.
+
+```python
+program = nnir.to_program(vollo_compiler.Config.amd_v80_c6b32(), generate_state_reset=True)
+```
+
+See the [Vollo RT Example](./vollo-rt-example.md#resetting-model-state) for an example of how to then
+reset the model when running inferences.

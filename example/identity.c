@@ -6,7 +6,9 @@
 
 #include "utils.h"
 
+#include <getopt.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <vollo-rt.h>
 
 // A small wrapper around the asynchronous Vollo RT API to block on a single inference
@@ -40,7 +42,28 @@ static void single_shot_inference(vollo_rt_context_t ctx, const float* input, fl
   }
 }
 
-int main(void) {
+int main(int argc, char** argv) {
+  const char* device_spec = "0";
+
+  static struct option long_options[] = {
+    {"device", required_argument, 0, 'd'},
+    {"help", no_argument, 0, 'h'},
+    {0, 0, 0, 0},
+  };
+
+  int opt = 0;
+  int long_index = 0;
+  while ((opt = getopt_long(argc, argv, "d:h", long_options, &long_index)) != -1) {
+    switch (opt) {
+    case 'd': device_spec = optarg; break;
+    case 'h':
+      printf("USAGE:\n    %s [--device <SPEC>]\n", argv[0]);
+      printf("Defaults to --device 0\n");
+      return EXIT_SUCCESS;
+    default: return EXIT_FAILURE;
+    }
+  }
+
   //////////////////////////////////////////////////
   // Init
   vollo_rt_context_t ctx;
@@ -48,13 +71,12 @@ int main(void) {
 
   //////////////////////////////////////////////////
   // Add accelerators
-  size_t accelerator_index = 0;
-  EXIT_ON_ERROR(vollo_rt_add_accelerator(ctx, accelerator_index));
+  EXIT_ON_ERROR(vollo_rt_add_device(ctx, 0, device_spec));
 
   //////////////////////////////////////////////////
   // Load program
 
-  if (vollo_rt_accelerator_block_size(ctx, accelerator_index) == 32) {
+  if (vollo_rt_accelerator_block_size(ctx, 0) == 32) {
     EXIT_ON_ERROR(vollo_rt_load_program(ctx, "./identity_b32.vollo"));
   } else {
     EXIT_ON_ERROR(vollo_rt_load_program(ctx, "./identity_b64.vollo"));

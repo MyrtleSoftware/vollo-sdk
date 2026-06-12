@@ -9,6 +9,7 @@
 #include <ctype.h>
 #include <getopt.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include <vollo-rt.h>
@@ -16,6 +17,8 @@
 typedef struct ExampleOptions {
   // Path to program.vollo
   const char* program_path;
+  // Device specifier to pass to vollo-rt (defaults to 0)
+  const char* device_spec;
   // Index of the model to do inference with (defaults to 0)
   size_t model_index;
   // Number of inferences to compute
@@ -31,6 +34,10 @@ typedef struct ExampleOptions {
   size_t max_duration_ms;
   // Maximum duration for the warmup phase in milliseconds (defaults 0 = no limit)
   size_t max_warmup_duration_ms;
+  // The state of the model will be reset before every inference that's a multiple of this (defaults
+  // to 0 = no reset)
+  // The model must have been compiled with generate_state_reset = True for it to be resettable
+  size_t state_reset_spacing;
 
   // Provide all inputs/outputs as fp32 (these may get converted to bf16 by the runtime)
   bool fp32_api;
@@ -86,18 +93,16 @@ static void vollo_example(ExampleOptions options) {
 
   //////////////////////////////////////////////////
   // Add accelerators
-  size_t accelerator_index = 0;
-
   if (options.run_in_vm) {
     bool bit_accurate = true;
-    EXIT_ON_ERROR(vollo_rt_add_vm(ctx, accelerator_index, bit_accurate));
+    EXIT_ON_ERROR(vollo_rt_add_vm(ctx, 0, bit_accurate));
   } else {
-    EXIT_ON_ERROR(vollo_rt_add_accelerator(ctx, accelerator_index));
+    EXIT_ON_ERROR(vollo_rt_add_device(ctx, 0, options.device_spec));
     fprintf(
       stderr,
       "Using Vollo accelerator with %zu core(s) and block_size %zu\n",
-      vollo_rt_accelerator_num_cores(ctx, accelerator_index),
-      vollo_rt_accelerator_block_size(ctx, accelerator_index));
+      vollo_rt_accelerator_num_cores(ctx, 0),
+      vollo_rt_accelerator_block_size(ctx, 0));
   }
 
   //////////////////////////////////////////////////
@@ -109,8 +114,8 @@ static void vollo_example(ExampleOptions options) {
     fprintf(
       stderr,
       "Using Vollo VM with %zu core(s) and block_size %zu\n",
-      vollo_rt_accelerator_num_cores(ctx, accelerator_index),
-      vollo_rt_accelerator_block_size(ctx, accelerator_index));
+      vollo_rt_accelerator_num_cores(ctx, 0),
+      vollo_rt_accelerator_block_size(ctx, 0));
   }
 
   //////////////////////////////////////////////////
@@ -177,6 +182,10 @@ static void vollo_example(ExampleOptions options) {
 
   if (vollo_rt_model_input_streaming_dim(ctx, model_index, 0) >= 0) {
     fprintf(stderr, "  The model is streaming\n");
+  }
+
+  if (options.state_reset_spacing != 0) {
+    ALWAYS_ASSERT(vollo_rt_model_is_resettable(ctx, model_index));
   }
 
   //////////////////////////////////////////////////
@@ -386,6 +395,16 @@ static void vollo_example(ExampleOptions options) {
 
       size_t input_ix = options.random_input ? (size_t)rand() % options.num_random_candidates : 0;
 
+      // Reset the state of the model, if desired
+      if (
+        options.state_reset_spacing != 0
+        && inf_started % options.state_reset_spacing == 0
+        // No need to reset before the first inference
+        && inf_started != 0) {
+        EXIT_ON_ERROR(vollo_rt_add_reset_job(ctx, model_index));
+      }
+
+      // Add an inference
       EXIT_ON_ERROR(vollo_rt_add_job(
         ctx,
         model_index,
@@ -566,6 +585,12 @@ void print_help(const char* example_program) {
     "\n"
 
     "OPTIONS:\n"
+    "    -d, --device\n"
+    "        Device specifier to pass to vollo-rt\n"
+    "        Examples: 0, 01:00.0\n"
+    "        Defaults to 0\n"
+    "\n"
+
     "    -m, --model-index\n"
     "        Index of the model to do inference with\n"
     "        Defaults to 0\n"
@@ -625,6 +650,14 @@ void print_help(const char* example_program) {
     "        Defaults to 0\n"
     "\n"
 
+    "    --state-reset-spacing\n"
+    "        The state of the model will be reset before every inference that's a multiple of \n"
+    "        this (0 = no reset)\n"
+    "        The model must have been compiled with generate_state_reset = True for it to be \n"
+    "        resettable\n"
+    "        Defaults to 0\n"
+    "\n"
+
     "    -j, --json\n"
     "        Output detailed measurements in JSON\n"
     "\n"
@@ -651,6 +684,7 @@ void print_help(const char* example_program) {
 enum {
   OPT_MAX_DURATION_MS = 256,
   OPT_MAX_WARMUP_DURATION_MS,
+  OPT_STATE_RESET_SPACING,
 };
 
 #define MAX_INPUT_PATH_COUNT 10
@@ -664,6 +698,7 @@ int main(int argc, char** argv) {
 
   ExampleOptions options;
   options.program_path = "";
+  options.device_spec = "0";
   options.model_index = 0;
   options.fp32_api = false;
   options.bf16_api = false;
@@ -677,6 +712,7 @@ int main(int argc, char** argv) {
   options.inference_spacing_ns = 0;
   options.max_duration_ms = 0;
   options.max_warmup_duration_ms = 0;
+  options.state_reset_spacing = 0;
   options.json = false;
   options.input_paths = input_paths;
   options.output_paths = output_paths;
@@ -686,6 +722,7 @@ int main(int argc, char** argv) {
 
   // Parse example options
   static struct option long_options[] = {
+    {"device", required_argument, 0, 'd'},
     {"model-index", required_argument, 0, 'm'},
     {"num-inferences", required_argument, 0, 'i'},
     {"fp32-api", no_argument, 0, 'F'},
@@ -699,6 +736,7 @@ int main(int argc, char** argv) {
     {"inference-spacing-ns", required_argument, 0, 's'},
     {"max-duration-ms", required_argument, 0, OPT_MAX_DURATION_MS},
     {"max-warmup-duration-ms", required_argument, 0, OPT_MAX_WARMUP_DURATION_MS},
+    {"state-reset-spacing", required_argument, 0, OPT_STATE_RESET_SPACING},
     {"json", no_argument, 0, 'j'},
     {"input", required_argument, 0, 'f'},
     {"output", required_argument, 0, 'o'},
@@ -708,9 +746,10 @@ int main(int argc, char** argv) {
 
   int opt = 0;
   int long_index = 0;
-  while ((opt = getopt_long(argc, argv, "m:i:FBRvrn:c:w:jf:o:h", long_options, &long_index))
+  while ((opt = getopt_long(argc, argv, "d:m:i:FBRvrn:c:w:s:jf:o:h", long_options, &long_index))
          != -1) {
     switch (opt) {
+    case 'd': options.device_spec = optarg; break;
     case 'm': options.model_index = parse_size_arg(optarg, "--model-index"); break;
     case 'i': options.num_inferences = parse_size_arg(optarg, "--num-inferences"); break;
     case 'F': options.fp32_api = true; break;
@@ -733,6 +772,9 @@ int main(int argc, char** argv) {
       break;
     case OPT_MAX_WARMUP_DURATION_MS:
       options.max_warmup_duration_ms = parse_size_arg(optarg, "--max-warmup-duration-ms");
+      break;
+    case OPT_STATE_RESET_SPACING:
+      options.state_reset_spacing = parse_size_arg(optarg, "--state-reset-spacing");
       break;
     case 'j': options.json = true; break;
     case 'f':

@@ -9,7 +9,7 @@ The Vollo compiler supports PyTorch models that use the following operations:
 | Inequality               | `>`, `<`, `>=`, `<=`                                                                                                   | ✅                                     |
 | Clamp ops                | `clamp`, `relu`                                                                                                        | ✅                                     |
 | Matrix multiplication    | `Linear`; `matmul` / `@` where one side is a constant                                                                  | ❌                                     |
-| Convolution              | Via `vollo_torch.nn.PaddedConv1d`, with `groups == 1` or `groups == in_channels == out_channels`                       | ❌                                     |
+| Convolution              | `torch.nn.Conv1d`, `vollo_torch.nn.PaddedConv1d`; with `groups == 1` or `groups == in_channels == out_channels`        | ❌                                     |
 | LSTM                     | `torch.nn.LSTM`, `vollo_torch.nn.LSTM`                                                                                 | ❌                                     |
 | Indexing / slicing       | Partial square bracket `[]` support; `index_select`, `narrow`                                                          | ✅                                     |
 | `sum`                    | `keepdim = True` required when summing over [data dimension](data-dimension.md)                                        | ❌                                     |

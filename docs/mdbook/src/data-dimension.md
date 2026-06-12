@@ -128,33 +128,75 @@ runtime tensor. The output data dimension is along the "replaced" index.
 Note: a linear layer is a special case of the above with the `k` dimension
 squeezed out.
 
-If the contraction is not along the data dimension of the non-constant
-(requires `allow_dynamic_weights`):
+### Dynamic weights
 
-```txt
-[* i j] @ [* j k!] -> [* i k!]
-```
+Vollo supports a broader range of matrix multiplication via the Dynamic Weights
+feature. We define a Constant to be any compile-time constant tensor and an
+Activation to be any tensor that is not a compile-time constant. The Dynamic
+Weights feature covers the Constant x Activation case where contraction is not
+along the data dimension of the activation as well as Activation x Activation
+matrix multiplication.
 
-That is, the data dimension of non-constant is preserved in the output. This
-potentially has a higher latency and consumes more tensor RAM than contracting
-along the data dimension.
+This is an advanced feature with non-obvious performance characteristics and is
+gated behind the `allow_dynamic_weights` flag.
 
-With both sides runtime tensors (also requires `allow_dynamic_weights`):
+1. Constant x Activation with data dimension on the non-contracted dimension:
 
-```txt
-[* i! j] @ [* j! k] -> [* i! k]
-```
+   ```txt
+   [* i j] @ [* j k!] -> [* i k!]
+   ```
 
-That is, the contracted dimension must be the data dimension of exactly one of
-the input tensors (in this case the RHS WLOG). The output data dimension is
-that of the side whose data dimension was not contracted, for example:
+   That is, the data dimension of the non-constant tensor is preserved in the
+   output. This potentially has a higher latency and consumes more tensor RAM
+   than contracting along the data dimension.
 
-```txt
-[* i j!] @ [* j k!] -> [* i k!]
-```
+2. matrix Activation x vector Activation:
 
-This uses more tensor RAM and potentially has a higher latency than
-contractions with a constant.
+   ```txt
+   [* i! j] @ [j!] -> [* i!]
+   [* i j!] @ [j!] -> [* i!]
+   [j!] @ [* j! k] -> [* k!]
+   [j!] @ [* j k!] -> [* k!]
+   ```
+
+   That is, output data dimension is along the "replaced" index.
+
+3. Activation x Activation with opposite data dimensions:
+
+   ```txt
+   [* i! j] @ [* j! k] -> [* i! k]
+   [* i j!] @ [* j k!] -> [* i k!]
+   ```
+
+   That is, when the contracted dimension is the data dimension of exactly one
+   of the input tensors. The output data dimension is that of the side whose
+   data dimension was not contracted.
+
+4. Activation x Activation with contracted data dimensions:
+
+   ```txt
+   [* i j!] @ [* j! k] -> [* i k!]
+   ```
+
+   Note that in this case the output data dimension is determined by convention
+   to be the rightmost output dimension. It can be adjusted by changing the
+   matmul inputs order in the model:
+
+   ```txt
+   [* j! k].t() -> [* k j!]
+
+                      @     -> [* k i!]
+
+   [* i j!].t() -> [* j! i]
+   ```
+
+5. unsupported Activation x Activation:
+
+   ```txt
+   [* i! j] @ [* j k!] -> #
+   ```
+
+   This case is unsupported.
 
 ## Transpose
 

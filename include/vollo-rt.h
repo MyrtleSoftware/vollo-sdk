@@ -103,6 +103,27 @@ void vollo_rt_destroy(vollo_rt_context_t vollo);
 vollo_rt_error_t vollo_rt_add_accelerator(vollo_rt_context_t vollo, size_t accelerator_index);
 
 /**
+ * Add an accelerator using a device specifier string. This is a more versatile version of
+ * `vollo_rt_add_accelerator` that takes a string instead of just an index.
+ *
+ * `accelerator_index` assigns the logical accelerator slot used by query APIs such as
+ * `vollo_rt_accelerator_num_cores` and `vollo_rt_accelerator_block_size`.
+ *
+ * - `0` -- vollo accelerator 0
+ * - `01:00.0` -- vollo accelerator with PCI address 01:00.0
+ * - `vm:vollo` -- anonymous Vollo VM, bit-accurate by default
+ * - `vm+f32:vollo` -- anonymous Vollo VM in non-bit-accurate mode
+ * - `vm:bittware-ia420f-c6b32` -- Vollo VM constrained to the given named hw config preset
+ * - `vm+bit-accurate:bittware-ia420f-c6b32` -- same named VM in bit-accurate mode (the default)
+ * - `vm:path/to/hw-config.json` -- Vollo VM constrained to the given hw config JSON file
+ * - `vm+f32:path/to/hw-config.json` -- same JSON-configured VM in non-bit-accurate mode
+ *
+ * This should be called after `vollo_rt_init` but before `vollo_rt_load_program`.
+ */
+vollo_rt_error_t vollo_rt_add_device(
+  vollo_rt_context_t vollo, size_t accelerator_index, const char* device_spec);
+
+/**
  * Add a VM, to run a program in software simulation rather than on hardware.
  * Allows testing the API without needing an accelerator or license, giving correct results but much
  * slower.
@@ -112,7 +133,10 @@ vollo_rt_error_t vollo_rt_add_accelerator(vollo_rt_context_t vollo, size_t accel
  * requirements of the loaded program, so until you call `vollo_rt_load_program` the values returned
  * by `vollo_rt_accelerator_num_cores` and `vollo_rt_accelerator_block_size` will be 0.
  *
- * Cannot currently be used with Vollo Trees programs.
+ * This works with both Vollo and Vollo Trees programs. The program type is detected when the
+ * program is loaded. Note that `vollo_rt_accelerator_block_size` is not meaningful for Vollo Trees
+ * programs and will panic if called, and the `bit_accurate` flag is ignored for Vollo Trees (the
+ * forest is always evaluated exactly).
  *
  * This should be called after `vollo_rt_init` but before `vollo_rt_load_program`.
  *
@@ -374,6 +398,16 @@ number_format vollo_rt_model_output_format(
   vollo_rt_context_t vollo, size_t model_index, size_t output_index);
 
 /**
+ * Returns whether the model can be reset to its initial state (i.e. was compiled with
+ * `generate_state_reset = True`)
+ *
+ * Requirements (panics otherwise):
+ * - a program was loaded with `vollo_rt_load_program`
+ * - `model_index < vollo_rt_num_models`
+ */
+bool vollo_rt_model_is_resettable(vollo_rt_context_t vollo, size_t model_index);
+
+/**
  * Sets up a computation on the vollo accelerator where the inputs and outputs are in brain-float 16
  * format.
  *
@@ -394,7 +428,7 @@ number_format vollo_rt_model_output_format(
  *     number of inputs is given by `vollo_rt_model_num_inputs` each input length is the product of
  *     the shape given by `vollo_rt_model_input_shape`
  *     (or more convenient: `vollo_rt_model_input_num_elements`)
- *     lifetime:
+ *     - lifetime:
  *       - The outer array only needs to live until `vollo_rt_add_job_bf16` returns
  *       - The input buffers need to live until `vollo_rt_poll` returns with the completion for
  *         this job
@@ -403,7 +437,7 @@ number_format vollo_rt_model_output_format(
  *     buffer the number of outputs is given by `vollo_rt_model_num_outputs` each output length is
  *     the product of the shape given by `vollo_rt_model_output_shape`
  *     (or more convenient: `vollo_rt_model_output_num_elements`)
- *     lifetime:
+ *     - lifetime:
  *       - The outer array only needs to live until `vollo_rt_add_job_bf16` returns
  *       - The output buffers need to live until `vollo_rt_poll` returns with the completion for
  *         this job
@@ -441,7 +475,7 @@ vollo_rt_error_t vollo_rt_add_job_bf16(
  *     number of inputs is given by `vollo_rt_model_num_inputs` each input length is the product of
  *     the shape given by `vollo_rt_model_input_shape`
  *     (or more convenient: `vollo_rt_model_input_num_elements`)
- *     lifetime:
+ *     - lifetime:
  *       - The outer array only needs to live until `vollo_rt_add_job_fp32` returns
  *       - The input buffers need to live until `vollo_rt_poll` returns with the completion for
  *         this job
@@ -450,7 +484,7 @@ vollo_rt_error_t vollo_rt_add_job_bf16(
  *     buffer the number of outputs is given by `vollo_rt_model_num_outputs` each output length is
  *     the product of the shape given by `vollo_rt_model_output_shape`
  *     (or more convenient: `vollo_rt_model_output_num_elements`)
- *     lifetime:
+ *     - lifetime:
  *       - The outer array only needs to live until `vollo_rt_add_job_fp32` returns
  *       - The output buffers need to live until `vollo_rt_poll` returns with the completion for
  *         this job
@@ -489,7 +523,7 @@ vollo_rt_error_t vollo_rt_add_job_fp32(
  *     product of the shape given by `vollo_rt_model_input_shape` (or more convenient:
  *     `vollo_rt_model_input_num_elements`). The number format of each input is given by
  *     `vollo_rt_model_input_format`.
- *     lifetime:
+ *     - lifetime:
  *       - The outer array only needs to live until `vollo_rt_add_job` returns
  *       - The input buffers need to live until `vollo_rt_poll` returns with the completion for
  *         this job
@@ -523,8 +557,7 @@ vollo_rt_error_t vollo_rt_add_job(
  * Limitations:
  * - Only single model programs are supported
  * - Only single input models are supported
- * - Only inputs with up to 65536 elements supported (for now)
- * - Currently not supported for a VM
+ * - A full update must be queued before the first partial update
  *
  * For a more general version that supports different data types and multiple inputs, see
  * `vollo_rt_add_job_partial_update`.
@@ -585,8 +618,7 @@ vollo_rt_error_t vollo_rt_add_job_bf16_partial_update(
  *
  * Limitations:
  * - Only single model programs are supported
- * - Only a total input size of to 131072 bytes supported (padding each input to 64 bytes)
- * - Currently not supported for a VM
+ * - A full update must be queued before the first partial update
  *
  * Note: The computation is only started on the next call to vollo_rt_poll. This way it is possible
  * to set up several computations that are kicked off at the same time.
@@ -614,7 +646,7 @@ vollo_rt_error_t vollo_rt_add_job_bf16_partial_update(
  *         Each index MUST be less than the number of input elements
  *         (see `vollo_rt_model_input_num_elements`)
  *         Updating multiple times the same index in a given update has undefined semantics
- *     lifetime:
+ *     - lifetime:
  *       - The input_update_indices array needs to live until `vollo_rt_poll` returns with the
  *         completion for this job
  * - output_data:
@@ -623,7 +655,7 @@ vollo_rt_error_t vollo_rt_add_job_bf16_partial_update(
  *     the product of the shape given by `vollo_rt_model_output_shape`
  *     (or more convenient: `vollo_rt_model_output_num_elements`). The type of each output buffer
  *     is given by `vollo_rt_model_output_type`.
- *     lifetime:
+ *     - lifetime:
  *       - The outer array only needs to live until `vollo_rt_add_job_bf16_partial_update` returns
  *       - The output buffers need to live until `vollo_rt_poll` returns with the completion for
  *         this job
@@ -639,8 +671,6 @@ vollo_rt_error_t vollo_rt_add_job_partial_update(
 /**
  * Resets a model to its initial state.
  *
- * The model must have been compiled with `generate_state_reset = True`.
- *
  * Unlike `vollo_rt_add_job`, this function does not take in a `user_ctx`, because there is no
  * output to receive. Consequently, `vollo_rt_poll` will not notify you when a reset job is
  * done, but it will be done before any subsequent jobs for that model.
@@ -653,6 +683,11 @@ vollo_rt_error_t vollo_rt_add_job_partial_update(
  *     the context that the model should be reset on
  * - model_index:
  *     the model to reset
+ *
+ * Requirements (panics otherwise):
+ * - a program was loaded with `vollo_rt_load_program`
+ * - `model_index < vollo_rt_num_models`
+ * - the model was compiled with `generate_state_reset = True`
  */
 vollo_rt_error_t vollo_rt_add_reset_job(vollo_rt_context_t vollo, size_t model_index);
 

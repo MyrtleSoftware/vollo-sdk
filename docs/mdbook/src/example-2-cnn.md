@@ -1,8 +1,7 @@
 # Example 2: CNN
 
-Vollo supports streaming 1D convolutional neural networks (CNNs), which might
-require you to make some changes to your model if you are currently using a
-non-streaming 1D CNN.
+Vollo supports both streaming and non-streaming 1D convolutional neural
+networks (CNNs).
 
 A streaming convolution applies the convolutional kernel to the most recent
 window of the input sequence as the data points in the input sequence arrive.
@@ -17,41 +16,69 @@ To enable the use of of streaming convolutions, the Vollo compiler includes a
 `streaming_transform` which transforms a non-streaming CNN into a streaming CNN,
 as long as the non-streaming CNN meets certain constraints.
 
-## Using the `streaming_transform`
+## Non-streaming CNN
 
-The model below is a non-streaming CNN taking an input sequence of length 5 and
-producing an output of length 1.
-(It can actually take any input sequence of length 5+n and produce an output of
-length 1+n, but we will only consider the minimal sequence length, since that is
-the length of the input context used by each of the output elements.)
+To compile a CNN as a non-streaming model, you can follow the steps outlined in
+[Example 1: MLP](example-1-mlp.md).
 
 ```python
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import vollo_compiler
+import vollo_torch
 
 class CNN(nn.Module):
     def __init__(self, in_channels, out_channels, hidden_channels, kernel_size=3):
         super().__init__()
-        # Reduces sequence length by (kernel_size - 1) = 2
         self.conv1 = nn.Conv1d(in_channels, hidden_channels, kernel_size)
-        # Reduces sequence length by (kernel_size - 1) = 2
         self.conv2 = nn.Conv1d(hidden_channels, out_channels, kernel_size)
 
     def forward(self, x):
+        x = x.transpose(-1, -2)
         x = F.relu(self.conv1(x))
         x = F.relu(self.conv2(x))
+        x = x.transpose(-1, -2)
         return x
 
-# Instantiate the model
 in_channels = 32
 out_channels = 1
 hidden_channels = 128
+sequence_length = 6
 model = CNN(in_channels, out_channels, hidden_channels)
+
+input = torch.randn(sequence_length, in_channels)
+(model, expected_output) = vollo_torch.fx.prepare_shape(model, input)
+nnir = vollo_torch.fx.nnir.to_nnir(model)
+
+# Replace this config with the one for the accelerator you are using
+config = vollo_compiler.Config.amd_v80_c6b32()
+program = nnir.to_program(config)
 ```
 
-In order to apply the `streaming_transform`, the `torch.nn.Conv1d` layers need
-to be replaced with `vollo_torch.nn.PaddedConv1d` layers.
+The example above gives a Vollo program which takes an input tensor of size
+`6 x 32` and outputs a tensor of size `2 x 1`.
+
+The transposes are needed because Vollo performs matrix multiplication on the
+second-last (channels) dimension — see [The data dimension](data-dimension.md)
+for details.
+
+As in [Example 1: MLP](example-1-mlp.md) we can construct a VM instance to
+simulate the Vollo accelerator, giving bit-accurate results and a latency
+estimate.
+
+```python
+vm = program.to_vm()
+vm_output = vm.run(input.detach().numpy())
+torch.testing.assert_close(expected_output, torch.from_numpy(vm_output), atol=1e-2, rtol=1e-2)
+print(f"latency (compute): {program.compute_duration_per_inference_us():.1f}us")
+```
+
+## Using the `streaming_transform`
+
+Starting from the non-streaming `CNN` model defined above, in order to apply the
+`streaming_transform` the `torch.nn.Conv1d` layers need to be replaced with
+`vollo_torch.nn.PaddedConv1d` layers.
 
 ```python
 import torch
@@ -80,6 +107,9 @@ model = CNN(in_channels, out_channels, hidden_channels)
 
 These `PaddedConv1d` layers are identical to `torch.nn.Conv1d`, but with left
 padding pre-applied to the input so as not to reduce the sequence length.
+Note that `PaddedConv1d` only supports `stride=1`, since a stride greater than 1
+would produce fewer output elements than input elements, breaking the
+one-to-one correspondence required by the streaming model.
 
 This `PaddedConv1d` model is still a non-streaming model, which now takes an
 input sequence of length 5 and produces an output of length 5.
