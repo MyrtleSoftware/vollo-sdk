@@ -1,5 +1,26 @@
 # Release Notes
 
+## 28.0.0
+
+- MMIO optimisations
+- Speed up model compilation
+- Optimise pointwise operations
+- Support partial updates with inputs that have more than 65536 elements
+- Support for transposed dynamic weight matmuls
+- Add functions to check if a model was compiled with `generate_state_reset =
+  True`
+  - `vollo_rt_model_is_resettable` in Vollo RT C/C++ API
+  - `vollo_rt.VolloRTContext.model_is_resettable` in Vollo RT Python bindings
+  - `vollo_compiler.Program.model_is_resettable` in `vollo-compiler`
+- Add `vollo_rt_add_device` in Vollo RT C/C++ API as a more versatile version of
+  `vollo_rt_add_accelerator`
+  - `vollo_rt.VolloRTContext.add_device` in Vollo RT Python bindings
+- Handle SIGINT in long-running `vollo_compiler` functions
+- Support for non-streaming `torch.nn.Conv1d`
+- Support `torch.sum`/`torch.Tensor.sum` over multiple dimensions
+- Support variable-length arg for `dims` in `torch.Tensor.permute`
+- Fix handling of exponentiation on infinities
+
 ## 27.1.0
 
 - State reset with `vollo_rt_add_reset_job` (for models compiled with `generate_state_reset = True`)

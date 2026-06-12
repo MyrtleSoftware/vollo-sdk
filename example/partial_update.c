@@ -38,6 +38,11 @@ void print_help(const char* prog) {
     "\n"
 
     "OPTIONS:\n"
+    "    -d, --device\n"
+    "        Device specifier to pass to vollo-rt\n"
+    "        Examples: 0, 01:00.0\n"
+    "        Defaults to 0\n"
+    "\n"
 
     "    -o, --output-dir\n"
     "        Path to an output directory\n"
@@ -67,10 +72,12 @@ int main(int argc, char** argv) {
   // Parse options from CLI
   char* program_path = NULL;
   char* output_dir = NULL;
+  const char* device_spec = "0";
   size_t num_inferences = 1000;
   long int threshold_partial_updates = -1;
 
   static struct option long_options[] = {
+    {"device", required_argument, 0, 'd'},
     {"output-dir", required_argument, 0, 'o'},
     {"num-inferences", required_argument, 0, 'i'},
     {"threshold-partial", required_argument, 0, 't'},
@@ -80,8 +87,9 @@ int main(int argc, char** argv) {
 
   int opt = 0;
   int long_index = 0;
-  while ((opt = getopt_long(argc, argv, "o:i:t:h", long_options, &long_index)) != -1) {
+  while ((opt = getopt_long(argc, argv, "d:o:i:t:h", long_options, &long_index)) != -1) {
     switch (opt) {
+    case 'd': device_spec = optarg; break;
     case 'o': output_dir = optarg; break;
     case 'i': num_inferences = parse_size_arg(optarg, "--num-inferences"); break;
     case 't': threshold_partial_updates = parse_long_arg(optarg, "--threshold-partial"); break;
@@ -109,8 +117,7 @@ int main(int argc, char** argv) {
 
   //////////////////////////////////////////////////
   // Add accelerators
-  size_t accelerator_index = 0;
-  EXIT_ON_ERROR(vollo_rt_add_accelerator(ctx, accelerator_index));
+  EXIT_ON_ERROR(vollo_rt_add_device(ctx, 0, device_spec));
 
   //////////////////////////////////////////////////
   // Load program

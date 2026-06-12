@@ -247,6 +247,38 @@ int vollo_rt_model_input_streaming_dim(
  */
 int vollo_rt_model_output_streaming_dim(
   vollo_rt_context_t vollo, size_t model_index, size_t output_index);
+
+/**
+ * Get the number type of an input at the given index
+ *
+ * Requirements (panics otherwise):
+ * - a program was loaded with `vollo_rt_load_program`
+ * - `model_index < vollo_rt_num_models`
+ * - `input_index < vollo_rt_model_num_inputs`
+ */
+number_format vollo_rt_model_input_format(
+  vollo_rt_context_t vollo, size_t model_index, size_t input_index);
+
+/**
+ * Get the number type of an output at the given index
+ *
+ * Requirements (panics otherwise):
+ * - a program was loaded with `vollo_rt_load_program`
+ * - `model_index < vollo_rt_num_models`
+ * - `output_index < vollo_rt_model_num_outputs`
+ */
+number_format vollo_rt_model_output_format(
+  vollo_rt_context_t vollo, size_t model_index, size_t output_index);
+
+/**
+ * Returns whether the model can be reset to its initial state (i.e. was compiled with
+ * `generate_state_reset = True`)
+ *
+ * Requirements (panics otherwise):
+ * - a program was loaded with `vollo_rt_load_program`
+ * - `model_index < vollo_rt_num_models`
+ */
+bool vollo_rt_model_is_resettable(vollo_rt_context_t vollo, size_t model_index);
 ```
 
 ## Running inference
@@ -409,7 +441,7 @@ vollo_rt_error_t vollo_rt_add_job_bf16_partial_update(
   bf16* const* output_data);
 ```
 
-## State reset
+## Resetting model state
 
 Stateful models can have their state reset with `vollo_rt_add_reset_job`. The model must have been
 compiled with `generate_state_reset = True`.
@@ -417,8 +449,6 @@ compiled with `generate_state_reset = True`.
 ```c
 /**
  * Resets a model to its initial state.
- *
- * The model must have been compiled with `generate_state_reset = True`.
  *
  * Unlike `vollo_rt_add_job`, this function does not take in a `user_ctx`, because there is no
  * output to receive. Consequently, `vollo_rt_poll` will not notify you when a reset job is
@@ -432,6 +462,11 @@ compiled with `generate_state_reset = True`.
  *     the context that the model should be reset on
  * - model_index:
  *     the model to reset
+ *
+ * Requirements (panics otherwise):
+ * - a program was loaded with `vollo_rt_load_program`
+ * - `model_index < vollo_rt_num_models`
+ * - the model was compiled with `generate_state_reset = True`
  */
 vollo_rt_error_t vollo_rt_add_reset_job(vollo_rt_context_t vollo, size_t model_index);
 ```

@@ -152,3 +152,29 @@ printf("\n]\n");
 // Release resources / Cleanup
 vollo_rt_destroy(ctx);
 ```
+
+## Resetting model state
+
+If the model was compiled with `generate_state_reset = True`, we can reset the state of the
+model before starting an inference. Here's an example from `example/example.c`:
+
+```c
+// Reset the state of the model, if desired
+if (
+  options.state_reset_spacing != 0
+  && inf_started % options.state_reset_spacing == 0
+  // No need to reset before the first inference
+  && inf_started != 0) {
+  EXIT_ON_ERROR(vollo_rt_add_reset_job(ctx, model_index));
+}
+
+// Add an inference
+EXIT_ON_ERROR(vollo_rt_add_job(
+  ctx,
+  model_index,
+  user_ctx,
+  (const number_format*)input_buffer_formats,
+  (const void* const*)test_inputs_dyn[input_ix],
+  (const number_format*)output_buffer_formats,
+  model_outputs_dyn));
+```
