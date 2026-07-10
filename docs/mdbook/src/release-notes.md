@@ -1,5 +1,11 @@
 # Release Notes
 
+## 28.0.1
+
+- Add support for `torch.nn.Flatten`
+- Add support for `torch.nn.MaxPool1d`, `torch.nn.functional.max_pool1d`
+- Matrix multiplication optimisations
+
 ## 28.0.0
 
 - MMIO optimisations

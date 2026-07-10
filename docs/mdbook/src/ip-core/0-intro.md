@@ -10,3 +10,7 @@ An IP Core release consists of the following components:
 - Vollo Config C API for programming and activating the IP Core
 - Example design for the IP Core
 - Compiler configuration file for the IP Core, which can be used by the compiler to generate programs for the particular IP Core configuration
+
+A [simulation model](6-simulation-model.md) of the IP Core is also available for
+bringing up and testing the host/RTL interfaces in simulation, without hardware
+or a license.
