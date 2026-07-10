@@ -39,5 +39,6 @@
   - [Quartus Integration](ip-core/3-quartus-integration.md)
   - [Runtime configuration](ip-core/4-config.md)
   - [Example design](ip-core/5-example-design.md)
+  - [Simulation model](ip-core/6-simulation-model.md)
 - [Versions](versions.md)
   - [Release Notes](release-notes.md)
