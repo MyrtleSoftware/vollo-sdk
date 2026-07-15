@@ -1,5 +1,10 @@
 # Release Notes
 
+## 28.0.2
+
+- Fix a DMA buffer allocation error in vollo-rt when running many concurrent jobs with large inputs
+- Fix an issue in vollo-rt when running many concurrent jobs with MMIO inputs
+
 ## 28.0.1
 
 - Add support for `torch.nn.Flatten`
