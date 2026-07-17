@@ -1,5 +1,21 @@
 # Changelog
 
+## 28.1.0
+
+- Add automatic FPGA temperature monitoring in Vollo RT: it warns when the
+  device gets hot and stops compute before it overheats, configurable with the
+  `VOLLO_RT_TEMP_LIMIT_C` and `VOLLO_RT_TEMP_WARN_C` environment variables
+- Remove the unused DDR4 DIMM memory controller from the V80 and V80LL
+  bitstreams
+- Speed up model compilation
+- Fix a DMA deadlock that could occur when a model output transfer was paused
+  partway through
+- Fix the input size threshold used to decide whether inputs are sent over MMIO
+- Fix a stall in models with multiple MMIO inputs when an optional input is
+  empty
+- Prevent the SDK installer from opening an X11 terminal window when run
+  non-interactively
+
 ## 28.0.2
 
 - Fix a DMA buffer allocation error in vollo-rt when running many concurrent jobs with large inputs
