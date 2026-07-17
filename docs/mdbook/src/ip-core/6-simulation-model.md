@@ -97,6 +97,63 @@ you can inspect the logs and the waveform afterwards; on failure the relevant
 logs are also dumped to stderr. To choose its location (instead of a fresh temp
 dir), set `WORKDIR`.
 
+> **Note:** the DPI layer uses a Unix domain socket, whose path is limited to
+> ~108 characters. If you point `WORKDIR` at a very deep directory the run can
+> fail with `failed to open DPI Unix socket server`; use a shorter `WORKDIR`.
+> The default temp directory is short and unaffected.
+
+## Checking the output on the `vm` backend
+
+The `vm` backend runs true inference, so its output can be checked. `run.sh
+vollo-cfg-vm` offers two ways to do that, and they are alternatives:
+
+- `--check-method` — compare the output against a known-good value:
+  - `identity` (the default) drives an input equal to the expected output, so it
+    only makes sense for an identity program.
+  - `reference=path/to/<prefix>_expected_<index>_<step>.npy` compares against
+    reference tensors. `<index>` and `<step>` are integers: `<index>` is the
+    tensor index (in tensor order) and `<step>` the timestep/sample. You pass
+    only the `_expected_` file; the matching `<prefix>_input_<index>_<step>.npy`
+    input files in the same directory are picked up automatically by their
+    shared prefix. If no `_input_` files are present the check falls back to a
+    synthetic input (and then only supports a single-output model); a partial
+    set of input files for a step is an error.
+
+  The reference comparison is **exact** (bit-for-bit on the bf16 wire bytes), with
+  no tolerance. It is meant for regression against Vollo's *own* reference
+  vectors — a tensor exported from your framework will almost never match
+  exactly, since Vollo runs in bf16 rather than the framework's float32.
+
+- `--input` / `--save-output` — feed your own input and save the actual output,
+  so you can compare against your framework yourself, with your own tolerance.
+  This is the right choice for validating a compiled model against PyTorch or
+  TensorFlow:
+
+  ```sh
+  # Feed your own input; write the actual inference output as a float32 .npy.
+  ./run.sh vollo-cfg-vm --input my_input.npy --save-output my_output.npy path/to/program.vollo
+  ```
+
+  Pass one `--input` per input tensor, in tensor order; for a model with multiple
+  output tensors the results are written to `my_output_0.npy`, `my_output_1.npy`,
+  and so on. Save the `.npy` files as `float32` with the model's tensor shapes
+  (from `vollo-tool program-metadata`); the harness converts to the model's
+  precision. You can then diff `my_output.npy` against your reference output in
+  Python:
+
+  ```python
+  import numpy as np
+  np.testing.assert_allclose(reference_output, np.load("my_output.npy"), atol=1e-2, rtol=1e-2)
+  ```
+
+If all you need is to check a compiled program's numerics against your source
+model — with no RTL/host-interface simulation — you don't need this model at
+all: load the program into the Vollo compiler's bit-accurate VM in Python
+(`vollo_compiler.Program.load(...).to_vm().run(...)`) and compare there. The
+`vm` backend here runs that same VM; `--save-output` gives you its result out of
+the RTL simulation. See the [compiler simulation
+docs](../example-1-mlp.md#simulation).
+
 ## Architecture
 
 `vollo_ip_core` has its **config** interface (`config`, AXI4-Lite) on one edge
