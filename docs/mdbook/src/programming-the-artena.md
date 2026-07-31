@@ -17,7 +17,7 @@ download the bitstream for the Silicom `Artena` board with the `c8b32` configura
 [Github Release page]: https://github.com/MyrtleSoftware/vollo-sdk/releases/
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v28.0.2/vollo-silicom-artena-c8b32-28.0.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v28.0.3/vollo-silicom-artena-c8b32-28.0.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
 tar -xzf vollo-silicom-artena-c8b32-28.0.tar.gz -C $VOLLO_SDK/bitstream
 ```
@@ -26,7 +26,7 @@ An LSTM-only image is available for the Artena which runs at a slightly higher c
 c8b32 version. This may be downloaded as follows:
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v28.0.2/vollo-silicom-artena-c8b32lstm-28.0.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v28.0.3/vollo-silicom-artena-c8b32lstm-28.0.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
 tar -xzf vollo-silicom-artena-c8b32lstm-28.0.tar.gz -C $VOLLO_SDK/bitstream
 ```

@@ -1,5 +1,12 @@
 # Release Notes
 
+## 28.0.3
+
+- Fix a multi-model program intermittently running the wrong model, from some
+  point in a run until the program is reloaded. This affected inputs
+  transferred over MMIO (the default for small inputs) and only on some host
+  CPUs
+
 ## 28.0.2
 
 - Fix a DMA buffer allocation error in vollo-rt when running many concurrent jobs with large inputs
