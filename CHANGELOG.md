@@ -1,5 +1,17 @@
 # Changelog
 
+## 28.1.1
+
+- Fix `vollo_torch.nn.LSTMCell` using a different cell state each time it's called
+- Fix a bug which caused `ProgramBuilder.to_program` to fail on programs with fp8 weights
+- Reduce tensor descriptors used in multi-model programs, allowing more models to be combined
+  into a program
+- Fix a multi-model program intermittently running the wrong model, from some
+  point in a run until the program is reloaded. This affected inputs
+  transferred over MMIO (the default for small inputs) and only on some host
+  CPUs
+- Add an example in `vollo-ip-sim` for using your own data path
+
 ## 28.1.0
 
 - Add automatic FPGA temperature monitoring in Vollo RT: it warns when the
