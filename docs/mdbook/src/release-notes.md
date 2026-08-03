@@ -11,6 +11,10 @@
   transferred over MMIO (the default for small inputs) and only on some host
   CPUs
 - Add an example in `vollo-ip-sim` for using your own data path
+- Remove the automatic FPGA temperature monitoring added in 28.1.0. It sometimes
+  caused a crash with the `artena` bitstream. `VOLLO_RT_TEMP_LIMIT_C` and
+  `VOLLO_RT_TEMP_WARN_C` no longer do anything. The monitor will be reinstated in
+  the next hardware release with the necessary bitstream change.
 
 ## 28.1.0
 
