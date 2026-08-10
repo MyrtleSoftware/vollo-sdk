@@ -1,5 +1,9 @@
 # Changelog
 
+## 28.1.2
+- Fix a bug which caused programs built through the `ProgramBuilder` with certain activation
+  functions to produce incorrect values
+
 ## 28.1.1
 
 - Fix `vollo_torch.nn.LSTMCell` using a different cell state each time it's called
