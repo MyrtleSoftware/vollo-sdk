@@ -97,6 +97,63 @@ you can inspect the logs and the waveform afterwards; on failure the relevant
 logs are also dumped to stderr. To choose its location (instead of a fresh temp
 dir), set `WORKDIR`.
 
+> **Note:** the DPI layer uses a Unix domain socket, whose path is limited to
+> ~108 characters. If you point `WORKDIR` at a very deep directory the run can
+> fail with `failed to open DPI Unix socket server`; use a shorter `WORKDIR`.
+> The default temp directory is short and unaffected.
+
+## Checking the output on the `vm` backend
+
+The `vm` backend runs true inference, so its output can be checked. `run.sh
+vollo-cfg-vm` offers two ways to do that, and they are alternatives:
+
+- `--check-method` — compare the output against a known-good value:
+  - `identity` (the default) drives an input equal to the expected output, so it
+    only makes sense for an identity program.
+  - `reference=path/to/<prefix>_expected_<index>_<step>.npy` compares against
+    reference tensors. `<index>` and `<step>` are integers: `<index>` is the
+    tensor index (in tensor order) and `<step>` the timestep/sample. You pass
+    only the `_expected_` file; the matching `<prefix>_input_<index>_<step>.npy`
+    input files in the same directory are picked up automatically by their
+    shared prefix. If no `_input_` files are present the check falls back to a
+    synthetic input (and then only supports a single-output model); a partial
+    set of input files for a step is an error.
+
+  The reference comparison is **exact** (bit-for-bit on the bf16 wire bytes), with
+  no tolerance. It is meant for regression against Vollo's *own* reference
+  vectors — a tensor exported from your framework will almost never match
+  exactly, since Vollo runs in bf16 rather than the framework's float32.
+
+- `--input` / `--save-output` — feed your own input and save the actual output,
+  so you can compare against your framework yourself, with your own tolerance.
+  This is the right choice for validating a compiled model against PyTorch or
+  TensorFlow:
+
+  ```sh
+  # Feed your own input; write the actual inference output as a float32 .npy.
+  ./run.sh vollo-cfg-vm --input my_input.npy --save-output my_output.npy path/to/program.vollo
+  ```
+
+  Pass one `--input` per input tensor, in tensor order; for a model with multiple
+  output tensors the results are written to `my_output_0.npy`, `my_output_1.npy`,
+  and so on. Save the `.npy` files as `float32` with the model's tensor shapes
+  (from `vollo-tool program-metadata`); the harness converts to the model's
+  precision. You can then diff `my_output.npy` against your reference output in
+  Python:
+
+  ```python
+  import numpy as np
+  np.testing.assert_allclose(reference_output, np.load("my_output.npy"), atol=1e-2, rtol=1e-2)
+  ```
+
+If all you need is to check a compiled program's numerics against your source
+model — with no RTL/host-interface simulation — you don't need this model at
+all: load the program into the Vollo compiler's bit-accurate VM in Python
+(`vollo_compiler.Program.load(...).to_vm().run(...)`) and compare there. The
+`vm` backend here runs that same VM; `--save-output` gives you its result out of
+the RTL simulation. See the [compiler simulation
+docs](../example-1-mlp.md#simulation).
+
 ## Architecture
 
 `vollo_ip_core` has its **config** interface (`config`, AXI4-Lite) on one edge
@@ -151,7 +208,15 @@ stage 1 of the integration below.
 ## Integration stages
 
 The model lets you replace one piece at a time with your own; each stage swaps
-one block and leaves the rest in place.
+one block and leaves the rest in place. Across all three, config is always the
+`vollo-cfg` library — what you take over is first the **data** path, then the
+**config transport** beneath vollo-cfg. Each stage is one concrete script:
+
+| Stage                    | You provide                | You run                                                     |
+|--------------------------|----------------------------|-------------------------------------------------------------|
+| 1. Fully bundled         | just a `.vollo`            | `run.sh vollo-cfg-{stub,vm}`                                |
+| 2. User data path        | your data-path RTL         | `example/user-data-path/run.sh` (a worked stage-2 example)  |
+| 3. User config transport | your config-bus driver too | your sim, with `vollo-cfg` hooked up to it however you like |
 
 ### 1. Fully bundled
 
@@ -159,9 +224,14 @@ one block and leaves the rest in place.
 
 `vollo-cfg` (through `vollo_cfg_socket_loader`) programs config, and
 `dpi_stream_client.py --mode input` drives the streams and checks `output`. This
-is the `vollo-cfg-stub` / `vollo-cfg-vm` flows. (The zero-dependency `registers`
-flow is the same picture with the python client driving config too, instead of
-`vollo-cfg`.)
+is what `run.sh` runs for you:
+
+```sh
+./run.sh vollo-cfg-vm --check-method identity path/to/program.vollo
+```
+
+(The zero-dependency `registers` flow is the same picture with the python client
+driving config too, instead of `vollo-cfg`.)
 
 ### 2. User data path
 
@@ -169,8 +239,46 @@ flow is the same picture with the python client driving config too, instead of
 
 Connect your RTL to the `model_select` / `input` / `output` AXI4-Stream ports of
 `rtl/vollo_ip_core.sv` and drop the python data client and the DPI stream
-master/slave. Config is unchanged — still `vollo-cfg` via
-`vollo_cfg_socket_loader` — so you can check your data path against the same
+master/slave. Keep the config bus wired to `dpi/dpi_axi_lite32_master.sv` + the
+socket bridge (`dpi/dpi_sim_socket.c`) — config is unchanged, still `vollo-cfg`.
+
+The bundle ships a **complete worked example** of this at
+`example/user-data-path/` — a testbench + your-RTL-goes-here data path + a
+`run.sh` that builds, launches, programs config and checks the result. Start
+there:
+
+```sh
+cd example/user-data-path && ./run.sh   # identity in == out, driven by the example's own RTL
+```
+
+Its `README.md` is the reference for the **data-path contract** — beat width
+(512-bit / 64-byte), `model_select` = one beat carrying the model index,
+`ceil(size/64)` input/output beats, `tkeep`/`tlast`, and how to get the sizes
+from the program metadata. Note the data path needs no synchronization with the
+config load: the core buffers `model_select`/`input` (deep FIFOs) and starts the
+request once the program is loaded, with ordinary AXI4-Stream `tready`
+backpressure if you outrun the buffer — so you just drive the streams.
+
+Under the hood the example uses two standalone tools, so you can drop them into
+your own build:
+
+```sh
+# build the deps your testbench compiles against -- the hw-config ROM includes
+# (generated_hw_config_{case,localparams}.svh) + dpi_sim_socket.so:
+dpi/scripts/prepare_dpi.sh --backend vm path/to/program.vollo
+# compile + launch your own testbench, exporting the socket path its DPI master
+# opens; then program config over that same socket:
+export DPI_SIM_UNIX_SOCKET_PATH="$PWD/dpi.sock"   # your testbench opens this
+# ... compile (all sources as SystemVerilog) and launch your sim here ...
+dpi/scripts/drive_config.sh --unix-socket "$DPI_SIM_UNIX_SOCKET_PATH" path/to/program.vollo
+```
+
+The middle "compile + launch your testbench" step is the part you own; the
+example's `README.md` documents its full contract — the source list, the required
+`+define+`s, the `dpi_sim_socket` DPI library, and the `DPI_SIM_UNIX_SOCKET_PATH`
+socket handshake. That middle step is all `run.sh` adds: it calls the same
+`prepare_dpi.sh` and `drive_config.sh` around its own testbench — so your build
+gets config programmed by the same vollo-cfg loader and checks against the same
 bit-accurate `output`.
 
 ### 3. User config transport
@@ -179,8 +287,12 @@ bit-accurate `output`.
 
 <!-- markdown-link-check-enable -->
 
-An optional final stage is to drive the config bus from your own mechanism
-instead of `vollo_cfg_socket_loader` and the DPI lite master. This is still the
-`vollo-cfg` library issuing the same `vollo_cfg_load_program` writes — only the
-transport beneath it changes — so it matches your card config bus setup on
-hardware.
+An optional final stage is to connect the `vollo-cfg` library to your own
+simulation directly, in place of `drive_config.sh` (the DPI lite master +
+socket). It is still the same `vollo-cfg` library issuing the same
+`vollo_cfg_load_program` writes — only how those config reads/writes reach your
+DUT changes — so it matches your card config-bus setup on hardware. How you make
+that connection is up to you; `dpi/vollo_cfg_socket_loader.c` is one worked
+reference — it links the SDK's `lib/libvollo_cfg.a` and feeds the library's
+config reads/writes to the socket, so you can read it to see how the API is
+called and then bridge it to your simulation however suits you.

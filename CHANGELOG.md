@@ -1,11 +1,40 @@
 # Changelog
 
-## 28.0.3
+## 28.1.2
+- Fix a bug which caused programs built through the `ProgramBuilder` with certain activation
+  functions to produce incorrect values
 
+## 28.1.1
+
+- Fix `vollo_torch.nn.LSTMCell` using a different cell state each time it's called
+- Fix a bug which caused `ProgramBuilder.to_program` to fail on programs with fp8 weights
+- Reduce tensor descriptors used in multi-model programs, allowing more models to be combined
+  into a program
 - Fix a multi-model program intermittently running the wrong model, from some
   point in a run until the program is reloaded. This affected inputs
   transferred over MMIO (the default for small inputs) and only on some host
   CPUs
+- Add an example in `vollo-ip-sim` for using your own data path
+- Remove the automatic FPGA temperature monitoring added in 28.1.0. It sometimes
+  caused a crash with the `artena` bitstream. `VOLLO_RT_TEMP_LIMIT_C` and
+  `VOLLO_RT_TEMP_WARN_C` no longer do anything. The monitor will be reinstated in
+  the next hardware release with the necessary bitstream change.
+
+## 28.1.0
+
+- Add automatic FPGA temperature monitoring in Vollo RT: it warns when the
+  device gets hot and stops compute before it overheats, configurable with the
+  `VOLLO_RT_TEMP_LIMIT_C` and `VOLLO_RT_TEMP_WARN_C` environment variables
+- Remove the unused DDR4 DIMM memory controller from the V80 and V80LL
+  bitstreams
+- Speed up model compilation
+- Fix a DMA deadlock that could occur when a model output transfer was paused
+  partway through
+- Fix the input size threshold used to decide whether inputs are sent over MMIO
+- Fix a stall in models with multiple MMIO inputs when an optional input is
+  empty
+- Prevent the SDK installer from opening an X11 terminal window when run
+  non-interactively
 
 ## 28.0.2
 
