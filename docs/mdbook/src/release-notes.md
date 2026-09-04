@@ -1,7 +1,41 @@
 # Release Notes
 
-## 28.1.2
+## 29.0.0
 
+- Support for `torch.log`, `torch.log2`, `torch.log10` (as well as respective
+  `torch.Tensor` methods) and the ONNX `Log` operator, at BF16 precision
+- Bump the `amd_v80_c6b32`, `amd_v80ll_c6b32`, `silicom_artena_c8b32` and
+  `silicom_artena_c8b32lstm` cards' `cell_state_depth` to 2048
+- Recurrent models such as LSTMs use fewer tensor descriptors. This allows a
+  larger number of these models to be combined into a multi-model program.
+- The example applications default `--device` to the `VOLLO_CARD_BDF` environment
+  variable when it is set, so a host with several accelerators can select one without
+  editing every command
+- `vollo-tool fpga-config` can name a card by PCI BDF as well as by index
+- Report loading a `.vollo` program from a mismatched compiler version as a
+  `vollo_compiler.LoadError` explaining the version difference, instead of a
+  panic
+- Raise `ValueError` instead of panicking when constructing a `Config` with an
+  unknown fabric or a missing `clock_mhz`
+- `Program.load_bytes` now raises `vollo_compiler.LoadError` rather than
+  `ValueError` when the data isn't a valid program, matching `Program.load`
+- Say what produced a program file that wasn't written by the Vollo compiler,
+  when it records that, instead of reporting it as an empty field
+- Fix a bug which caused programs built through the `ProgramBuilder` to produce
+  incorrect values if they used dynamic weights
+- Fix an operator fusion bug in `where` operations which could select the wrong
+  branch depending on the operations on the inputs to the `where` operation
+- Fixed panic when a dynamic weight matmul is an input to a sum
+- Fix miscompilation with `optimize_transforms = False` for summing values from
+  different timesteps
+- Fix clamp behaviour not matching PyTorch / ONNX when max < min
+- Fix streaming transform panics
+- Fix handling of `BatchNorm1d` bias
+- Fix panics involving sums
+- Fix compiler causing stack overflow
+- Fix rare LSTM miscompilation
+
+## 28.1.2
 - Fix a bug which caused programs built through the `ProgramBuilder` with certain activation
   functions to produce incorrect values
 
@@ -36,6 +70,13 @@
   empty
 - Prevent the SDK installer from opening an X11 terminal window when run
   non-interactively
+
+## 28.0.3
+
+- Fix a multi-model program intermittently running the wrong model, from some
+  point in a run until the program is reloaded. This affected inputs
+  transferred over MMIO (the default for small inputs) and only on some host
+  CPUs
 
 ## 28.0.2
 

@@ -160,7 +160,7 @@ struct amc_proxy_pdi_download_request {
 
 /**
  * struct amc_proxy_partition_copy_request: the partition copy request data
- * 
+ *
  * @src_device: source device
  * @src_part: source partition
  * @dest_device: destination device
@@ -316,7 +316,7 @@ int amc_proxy_bind_callback(FW_IF_CFG *fw_if_handle, amc_proxy_event_callback *e
  * amc_proxy_close() - Close the amc proxy layer and free up resources
  *
  * @fw_if_handle: handle to the fw interface
- * 
+ *
  * Return: The errno return code
  */
 int amc_proxy_close(const FW_IF_CFG *fw_if_handle);
@@ -334,7 +334,7 @@ int amc_proxy_request_abort(struct amc_proxy_cmd_struct *cmd);
  * amc_proxy_request_identity() - Request the identify
  *
  * @cmd: the proxy command structure
- * 
+ *
  * Return: The errno return code
  */
 int amc_proxy_request_identity(struct amc_proxy_cmd_struct *cmd);
@@ -364,10 +364,10 @@ int amc_proxy_request_pdi_download(struct amc_proxy_cmd_struct *cmd,
 
 /**
  * amc_proxy_request_device_boot() - Select device boot partition
- * 
+ *
  * @cmd: the proxy command structure
  * @device_boot: a structure populated with the boot select request
- * 
+ *
  * This request uses the same structure as the PDI download.
  *
  * Return: The errno return code
@@ -377,10 +377,10 @@ int amc_proxy_request_device_boot(struct amc_proxy_cmd_struct *cmd,
 
 /**
  * amc_proxy_request_partition_copy() - Copy one partition to another
- * 
+ *
  * @cmd: the proxy command structure
  * @partition_copy: a structure populated with the partition copy request
- * 
+ *
  * Return: The errno return code
  */
 int amc_proxy_request_partition_copy(struct amc_proxy_cmd_struct *cmd,
@@ -388,10 +388,10 @@ int amc_proxy_request_partition_copy(struct amc_proxy_cmd_struct *cmd,
 
 /**
  * amc_proxy_request_heartbeat() - heartbeat request
- * 
+ *
  * @cmd: the proxy command structure
  * @heartbeat: a structure populated with the heartbeat request
- * 
+ *
  * Return: The errno return code
  */
 int amc_proxy_request_heartbeat(struct amc_proxy_cmd_struct *cmd,
@@ -437,14 +437,14 @@ int amc_proxy_request_debug_verbosity(struct amc_proxy_cmd_struct *cmd, uint8_t 
  *
  * Return: The errno return code
  */
-int amc_proxy_get_response_identity(struct amc_proxy_cmd_struct *cmd, 
+int amc_proxy_get_response_identity(struct amc_proxy_cmd_struct *cmd,
                                     struct amc_proxy_identify_response *identity);
 
 /**
  * amc_proxy_get_response_sensor() - check if a valid sensor response has been received
  *
  * @cmd: the proxy command structure
- * 
+ *
  * As part of a sensor request an address and length is passed to be populated, this
  * api is to check if its now valid to consume that data.
  *
@@ -476,19 +476,19 @@ int amc_proxy_get_response_device_boot(struct amc_proxy_cmd_struct *cmd);
 
 /**
  * amc_proxy_get_response_partition_copy() - retrieve the partition copy response
- * 
+ *
  * @cmd: the proxy command structure
- * 
+ *
  * Return: The errno return code
  */
 int amc_proxy_get_response_partition_copy(struct amc_proxy_cmd_struct *cmd);
 
 /**
  * amc_proxy_get_response_heartbeat() - retrieve the heartbeat response
- * 
+ *
  * @cmd: the proxy command structure
  * @heartbeat: the structure to be populated with the response
- * 
+ *
  * Return: The errno return code
  */
 int amc_proxy_get_response_heartbeat(struct amc_proxy_cmd_struct *cmd,

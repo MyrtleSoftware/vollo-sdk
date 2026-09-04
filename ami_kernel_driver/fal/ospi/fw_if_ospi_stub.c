@@ -316,7 +316,7 @@ static uint32_t ulOspiWrite( void *pvFwIf,
             PLL_DBG( FW_IF_OSPI_NAME, "OSPI FW_IF_write Offset:0x%x Addr:0x%x\r\n",
                      ulAddrOffset,
                      pxCfg->ulBaseAddress + ulAddrOffset);
-   
+
             xRet = ulValidateAddressRange( pxCfg, ulAddrOffset, ulLength );
             if( FW_IF_ERRORS_NONE == xRet )
             {
@@ -501,7 +501,7 @@ static uint32_t ulValidateAddressRange( FW_IF_OSPI_CFG *pxCfg, uint32_t ulAddrOf
 int iFW_IF_OSPI_PrintStatistics( void )
 {
     FW_IF_OSPI_ERRORS xRet = FW_IF_ERRORS_DRIVER_NOT_INITIALISED;
-    
+
     /* TODO implement print stats */
 
     return xRet;

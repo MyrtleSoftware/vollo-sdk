@@ -27,6 +27,7 @@ The Vollo compiler supports PyTorch models that use the following operations:
 | `sqrt`                   | `torch.sqrt`, `torch.rsqrt`                                                                                            | ❌                                     |
 | `tanh`                   | `torch.tanh`, `torch.nn.Tanh`                                                                                          | ❌                                     |
 | Exponential              | `torch.exp`, `torch.exp2`                                                                                              | ✅                                     |
+| Logarithm                | `torch.log`, `torch.log2`, `torch.log10`                                                                               | ❌                                     |
 | `silu`                   | `torch.nn.functional.silu`, `torch.nn.SiLU`                                                                            | ❌                                     |
 | `softplus`               | `torch.nn.functional.softplus`, `torch.nn.Softplus`                                                                    | ❌                                     |
 | `softmax`                | `torch.softmax`, `torch.nn.Softmax`                                                                                    | ❌                                     |

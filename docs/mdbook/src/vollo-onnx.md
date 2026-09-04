@@ -133,6 +133,7 @@ Tensors are expected to be in `float32` format, unless they are used as indices 
 | `Sqrt`                    |                                                                                                                                |
 | `Tanh`                    |                                                                                                                                |
 | `Exp`                     |                                                                                                                                |
+| `Log`                     |                                                                                                                                |
 | `Softplus`                |                                                                                                                                |
 | `Sigmoid`                 |                                                                                                                                |
 | `Expand`                  |                                                                                                                                |

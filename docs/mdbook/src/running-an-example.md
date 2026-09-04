@@ -31,6 +31,12 @@ The Vollo SDK contains a trivial program for each accelerator to check if the ac
    ./example/vollo-example example/identity_b32.vollo
    ```
 
+   For a block-size 16 Vollo IP core:
+
+   ```sh
+   ./example/vollo-example example/identity_b16.vollo
+   ```
+
    You should see an output similar to the following:
 
    ```sh

@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
  * ami_program.h - This file contains functions to program (flash) devices.
- * 
+ *
  * Copyright (c) 2023-present Advanced Micro Devices, Inc. All rights reserved.
  */
- 
+
 #ifndef AMI_PROGRAM_H
 #define AMI_PROGRAM_H
 
@@ -66,7 +66,7 @@
  * @boot_device: Target boot device.
  * @partition: Partition number to flash.
  * @efd_ctx: eventfd context for reporting progress (optional).
- * 
+ *
  * Return: 0 or negative error code.
  */
 int download_pdi(struct amc_control_ctxt *amc_ctrl_ctxt, uint8_t *buf, uint32_t size,
@@ -79,7 +79,7 @@ int download_pdi(struct amc_control_ctxt *amc_ctrl_ctxt, uint8_t *buf, uint32_t 
  * @size: Size of bitstream buffer.
  * @boot_device: Target boot device.
  * @efd_ctx: eventfd context for reporting progress (optional).
- * 
+ *
  * Return: 0 or negative error code.
  */
 int update_fpt(struct pf_dev_struct *pf_dev, uint8_t *buf, uint32_t size,
@@ -89,7 +89,7 @@ int update_fpt(struct pf_dev_struct *pf_dev, uint8_t *buf, uint32_t size,
  * device_boot() - Set the device boot partition.
  * @pf_dev: Device data.
  * @partition: Partition number to select.
- * 
+ *
  * Return: 0 or negative error code.
  */
 int device_boot(struct pf_dev_struct *pf_dev, uint32_t partition);

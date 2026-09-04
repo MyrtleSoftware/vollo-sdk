@@ -150,7 +150,7 @@ AP_STATIC_ASSERT(sizeof(struct amc_proxy_cmd_request_hdr) == 8,\
  * @specific:   flag indicates there is command specific info in result
  * @state:      flag indicates this is a new entry
  * @header:     Used to convert between data buffer and header structure
- * 
+ *
  * This is the header of the completion queue entry. A generic command
  * state is put into cstate. The command is identified by cid which
  * matches the cid in submission queue.
@@ -177,7 +177,7 @@ AP_STATIC_ASSERT(sizeof(struct amc_proxy_cmd_response_hdr) == 4,\
  * @resvd: reserved
  * @rcode: POSIX error return code
  * @data:  command data
- * 
+ *
  * When a command is completed, a completion entry is put into completion
  * queue. A generic command state is put into cstate. The command is
  * identified by cid which matches the cid in submission queue.
@@ -303,7 +303,7 @@ struct amc_proxy_cmd_module_payload {
 /**
  * struct amc_proxy_cmd_heartbeat_payload: heartbeat request payload command
  *
- * @request_id: the id 
+ * @request_id: the id
  */
 struct amc_proxy_cmd_heartbeat_payload {
 	uint8_t request_id;
@@ -367,7 +367,7 @@ struct amc_proxy_cmd_resp_identify_payload {
 
 /**
  * struct amc_proxy_cmd_resp_sensor_payload: sensor completion payload
- * 
+ *
  * @result: result code
  * @resvd: reserved
  */
@@ -422,7 +422,7 @@ struct amc_proxy_cmd_resp_module_read_write_payload {
 
 /**
  * struct amc_proxy_cmd_response: response command, header & payload (if applicable)
- * 
+ *
  * @hdr: response command header
  * @default_payload: default completion payload
  * @identity_payload: identify completion payload
@@ -557,7 +557,7 @@ static void amc_proxy_cmd_complete(struct amc_proxy_instance *inst, struct com_q
                         /* Make a copy of the response before removing from the list */
                         memcpy(&cmd->cmd_response, &cmd_resp->default_payload,
 		                sizeof(cmd_resp->default_payload));
-                        
+
                         cmd->cmd_response_code = cmd_resp->ret;
 
                         /* Suppress hearbeat message so as not to flood dmesg */
@@ -835,7 +835,7 @@ int amc_proxy_init(uint8_t proxy_id, FW_IF_CFG *fw_if_handle)
                 amc_proxy_entry->inst.fw_if_handle = fw_if_handle;
                 amc_proxy_entry->inst.proxy_id = proxy_id;
                 amc_proxy_entry->inst.response_thread_created = false;
-                
+
                 mutex_init(&(amc_proxy_entry->inst.lock));
                 INIT_LIST_HEAD(&(amc_proxy_entry->list));
                 INIT_LIST_HEAD(&(amc_proxy_entry->inst.submitted_cmds));
@@ -1133,7 +1133,7 @@ int amc_proxy_request_device_boot(struct amc_proxy_cmd_struct *cmd,
                 request_hdr->opcode = AMC_PROXY_CMD_OPCODE_DEVICE_BOOT;
                 request_hdr->count = sizeof(request_cmd_entry.pdi_payload);
                 request_hdr->cid = cmd->cmd_cid;
-                
+
                 /* Only set the partition */
                 request_cmd_entry.pdi_payload.partition_sel = device_boot->partition;
 
@@ -1221,7 +1221,7 @@ int amc_proxy_request_heartbeat(struct amc_proxy_cmd_struct *cmd,
                 request_hdr->opcode = AMC_PROXY_CMD_OPCODE_HEARTBEAT;
                 request_hdr->count = sizeof(request_cmd_entry.heartbeat_payload);
                 request_hdr->cid = cmd->cmd_cid;
-                
+
                 /* Only set the count used to identify the heartbeat message id */
                 request_cmd_entry.heartbeat_payload.request_id = heartbeat->request_id;
 
@@ -1348,7 +1348,7 @@ int amc_proxy_request_debug_verbosity(struct amc_proxy_cmd_struct *cmd, uint8_t 
                 request_hdr->opcode = AMC_PROXY_CMD_OPCODE_DEBUG_VERBOSITY;
                 request_hdr->count = sizeof(request_cmd_entry.debug_verbosity_payload);
                 request_hdr->cid = cmd->cmd_cid;
-                
+
                 /* Only set the verbosity level as part of the request */
                 request_cmd_entry.debug_verbosity_payload = verbosity;
 
@@ -1386,7 +1386,7 @@ int amc_proxy_get_response_identity(struct amc_proxy_cmd_struct *cmd,
 
                 struct amc_proxy_cmd_resp_identify_payload *identity_payload =
                         (struct amc_proxy_cmd_resp_identify_payload *)&cmd->cmd_response;
-                
+
                 /* AMC version */
                 identity->ver_major = identity_payload->ver_major;
                 identity->ver_minor = identity_payload->ver_minor;
@@ -1550,7 +1550,7 @@ int amc_proxy_get_response_module_read_write(struct amc_proxy_cmd_struct *cmd)
         amc_ctxt = amc_proxy_find_matching_proxy_instance(cmd->cmd_fw_if_gcq);
         if (amc_ctxt && amc_ctxt->inst.initialised)
                 ret = amc_result_to_linux_errno(cmd->cmd_response_code);
-        
+
         return ret;
 }
 
@@ -1569,6 +1569,6 @@ int amc_proxy_get_response_debug_verbosity(struct amc_proxy_cmd_struct *cmd)
         amc_ctxt = amc_proxy_find_matching_proxy_instance(cmd->cmd_fw_if_gcq);
         if (amc_ctxt && amc_ctxt->inst.initialised)
                 ret = amc_result_to_linux_errno(cmd->cmd_response_code);
-        
+
         return ret;
 }

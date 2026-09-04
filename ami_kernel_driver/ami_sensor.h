@@ -43,7 +43,7 @@ struct pf_dev_struct;
 enum ami_amc_boot_devices {
 	AMI_AMC_BOOT_DEVICE_PRIMARY = 0,
 	AMI_AMC_BOOT_DEVICE_SECONDARY,
-	
+
 	AMI_AMC_BOOT_DEVICE_MAX
 };
 

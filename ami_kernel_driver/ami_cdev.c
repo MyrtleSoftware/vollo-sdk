@@ -45,7 +45,7 @@ static int dev_major = 0;  /* This will be overriden. */
  * devnode() - Callback to return device permissions.
  * @dev: Pointer to device struct.
  * @mode: Pointer to store permission bits.
- * 
+ *
  * Return: NULL.
  */
 static char *devnode(DEVICE_CONST struct device *dev, umode_t *mode)
@@ -63,7 +63,7 @@ int dev_open(struct inode *inode, struct file *filp)
 {
 	if (!inode || !filp)
 		return -EINVAL;
-	
+
 	/* This already checks the minor number */
 	filp->private_data = get_pf_dev_entry((void*)inode, PF_DEV_CACHE_INODE);
 
@@ -109,7 +109,7 @@ long dev_unlocked_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 
 	if(!access_ok((void __user*)arg, _IOC_SIZE(cmd)))
 		return -ENOTTY;
-	
+
 	/* This is is already reference counted  */
 	pf_dev = filp->private_data;
 
@@ -129,7 +129,7 @@ long dev_unlocked_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		case PF_DEV_STATE_READY:
 		case PF_DEV_STATE_MISSING_INFO:
 			break;
-		
+
 		default:
 			return -EPERM;
 		}
@@ -164,7 +164,7 @@ long dev_unlocked_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		case PF_DEV_STATE_READY:
 		case PF_DEV_STATE_MISSING_INFO:
 			break;
-		
+
 		default:
 			return -EPERM;
 		}
@@ -177,7 +177,7 @@ long dev_unlocked_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 	/* Acquire semaphore */
 	if (down_interruptible(&(pf_dev->ioctl_sema)))
 		return -ERESTARTSYS;
-	
+
 	if (pf_dev->state == PF_DEV_STATE_COMPAT)
 		PR_WARN("Performing IOCTL request in compatibility mode - you may experience issues!");
 
@@ -213,7 +213,7 @@ long dev_unlocked_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 			ret = -EPERM;
 			goto done;
 		}
-		
+
 		if ((data.size <= 0) || (data.addr == 0)) {
 			ret = -EINVAL;
 			goto done;
@@ -341,7 +341,7 @@ long dev_unlocked_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 			ret = -ENOMEM;
 			goto done;
 		}
-		
+
 		/* We will write the response to the userspace address. */
 		ret = read_pcie_bar(pf_dev->pci, data.bar_idx,
 			data.offset, data.num, buf);
@@ -378,7 +378,7 @@ long dev_unlocked_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 			ret = -EINVAL;
 			goto done;
 		}
-		
+
 		/* Allocate memory for payload buffer. */
 		buf = vzalloc(data.num * sizeof(uint32_t));
 
@@ -386,14 +386,14 @@ long dev_unlocked_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 			ret = -ENOMEM;
 			goto done;
 		}
-		
+
 		/* Copy payload data. */
 		if (!copy_from_user(buf, (uint32_t*)data.addr, data.num * sizeof(uint32_t)))
 			ret = write_pcie_bar(pf_dev->pci, data.bar_idx,
 				data.offset, data.num, buf);
 		else
 			ret = -EFAULT;
-		
+
 		vfree(buf);
 		break;
 	}
@@ -416,22 +416,22 @@ long dev_unlocked_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 			hwmon_type = hwmon_temp;
 			hwmon_attr = hwmon_temp_input;
 			break;
-		
+
 		case IOC_SENSOR_TYPE_POWER:
 			hwmon_type = hwmon_power;
 			hwmon_attr = hwmon_power_input;
 			break;
-		
+
 		case IOC_SENSOR_TYPE_CURRENT:
 			hwmon_type = hwmon_curr;
 			hwmon_attr = hwmon_curr_input;
 			break;
-		
+
 		case IOC_SENSOR_TYPE_VOLTAGE:
 			hwmon_type = hwmon_in;
 			hwmon_attr = hwmon_in_input;
 			break;
-		
+
 		default:
 			ret = -EINVAL;
 			break;
@@ -467,7 +467,7 @@ long dev_unlocked_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		if (copy_from_user(&data, (struct ami_ioc_fpt_hdr_value*)arg, sizeof(data))) {
 			ret = -EFAULT;
 			goto done;
-		}	
+		}
 
                 ret = read_fpt_hdr(pf_dev, data.boot_device, &hdr);
                 if (!ret) {
@@ -578,11 +578,11 @@ long dev_unlocked_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		case IOC_APP_SETUP_REGISTER:
 			ret = add_pf_dev_app(pf_dev, get_current());
 			break;
-		
+
 		case IOC_APP_SETUP_DEREGISTER:
 			ret = delete_pf_dev_app(pf_dev, get_current());
 			break;
-		
+
 		default:
 			ret = -EINVAL;
 			break;
@@ -741,7 +741,12 @@ int create_cdev(unsigned baseminor, struct drv_cdev_struct *drv_cdev,
 				drv_cdev->drv_cls_str, ret);
 			goto unreg_cdev_reg;
 		}
-		drv_cdev->dev_class->devnode = devnode;
+		/* Some distro kernels backport the 6.2 const-qualified devnode
+		 * signature (e.g. RHEL 8.10 z-stream >= 4.18.0-553.109), so the
+		 * kernel-version gate above cannot be exact. The signatures are
+		 * ABI-identical; cast so -Werror=incompatible-pointer-types stays
+		 * quiet either way. */
+		drv_cdev->dev_class->devnode = (typeof(drv_cdev->dev_class->devnode))devnode;
 	}
 
 	/* Create device */
@@ -765,7 +770,7 @@ int create_cdev(unsigned baseminor, struct drv_cdev_struct *drv_cdev,
 	 */
 	if (parent)
 		cdev_set_parent(&drv_cdev->cdev, &parent->kobj);
-	
+
 	/* Register cdev to the kernel */
 	ret = cdev_add(&(drv_cdev->cdev), drv_cdev->cdev_num, drv_cdev->count);
 	if (ret) {

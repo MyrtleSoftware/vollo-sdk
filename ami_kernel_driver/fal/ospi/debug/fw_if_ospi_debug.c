@@ -58,7 +58,7 @@ static void vClearStats( void );
 void vFW_IF_OSPI_DebugInit( DAL_HDL pxParentHandle )
 {
     if( FALSE == iIsInitialised )
-    {   
+    {
         if( NULL == pxParentHandle )
         {
             pxFwIfOspiTop = pxDAL_NewDirectory( "fw_if_ospi" );
@@ -73,7 +73,7 @@ void vFW_IF_OSPI_DebugInit( DAL_HDL pxParentHandle )
             pxDAL_NewDebugFunction( "print_all_stats", pxFwIfOspiTop, vPrintStats );
             pxDAL_NewDebugFunction( "clear_all_stats", pxFwIfOspiTop, vClearStats );
         }
-        
+
         iIsInitialised = TRUE;
     }
 }

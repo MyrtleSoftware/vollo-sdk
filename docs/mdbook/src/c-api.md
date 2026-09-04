@@ -38,14 +38,17 @@ Any other crash is considered a bug and we would be very grateful if you could t
 ## Initialisation
 
 A vollo context is created by calling `vollo_rt_init`.
-Add an accelerator by using the `vollo_rt_add_accelerator` function.
+Add an accelerator by using the `vollo_rt_add_accelerator` function, or
+`vollo_rt_add_device` to name a card by its PCI address (see [hosts with more
+than one accelerator](accelerator-setup.md#hosts-with-more-than-one-accelerator)).
 
 ```c
 /**
  * Initialise the vollo-rt context. This must be called before any other vollo-rt functions.
  *
- * Logging level can be configured by setting the environment variable `VOLLO_RT_LOG` to one of:
- * "error", "warn", "info", "debug", or "trace"
+ * Logging level can be configured by setting the environment variable `VOLLO_RT_LOG` (or
+ * `RUST_LOG`, which it takes precedence over) to one of: "error", "warn", "info", "debug", or
+ * "trace"
  */
 vollo_rt_error_t vollo_rt_init(vollo_rt_context_t* context_ptr);
 
