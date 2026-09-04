@@ -15,9 +15,9 @@ The bitstream is available on the [Github Release page](https://github.com/Myrtl
 For example to download the bitstream for the Agilex `ia840f` board with the `c2b64d` configuration of Vollo:
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v28.1.2/vollo-bittware-ia840f-c2b64d-28.1.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v29.0.0/vollo-bittware-ia840f-c2b64d-29.0.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-bittware-ia840f-c2b64d-28.1.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-bittware-ia840f-c2b64d-29.0.tar.gz -C $VOLLO_SDK/bitstream
 ```
 
 The Agilex-based boards that are currently supported are:
@@ -190,12 +190,13 @@ NOTE: this can only be done with an FPGA that is already programmed with a Vollo
    ```
 
 3. Check that the device is set up for remote system updates by running the
-   command below, with `device index` representing the index of the device you
-   want to update, in the order shown in the previous command, starting from 0.
-   It should print a `json` string to the terminal showing the device status.
+   command below, with `device` representing the device you want to update:
+   either its PCI address, or its index in the order shown in the previous
+   command, starting from 0. It should print a `json` string to the terminal
+   showing the device status.
 
    ```sh
-   vollo-tool fpga-config rsu-status <device index>
+   vollo-tool fpga-config rsu-status <device>
    ```
 
 4. Update the `USER_IMAGE` partition of the flash with the new bitstream image
@@ -204,7 +205,7 @@ NOTE: this can only be done with an FPGA that is already programmed with a Vollo
 
    ```sh
    sudo ./load-kernel-driver.sh
-   vollo-tool fpga-config overwrite-partition <device index> <.rpd.tar.gz file> USER_IMAGE
+   vollo-tool fpga-config overwrite-partition <device> <.rpd.tar.gz file> USER_IMAGE
    ```
 
 5. Repeat step 4 for any other devices you wish to update.

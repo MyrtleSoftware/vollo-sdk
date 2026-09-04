@@ -41,7 +41,7 @@ void print_help(const char* prog) {
     "    -d, --device\n"
     "        Device specifier to pass to vollo-rt\n"
     "        Examples: 0, 01:00.0\n"
-    "        Defaults to 0\n"
+    "        Defaults to $VOLLO_CARD_BDF if set, otherwise 0\n"
     "\n"
 
     "    -o, --output-dir\n"
@@ -52,6 +52,8 @@ void print_help(const char* prog) {
 
     "    -i, --num-inferences\n"
     "        Number of inferences to compute\n"
+    "        Must be at least 2: the first inference always sends a full input, so only later\n"
+    "        ones can use the partial input API\n"
     "        Defaults to 1_000\n"
     "\n"
 
@@ -72,7 +74,7 @@ int main(int argc, char** argv) {
   // Parse options from CLI
   char* program_path = NULL;
   char* output_dir = NULL;
-  const char* device_spec = "0";
+  const char* device_spec = default_device_spec();
   size_t num_inferences = 1000;
   long int threshold_partial_updates = -1;
 
@@ -95,6 +97,18 @@ int main(int argc, char** argv) {
     case 't': threshold_partial_updates = parse_long_arg(optarg, "--threshold-partial"); break;
     default: print_help(argv[0]); exit(opt == 'h' ? EXIT_SUCCESS : EXIT_FAILURE);
     }
+  }
+
+  // Inference 0 always sends a full input (there is nothing to update yet), so a single-inference
+  // run exercises no partial update at all: a full-vs-partial output comparison at
+  // `--num-inferences 1` passes whatever the partial path does, including not running.
+  if (num_inferences < 2) {
+    fprintf(
+      stderr,
+      "--num-inferences must be at least 2 (got %zu): inference 0 always sends a full input, so a "
+      "single-inference run issues no partial update\n",
+      num_inferences);
+    exit(EXIT_FAILURE);
   }
 
   if (optind == (argc - 1)) {
@@ -214,6 +228,11 @@ int main(int argc, char** argv) {
   ALWAYS_ASSERT(latencies != NULL);
   struct timespec start_time, completed_time;
 
+  // How the run actually split between the two APIs. Reported at the end: with a low
+  // `--threshold-partial` most inferences fall back to full inputs, and a run that used the
+  // partial API for none of them measures nothing about it.
+  size_t num_partial_inferences = 0;
+
   // Seed the randomness to be able to compare runs
   srand(0);
 
@@ -287,6 +306,7 @@ int main(int argc, char** argv) {
         ctx, input_formats, (const void* const*)input_tensors, output_formats, output_tensors);
 
     } else {
+      num_partial_inferences++;
       partial_input_inference_start(
         ctx, (uint32_t)model_num_inputs, update_configs, output_tensors);
 
@@ -313,6 +333,14 @@ int main(int argc, char** argv) {
 
   //////////////////////////////////////////////////
   // Summarize latencies
+
+  // Which API the run actually used, so a run that measured nothing about partial updates says so
+  // rather than reporting plausible full-input latencies under a partial-update banner.
+  fprintf(
+    stderr,
+    "%zu/%zu inferences used the partial input API (the rest sent full inputs)\n",
+    num_partial_inferences,
+    num_inferences);
 
   latency_summary summary = summarize_latencies(num_inferences, latencies);
 

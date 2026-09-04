@@ -62,7 +62,7 @@ static uint32_t ulSmbusOpen( void *pvFwIf )
     CHECK_DRIVER;
 
     FW_IF_SMBUS_CFG *pxThisSmbusCfg = ( FW_IF_SMBUS_CFG* )pxThisIf->cfg;
-        
+
     /*
      * this is where the SMBus device would be created/enabled
      */
@@ -86,7 +86,7 @@ static uint32_t ulSmbusClose( void *pvFwIf )
     CHECK_DRIVER;
 
     FW_IF_SMBUS_CFG *pxThisSmbusCfg = ( FW_IF_SMBUS_CFG* )pxThisIf->cfg;
-    
+
     /*
      * this is where the SMBus device would be destroyed/disabled
      */
@@ -113,7 +113,7 @@ static uint32_t ulSmbusWrite( void *pvFwIf, uint64_t ullDstPort, uint8_t *pucDat
     if( ( NULL != pucData ) && ( FW_IF_SMBUS_MAX_DATA >=ulSize ) )
     {
         FW_IF_SMBUS_CFG *pxThisSmbusCfg = ( FW_IF_SMBUS_CFG* )pxThisIf->cfg;
-        
+
         /*
          * this is where the SMBus data would be tx'd
          *
@@ -149,7 +149,7 @@ static uint32_t ulSmbusRead( void *pvFwIf, uint64_t ullSrcPort, uint8_t *pucData
     if( ( NULL != pucData ) && ( NULL != pulSize ) && ( FW_IF_SMBUS_MAX_DATA >= *pulSize ) )
     {
         FW_IF_SMBUS_CFG *pxThisSmbusCfg = ( FW_IF_SMBUS_CFG* )pxThisIf->cfg;
-        
+
         /*
          * this is where the SMBus data would be rx'd
          *
@@ -181,11 +181,11 @@ static uint32_t ulSmbusIoctrl( void *pvFwIf, uint32_t ulOption, void *pvValue )
     CHECK_CFG( pxThisIf );
     CHECK_FIREWALLS( pxThisIf );
     CHECK_DRIVER;
-    
+
     FW_IF_SMBUS_CFG *pxThisSmbusCfg = ( FW_IF_SMBUS_CFG* )pxThisIf->cfg;
-    
+
     printf( "SMBus FW_IF_ioctrl for addr 0x%02X (option %u)\r\n", pxThisSmbusCfg->ulPort, ulOption );
-    
+
     switch( ulOption )
     {
         case FW_IF_COMMON_IOCTRL_FLUSH_TX:
@@ -205,7 +205,7 @@ static uint32_t ulSmbusIoctrl( void *pvFwIf, uint32_t ulOption, void *pvValue )
             pxThisSmbusCfg->xRole = FW_IF_SMBUS_ROLE_TARGET;
             printf( "SMBus addr 0x%02X - Target\r\n", pxThisSmbusCfg->ulPort );
             break;
-        
+
         default:
             status = FW_IF_ERRORS_UNRECOGNISED_OPTION;
             printf( "SMBus addr 0x%02X - Unrecognised option\r\n", pxThisSmbusCfg->ulPort );
@@ -232,9 +232,9 @@ static uint32_t ulSmbusBindCallback( void *pvFwIf, FW_IF_callback *pxNewFunc )
     if( NULL != pxNewFunc )
     {
         FW_IF_SMBUS_CFG *pxThisSmbusCfg = ( FW_IF_SMBUS_CFG* )pxThisIf->cfg;
-        
+
         pxThisIf->raiseEvent = pxNewFunc;
-    
+
         printf( "SMBus FW_IF_bindCallback called for port 0x%02X\r\n", pxThisSmbusCfg->ulPort );
     }
     else
@@ -327,7 +327,7 @@ uint32_t ulFW_IF_SMBUS_Create( FW_IF_CFG *pvFwIf, FW_IF_SMBUS_CFG *pxSmbusCfg )
     {
         status =  FW_IF_ERRORS_PARAMS;
     }
-        
+
     return status;
 }
 

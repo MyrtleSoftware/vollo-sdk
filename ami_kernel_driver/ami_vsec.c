@@ -28,21 +28,21 @@ int read_logic_uuid(struct pci_dev *dev, endpoints_struct **endpoints)
 		goto fail;
 	}
 
-	ret = pci_request_region(dev, (*endpoints)->uuid0_rom.bar_num, 
+	ret = pci_request_region(dev, (*endpoints)->uuid0_rom.bar_num,
 			PCIE_BAR_NAME[(*endpoints)->uuid0_rom.bar_num]);
 	if (ret) {
-		DEV_ERR(dev, "Could not request %s region (%s)", 
+		DEV_ERR(dev, "Could not request %s region (%s)",
 			PCIE_BAR_NAME[(*endpoints)->uuid0_rom.bar_num],
 			(*endpoints)->uuid0_rom.name);
 		ret = -EIO;
 		goto fail;
 	}
 
-	virt_addr = pci_iomap_range(dev, (*endpoints)->uuid0_rom.bar_num, 
+	virt_addr = pci_iomap_range(dev, (*endpoints)->uuid0_rom.bar_num,
 			(*endpoints)->uuid0_rom.start_addr,
 			(*endpoints)->uuid0_rom.bar_len);
 	if (!virt_addr) {
-		DEV_ERR(dev, "Could not map %s endpoint into virtual memory at start address 0x%llX", 
+		DEV_ERR(dev, "Could not map %s endpoint into virtual memory at start address 0x%llX",
 			(*endpoints)->uuid0_rom.name, (*endpoints)->uuid0_rom.start_addr);
 		ret = -EIO;
 		goto release_bar;
@@ -220,7 +220,7 @@ int read_vsec(struct pci_dev *dev, uint32_t vsec_base_addr,
 
 	DEV_VDBG(dev, "table_length : 0x%X, table_entry_size : 0x%X",
 		table_length, table_entry_size);
-	
+
 	/* Do some basic sanity checking */
 	if ((table_length == ((uint32_t)-1)) ||
 			(table_entry_size > XILINX_HW_DISCOVERY_ENTRY_SIZE_MAX) ||
@@ -393,11 +393,12 @@ int read_vsec(struct pci_dev *dev, uint32_t vsec_base_addr,
 			break;
 
 		default:
-			DEV_ERR(dev,
-				"Found Unsupported or Reserved Type Endpoint: 0x%X",
+			/* The table is self-describing and ends at 0xFF, so an
+			 * endpoint this driver has no use for is skippable.
+			 */
+			DEV_WARN(dev,
+				"Skipping unknown endpoint type: 0x%X",
 				ep_type);
-			ret = -EINVAL;
-			goto fail;
 			break;
 		}
 	}

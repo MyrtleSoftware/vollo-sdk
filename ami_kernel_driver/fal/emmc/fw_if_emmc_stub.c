@@ -59,7 +59,7 @@ typedef struct FW_IF_EMMC_PRIVATE_DATA
 /* local variables                                                           */
 /*****************************************************************************/
 
-static FW_IF_EMMC_PRIVATE_DATA xLocalData = 
+static FW_IF_EMMC_PRIVATE_DATA xLocalData =
 {
     EMMC_UPPER_FIREWALL,    /* ulUpperFirewall */
 
@@ -164,13 +164,13 @@ static uint32_t ulEmmcOpen( void *pvFwIf )
     FW_IF_CFG *pxThisIf = ( FW_IF_CFG* )pvFwIf;
     CHECK_HDL( pxThisIf );
     CHECK_CFG( pxThisIf );
-    CHECK_FIREWALLS( pxThisIf );    
+    CHECK_FIREWALLS( pxThisIf );
     CHECK_DRIVER;
 
     FW_IF_EMMC_CFG *pxCfg = ( FW_IF_EMMC_CFG* )pxThisIf->cfg;
-        
+
     /*
-     * This is where the EMMC driver would be initialised, with the device 
+     * This is where the EMMC driver would be initialised, with the device
      * ID specified in the FwIf cfg.
      */
     PLL_DBG( FW_IF_EMMC_NAME, "FW_IF_open for if.%u (%s)\r\n",
@@ -190,16 +190,16 @@ static uint32_t ulEmmcClose( void *pvFwIf )
     FW_IF_CFG *pxThisIf = ( FW_IF_CFG* )pvFwIf;
     CHECK_HDL( pxThisIf );
     CHECK_CFG( pxThisIf );
-    CHECK_FIREWALLS( pxThisIf );    
+    CHECK_FIREWALLS( pxThisIf );
     CHECK_DRIVER;
 
     FW_IF_EMMC_CFG *pxCfg = ( FW_IF_EMMC_CFG* )pxThisIf->cfg;
 
     /*
-     * This is where the EMMC driver would be de-initialised, with the device 
+     * This is where the EMMC driver would be de-initialised, with the device
      * ID specified in the FwIf cfg.
      */
-    PLL_DBG( FW_IF_EMMC_NAME, "FW_IF_close for if.%u (%s)\r\n", 
+    PLL_DBG( FW_IF_EMMC_NAME, "FW_IF_close for if.%u (%s)\r\n",
              ( unsigned int )pxCfg->ulIfId,
              pxCfg->pcIfName );
 
@@ -220,11 +220,11 @@ static uint32_t ulEmmcWrite( void *pvFwIf,
     FW_IF_CFG *pxThisIf = ( FW_IF_CFG* )pvFwIf;
     CHECK_HDL( pxThisIf );
     CHECK_CFG( pxThisIf );
-    CHECK_FIREWALLS( pxThisIf );    
+    CHECK_FIREWALLS( pxThisIf );
     CHECK_DRIVER;
 
     if( NULL != pucData )
-    {   
+    {
         /*
          * This is where data will be written to the EMMC.
          */
@@ -251,11 +251,11 @@ static uint32_t ulEmmcRead( void *pvFwIf,
     FW_IF_CFG *pxThisIf = ( FW_IF_CFG* )pvFwIf;
     CHECK_HDL( pxThisIf );
     CHECK_CFG( pxThisIf );
-    CHECK_FIREWALLS( pxThisIf );    
+    CHECK_FIREWALLS( pxThisIf );
     CHECK_DRIVER;
 
     if( ( NULL != pucData ) && ( NULL != pulLength ) )
-    {   
+    {
         /*
          * This is where data will be read from the EMMC.
          */
@@ -278,11 +278,11 @@ static uint32_t ulEmmcIoCtrl( void *pvFwIf, uint32_t ulOption, void *pvValue )
     FW_IF_CFG *pxThisIf = ( FW_IF_CFG* )pvFwIf;
     CHECK_HDL( pxThisIf );
     CHECK_CFG( pxThisIf );
-    CHECK_FIREWALLS( pxThisIf );    
+    CHECK_FIREWALLS( pxThisIf );
     CHECK_DRIVER;
-    
+
     FW_IF_EMMC_CFG *pxCfg = ( FW_IF_EMMC_CFG* )pxThisIf->cfg;
-    
+
     switch( ulOption )
     {
         case FW_IF_COMMON_IOCTRL_FLUSH_TX:
@@ -295,11 +295,11 @@ static uint32_t ulEmmcIoCtrl( void *pvFwIf, uint32_t ulOption, void *pvValue )
 
         case FW_IF_EMMC_IOCTRL_PRINT_INSTANCE_DETAILS:
             /*
-             * This will call iEMMC_PrintInstanceDetails( ) to print 
+             * This will call iEMMC_PrintInstanceDetails( ) to print
              * the EMMC detected device details.
              */
             break;
-        
+
         default:
             ulStatus = FW_IF_ERRORS_UNRECOGNISED_OPTION;
             break;
@@ -326,18 +326,18 @@ static uint32_t ulEmmcBindCallback( void *pvFwIf, FW_IF_callback *pxNewFunc )
     FW_IF_CFG *pxThisIf = ( FW_IF_CFG* )pvFwIf;
     CHECK_HDL( pxThisIf );
     CHECK_CFG( pxThisIf );
-    CHECK_FIREWALLS( pxThisIf );    
+    CHECK_FIREWALLS( pxThisIf );
     CHECK_DRIVER;
 
     if( NULL != pxNewFunc )
-    {   
+    {
         /*
          * Binds in callback provided to the FW_IF.
          * Callback will be invoked when by the driver when event occurs.
          */
         FW_IF_EMMC_CFG *pxCfg = ( FW_IF_EMMC_CFG* )pxThisIf->cfg;
         pxThisIf->raiseEvent = pxNewFunc;
-    
+
         PLL_DBG( FW_IF_EMMC_NAME, "FW_IF_bindCallback called for if.%u (%s)\r\n",
                  ( unsigned int )pxCfg->ulIfId,
                  pxCfg->pcIfName );
@@ -416,7 +416,7 @@ uint32_t ulFW_IF_EMMC_Create( FW_IF_CFG *pxFwIf, FW_IF_EMMC_CFG *pxEmmcCfg )
                  ( unsigned int )pxCfg->ulIfId,
                  pxCfg->pcIfName );
     }
-        
+
     return status;
 }
 

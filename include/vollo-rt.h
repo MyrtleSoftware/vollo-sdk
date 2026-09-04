@@ -24,6 +24,21 @@ enum number_format {
 typedef uint32_t number_format;
 
 /**
+ * The accelerator architecture that a loaded program (or hardware bitstream) targets.
+ */
+enum vollo_rt_architecture_t {
+  /**
+   * Vollo: the neural-network inference accelerator.
+   */
+  vollo_rt_architecture_vollo = 0,
+  /**
+   * Vollo Trees: the tree-ensemble inference accelerator.
+   */
+  vollo_rt_architecture_vollo_trees = 1,
+};
+typedef uint32_t vollo_rt_architecture_t;
+
+/**
  * Functions in vollo-rt that can return an error return `vollo_rt_error_t`.
  * NULL is returned where there are no errors, otherwise it is a null-terminated string containing
  * an error message.
@@ -85,8 +100,9 @@ void vollo_rt_destroy_err(vollo_rt_error_t err);
 /**
  * Initialise the vollo-rt context. This must be called before any other vollo-rt functions.
  *
- * Logging level can be configured by setting the environment variable `VOLLO_RT_LOG` to one of:
- * "error", "warn", "info", "debug", or "trace"
+ * Logging level can be configured by setting the environment variable `VOLLO_RT_LOG` (or
+ * `RUST_LOG`, which it takes precedence over) to one of: "error", "warn", "info", "debug", or
+ * "trace"
  */
 vollo_rt_error_t vollo_rt_init(vollo_rt_context_t* context_ptr);
 
@@ -173,6 +189,20 @@ size_t vollo_rt_accelerator_num_cores(vollo_rt_context_t vollo, size_t accelerat
  * bitstream)
  */
 size_t vollo_rt_accelerator_block_size(vollo_rt_context_t vollo, size_t accelerator_index);
+
+/**
+ * Get the architecture (Vollo or Vollo Trees) of the accelerator at `accelerator_index`.
+ *
+ * The architecture is determined by the loaded program, or for a hardware accelerator by its
+ * bitstream. It is available after `vollo_rt_add_device` / `vollo_rt_add_accelerator` for a
+ * hardware accelerator, and after `vollo_rt_load_program` for a VM.
+ *
+ * Requirements (panics otherwise):
+ * - The accelerator at `accelerator_index` has already been added to the context.
+ * - The architecture is determinable (for a VM, a program has been loaded or a hardware config was
+ *   given).
+ */
+vollo_rt_architecture_t vollo_rt_architecture(vollo_rt_context_t vollo, size_t accelerator_index);
 
 /**
  * Load a program onto the Vollo accelerators.
@@ -413,6 +443,7 @@ bool vollo_rt_model_is_resettable(vollo_rt_context_t vollo, size_t model_index);
  *
  * Note: The computation is only started on the next call to vollo_rt_poll. This way it is possible
  * to set up several computations that are kicked off at the same time.
+ * This is not supported on Vollo Trees (it only supports fp32 activations)
  *
  * - vollo:
  *     the context that the computation should be run on
@@ -503,6 +534,7 @@ vollo_rt_error_t vollo_rt_add_job_fp32(
  *
  * The model's native number format can be queried with `vollo_rt_model_input_format` and
  * `vollo_rt_model_output_format`.
+ * Only fp32 inputs and output are supported on Vollo Trees.
  *
  * Note:
  * - The computation is only started on the next call to vollo_rt_poll. This way it is possible

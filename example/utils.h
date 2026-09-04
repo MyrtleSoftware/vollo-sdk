@@ -38,6 +38,12 @@
     }                                       \
   } while (0)
 
+// The device to use when --device is not given: $VOLLO_CARD_BDF if set, else accelerator 0.
+static inline const char* default_device_spec(void) {
+  const char* spec = getenv("VOLLO_CARD_BDF");
+  return spec != NULL ? spec : "0";
+}
+
 #define NANOSECONDS (1000 * 1000 * 1000)
 
 double diff_timespec_ns(struct timespec from, struct timespec to);

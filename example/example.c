@@ -63,6 +63,28 @@ typedef struct ExampleOptions {
   const char* const* output_paths;
 } ExampleOptions;
 
+// Print the hardware config of accelerator 0.
+//
+// block_size is a Vollo concept: it is not meaningful for Vollo Trees and querying it panics. We
+// detect the architecture at runtime with vollo_rt_architecture, so Vollo Trees reports tree units
+// and omits block_size.
+static void print_hw_config(vollo_rt_context_t ctx, const char* what) {
+  if (vollo_rt_architecture(ctx, 0) == vollo_rt_architecture_vollo_trees) {
+    fprintf(
+      stderr,
+      "Using Vollo %s with %zu tree unit(s)\n",
+      what,
+      vollo_rt_accelerator_num_cores(ctx, 0));
+  } else {
+    fprintf(
+      stderr,
+      "Using Vollo %s with %zu core(s) and block_size %zu\n",
+      what,
+      vollo_rt_accelerator_num_cores(ctx, 0),
+      vollo_rt_accelerator_block_size(ctx, 0));
+  }
+}
+
 // A small example of the Vollo API
 //
 // The steps are:
@@ -98,11 +120,7 @@ static void vollo_example(ExampleOptions options) {
     EXIT_ON_ERROR(vollo_rt_add_vm(ctx, 0, bit_accurate));
   } else {
     EXIT_ON_ERROR(vollo_rt_add_device(ctx, 0, options.device_spec));
-    fprintf(
-      stderr,
-      "Using Vollo accelerator with %zu core(s) and block_size %zu\n",
-      vollo_rt_accelerator_num_cores(ctx, 0),
-      vollo_rt_accelerator_block_size(ctx, 0));
+    print_hw_config(ctx, "accelerator");
   }
 
   //////////////////////////////////////////////////
@@ -111,11 +129,7 @@ static void vollo_example(ExampleOptions options) {
 
   // The VM's hardware config is determined by the program
   if (options.run_in_vm) {
-    fprintf(
-      stderr,
-      "Using Vollo VM with %zu core(s) and block_size %zu\n",
-      vollo_rt_accelerator_num_cores(ctx, 0),
-      vollo_rt_accelerator_block_size(ctx, 0));
+    print_hw_config(ctx, "VM");
   }
 
   //////////////////////////////////////////////////
@@ -356,6 +370,8 @@ static void vollo_example(ExampleOptions options) {
 
   clock_gettime(CLOCK_MONOTONIC, &start_warmup_time);
 
+  start_times[0] = start_warmup_time;
+
   while (inf_completed < total_inferences) {
     //////////////////////////////////////////////////
     // Add jobs
@@ -588,7 +604,7 @@ void print_help(const char* example_program) {
     "    -d, --device\n"
     "        Device specifier to pass to vollo-rt\n"
     "        Examples: 0, 01:00.0\n"
-    "        Defaults to 0\n"
+    "        Defaults to $VOLLO_CARD_BDF if set, otherwise 0\n"
     "\n"
 
     "    -m, --model-index\n"
@@ -698,7 +714,7 @@ int main(int argc, char** argv) {
 
   ExampleOptions options;
   options.program_path = "";
-  options.device_spec = "0";
+  options.device_spec = default_device_spec();
   options.model_index = 0;
   options.fp32_api = false;
   options.bf16_api = false;

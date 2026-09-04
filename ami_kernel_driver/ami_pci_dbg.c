@@ -19,7 +19,7 @@
 /**
  * pcie_vendor_id_to_str() - Convert a PCI vendor ID to a human readable string.
  * @id: Vendor ID
- * 
+ *
  * Return: The vendor name or "UNKOWN".
  */
 char *pcie_vendor_id_to_str(uint16_t id)
@@ -41,7 +41,7 @@ void print_pcie_vendor_id(struct pci_dev *dev, uint16_t id)
 /**
  * pcie_device_id_to_str() - Convert a PCI device ID to a human readable string.
  * @id: device ID
- * 
+ *
  * This function should only be used as part of the driver initialization
  * procedure - to get a human readable name for display to the user,
  * the board info data should be used instead. This function may also be
@@ -64,16 +64,16 @@ char *pcie_device_header_to_str(pcie_header_struct *header)
 	switch (device_id) {
 	case AMI_PCIE_DEVICE_ID_V70_PF0:
 		return "ALVEO V70";
-	
+
 	case AMI_PCIE_DEVICE_ID_VCK5000_PF0:
 		return "VCK5000";
-	
+
 	case AMI_PCIE_DEVICE_ID_V80:
 		return "ALVEO V80";
-	
+
 	case AMI_PCIE_DEVICE_ID_V80P:
 		return "ALVEO V80P";
-	
+
 	default:
 		break;
 	}
@@ -303,22 +303,22 @@ void print_pcie_cap_pm_status_cntrl(struct pci_dev *dev, uint16_t pm_status_cntr
 
 	DEV_VDBG(dev, "PCIE_CAP_PM_STATUS_CNTRL : 0x%X", pm_status_cntrl);
 
-	DEV_VDBG(dev, "\t- PMCSR_POWER_STATE   : 0x%X", 
+	DEV_VDBG(dev, "\t- PMCSR_POWER_STATE   : 0x%X",
 		get_pcie_cap_pm_pmcsr_power_state(pm_status_cntrl));
 
-	DEV_VDBG(dev, "\t- PMCSR_NO_SOFT_RESET : 0x%X", 
+	DEV_VDBG(dev, "\t- PMCSR_NO_SOFT_RESET : 0x%X",
 		get_pcie_cap_pm_pmcsr_no_soft_reset(pm_status_cntrl));
 
-	DEV_VDBG(dev, "\t- PMCSR_PME_ENABLE    : 0x%X", 
+	DEV_VDBG(dev, "\t- PMCSR_PME_ENABLE    : 0x%X",
 		get_pcie_cap_pm_pmcsr_pme_enable(pm_status_cntrl));
 
-	DEV_VDBG(dev, "\t- PMCSR_DATA_SEL      : 0x%X", 
+	DEV_VDBG(dev, "\t- PMCSR_DATA_SEL      : 0x%X",
 		get_pcie_cap_pm_pmcsr_data_sel(pm_status_cntrl));
 
-	DEV_VDBG(dev, "\t- PMCSR_DATA_SCALE    : 0x%X", 
+	DEV_VDBG(dev, "\t- PMCSR_DATA_SCALE    : 0x%X",
 		get_pcie_cap_pm_pmcsr_data_scale(pm_status_cntrl));
-	
-	DEV_VDBG(dev, "\t- PMCSR_PME_STATUS    : 0x%X", 
+
+	DEV_VDBG(dev, "\t- PMCSR_PME_STATUS    : 0x%X",
 		get_pcie_cap_pm_pmcsr_pme_status(pm_status_cntrl));
 }
 
@@ -373,7 +373,7 @@ void print_pcie_cap_msi( struct pci_dev *dev, uint16_t msi_config_status,
 		DEV_VDBG(dev, "\t- MSI_MESSAGE_32_BIT_DATA   : 0x%X ",
 			msi_msg_data);
 	} else {
-		DEV_VDBG(dev, "\t- MSI_MESSAGE_UPPR_ADDR     : 0x%X", 
+		DEV_VDBG(dev, "\t- MSI_MESSAGE_UPPR_ADDR     : 0x%X",
 			msi_msg_uppr_addr);
 
 		DEV_VDBG(dev, "\t- MSI_MESSAGE_64_BIT_DATA   : 0x%X ",
@@ -385,7 +385,7 @@ void print_pcie_cap_cap(struct pci_dev *dev, uint16_t cap)
 {
 	if (!dev)
 		return;
-	
+
 	DEV_VDBG(dev, "PCIE_EXP_CAPABILITIES: 0x%X", cap);
 	DEV_VDBG(dev, "\t- VERSION       : 0x%X", get_pcie_cap_version(cap));
 	DEV_VDBG(dev, "\t- DEV_TYPE      : 0x%X", get_pcie_cap_dev_type(cap));
@@ -803,34 +803,34 @@ void print_pcie_cap_dev_ctrl_2(struct pci_dev *dev, uint16_t dev_ctrl)
 	if (!dev)
 		return;
 
-	DEV_VDBG(dev, "\t- COMP_TIMEOUT_VAL         : 0x%X", 
+	DEV_VDBG(dev, "\t- COMP_TIMEOUT_VAL         : 0x%X",
 		get_pcie_cap_dev_ctrl_2_comp_timeout_val(dev_ctrl));
 
-	DEV_VDBG(dev, "\t- COMP_TIMEOUT_DISABLE     : 0x%X", 
+	DEV_VDBG(dev, "\t- COMP_TIMEOUT_DISABLE     : 0x%X",
 		get_pcie_cap_dev_ctrl_2_comp_timeout_disable(dev_ctrl));
 
-	DEV_VDBG(dev, "\t- ARI_FRWD_EN              : 0x%X", 
+	DEV_VDBG(dev, "\t- ARI_FRWD_EN              : 0x%X",
 		get_pcie_cap_dev_ctrl_2_ari_frwd_en(dev_ctrl));
 
-	DEV_VDBG(dev, "\t- ATOMIC_OP_REQ_EN         : 0x%X", 
+	DEV_VDBG(dev, "\t- ATOMIC_OP_REQ_EN         : 0x%X",
 		get_pcie_cap_dev_ctrl_2_atomic_op_req_en(dev_ctrl));
 
-	DEV_VDBG(dev, "\t- ATOMIC_OP_EGRESS_BLOCK   : 0x%X", 
+	DEV_VDBG(dev, "\t- ATOMIC_OP_EGRESS_BLOCK   : 0x%X",
 		get_pcie_cap_dev_ctrl_2_atomic_op_egress_block(dev_ctrl));
 
-	DEV_VDBG(dev, "\t- IDO_REQ_EN               : 0x%X", 
+	DEV_VDBG(dev, "\t- IDO_REQ_EN               : 0x%X",
 		get_pcie_cap_dev_ctrl_2_ido_req_en(dev_ctrl));
 
-	DEV_VDBG(dev, "\t- IDO_COMP_EN              : 0x%X", 
+	DEV_VDBG(dev, "\t- IDO_COMP_EN              : 0x%X",
 		get_pcie_cap_dev_ctrl_2_ido_comp_en(dev_ctrl));
 
-	DEV_VDBG(dev, "\t- LTR_MECH_EN_OFFSE        : 0x%X", 
+	DEV_VDBG(dev, "\t- LTR_MECH_EN_OFFSE        : 0x%X",
 		get_pcie_cap_dev_ctrl_2_ltr_mech_en(dev_ctrl));
 
-	DEV_VDBG(dev, "\t- OBFF_EN_OFFSET)          : 0x%X", 
+	DEV_VDBG(dev, "\t- OBFF_EN_OFFSET)          : 0x%X",
 		get_pcie_cap_dev_ctrl_2_obff_en(dev_ctrl));
 
-	DEV_VDBG(dev, "\t- END_TLP_PREFIX_BLOCK : 0x%X", 
+	DEV_VDBG(dev, "\t- END_TLP_PREFIX_BLOCK : 0x%X",
 		get_pcie_cap_dev_ctrl_2_end_tlp_prefix_block(dev_ctrl));
 }
 
@@ -839,10 +839,10 @@ void print_pcie_cap_link_cap_2(struct pci_dev *dev, uint32_t link_cap)
 	if (!dev)
 		return;
 
-	DEV_VDBG(dev, "\t- SUPP_LINK_SPEED_VECTOR : 0x%X", 
+	DEV_VDBG(dev, "\t- SUPP_LINK_SPEED_VECTOR : 0x%X",
 		get_pcie_cap_link_cap_2_supp_link_speed_vector(link_cap));
 
-	DEV_VDBG(dev, "\t- CROSSLINK_SUP          : 0x%X", 
+	DEV_VDBG(dev, "\t- CROSSLINK_SUP          : 0x%X",
 		get_pcie_cap_link_cap_2_crosslink_sup(link_cap));
 }
 
@@ -907,7 +907,7 @@ void find_pci_ext_capability(struct pci_dev *dev, char *cap_name, int cap)
 
 	if (!dev || !cap_name)
 		return;
-	
+
 	ret = pci_find_ext_capability(dev, PCI_CAP_ID_PM);
 	if (ret == CAP_NOT_FOUND)
 		DEV_VDBG(dev, "PCIe extended capability not found: %s", cap_name);

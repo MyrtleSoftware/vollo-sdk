@@ -43,7 +43,7 @@ static void single_shot_inference(vollo_rt_context_t ctx, const float* input, fl
 }
 
 int main(int argc, char** argv) {
-  const char* device_spec = "0";
+  const char* device_spec = default_device_spec();
 
   static struct option long_options[] = {
     {"device", required_argument, 0, 'd'},
@@ -58,7 +58,7 @@ int main(int argc, char** argv) {
     case 'd': device_spec = optarg; break;
     case 'h':
       printf("USAGE:\n    %s [--device <SPEC>]\n", argv[0]);
-      printf("Defaults to --device 0\n");
+      printf("Defaults to $VOLLO_CARD_BDF if set, otherwise --device 0\n");
       return EXIT_SUCCESS;
     default: return EXIT_FAILURE;
     }
@@ -75,11 +75,14 @@ int main(int argc, char** argv) {
 
   //////////////////////////////////////////////////
   // Load program
-
-  if (vollo_rt_accelerator_block_size(ctx, 0) == 32) {
-    EXIT_ON_ERROR(vollo_rt_load_program(ctx, "./identity_b32.vollo"));
-  } else {
-    EXIT_ON_ERROR(vollo_rt_load_program(ctx, "./identity_b64.vollo"));
+  {
+    char program_path[64];
+    snprintf(
+      program_path,
+      sizeof(program_path),
+      "./identity_b%zu.vollo",
+      vollo_rt_accelerator_block_size(ctx, 0));
+    EXIT_ON_ERROR(vollo_rt_load_program(ctx, program_path));
   }
 
   //////////////////////////////////////////////////

@@ -20,9 +20,9 @@
 
 /**
  * @brief   Initialise the FW IF OSPI debug access
- * 
+ *
  * @param   pxParentHandle optional handle to the parent directory
- * 
+ *
  * @return  N/A
  */
 void vFW_IF_OSPI_DebugInit( DAL_HDL pxParentHandle );

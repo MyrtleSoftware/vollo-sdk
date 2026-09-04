@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
  * ami_eeprom.h - This file contains functions to read/write from the AVED Manufacturing EEPROM.
- * 
+ *
  * Copyright (c) 2023-present Advanced Micro Devices, Inc. All rights reserved.
  */
- 
+
 #ifndef AMI_EEPROM_H
 #define AMI_EEPROM_H
 
@@ -29,7 +29,7 @@
  * @buf: Buffer to be populated with the bytes read.
  * @buf_len: The number of bytes to be read.
  * @offset: The offset from the base address of the EEPROM.
- * 
+ *
  * Return: 0 or negative error code.
  */
 int eeprom_read(struct amc_control_ctxt *amc_ctrl_ctxt,
@@ -43,7 +43,7 @@ int eeprom_read(struct amc_control_ctxt *amc_ctrl_ctxt,
  * @buf: Buffer to be populated with the bytes to write.
  * @buf_len: The number of bytes to be written.
  * @offset: The offset from the base address of the EEPROM.
- * 
+ *
  * Return: 0 or negative error code.
  */
 int eeprom_write(struct amc_control_ctxt *amc_ctrl_ctxt,

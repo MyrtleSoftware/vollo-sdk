@@ -76,6 +76,12 @@ runtime](vollo-runtime.md).
 program.save('mlp.vollo')
 ```
 
+You can also load the program back to the compiler from the saved file:
+
+```python
+program = vollo_compiler.Program.load('mlp.vollo')
+```
+
 ## Simulation
 
 The Vollo compiler can be used to simulate programs in the Vollo virtual machine

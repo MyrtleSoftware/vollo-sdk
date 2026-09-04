@@ -17,18 +17,18 @@ download the bitstream for the Silicom `Artena` board with the `c8b32` configura
 [Github Release page]: https://github.com/MyrtleSoftware/vollo-sdk/releases/
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v28.1.2/vollo-silicom-artena-c8b32-28.1.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v29.0.0/vollo-silicom-artena-c8b32-29.0.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-silicom-artena-c8b32-28.1.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-silicom-artena-c8b32-29.0.tar.gz -C $VOLLO_SDK/bitstream
 ```
 
 An LSTM-only image is available for the Artena which runs at a slightly higher clock frequency than the full-featured-Vollo
 c8b32 version. This may be downloaded as follows:
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v28.1.2/vollo-silicom-artena-c8b32lstm-28.1.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v29.0.0/vollo-silicom-artena-c8b32lstm-29.0.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-silicom-artena-c8b32lstm-28.1.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-silicom-artena-c8b32lstm-29.0.tar.gz -C $VOLLO_SDK/bitstream
 ```
 
 ## Programming the FPGA via JTAG
@@ -46,7 +46,7 @@ system so that the device can be programmed over JTAG.
 1. Download and install Vivado Lab Edition:
 
     - Navigate to the Vivado Design Tools [download page].
-    - Under "Vivado Lab Solutions" find "Vivado 2025.2: Lab Edition - Linux (TAR/GZIP - 1.99 GB)" (later versions may be available).
+    - Under "Vivado Lab Solutions" find "Vivado 2026.1: Lab Edition - Linux (TAR/GZIP - 1.99 GB)" (later versions may be available).
     - Download the file and extract it to a directory of your choice. You will need an AMD account
       to download the file. You can create an account for free.
     - Pick a location to install `Vivado_Lab`, e.g. `/opt/Xilinx`, a user directory like `~/Xilinx` is
@@ -73,8 +73,8 @@ system so that the device can be programmed over JTAG.
     - Check that installation was successful:
 
       ```sh
-      $ $VIVADO_DIR/2025.2/Vivado_Lab//bin/vivado_lab -version
-      Vivado Lab Edition v2025.2 (64-bit)
+      $ $VIVADO_DIR/2026.1/Vivado_Lab//bin/vivado_lab -version
+      Vivado Lab Edition v2026.1 (64-bit)
       SW Build 6299465 on Fri Nov 14 21:19:43 MST 2025
       Tool Version Limit: 2025.11
       Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
@@ -84,7 +84,7 @@ system so that the device can be programmed over JTAG.
 2. Run the `flash_vollo-silicom-artena-c8b32.tcl` script to program the Artena board:
 
     ```sh
-    sudo $VIVADO_DIR/2025.2/Vivado_Lab/bin/vivado_lab -mode batch -source ./flash_vollo-silicom-artena-c8b32.tcl
+    sudo $VIVADO_DIR/2026.1/Vivado_Lab/bin/vivado_lab -mode batch -source ./flash_vollo-silicom-artena-c8b32.tcl
     ```
 
    This prints out a lot of lines while programming and takes about 10 minutes.

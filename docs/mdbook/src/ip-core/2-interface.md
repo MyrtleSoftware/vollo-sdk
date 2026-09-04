@@ -12,8 +12,9 @@ The IP Core has the following interfaces:
 - Config bus. This is a 32-bit wide AXI4-Lite bus used to activate the device with a license key and to configure the IP Core. It is synchronous to the config clock.
 - Compute clock and reset signals. This is the clock used for running the model. In the example design this clock frequency is
   set to 320MHz.
-- Input data bus. This a AXI4-Stream bus used to stream input data to the IP Core. It size varies depending on the size of the
-  cores in the IP. For a 32-block size design, this is 512 wide (16 bits per value using brainfloat 16). It is synchronous to the compute clock.
+- Input data bus. This a AXI4-Stream bus used to stream input data to the IP Core. Its width is `block_size * 16` bits
+  (16 bits per value using brainfloat 16): 512 bits for a 32-block size design, 256 bits for a 16-block size design. It is
+  synchronous to the compute clock.
 - Model selection bus. This is an AXI4-Stream interface for providing the model index. It is synchronous to the compute clock.
 - Output data bus. This a AXI4-Stream bus used to stream output data from the IP Core. It is synchronous to the compute clock.
 
@@ -70,9 +71,11 @@ You can load a new program by re-running the configuration.
 ## Input and Output Streams
 
 The input and output streams are AXI4-Stream interfaces. Each input and output is packed as
-a flattened tensor and padded to the next multiple of block-size. The data should be packed in
-*little-endian* format. The output stream includes `tkeep` and `tlast` signals to indicate when the
-end of the packet and which bytes are valid (i.e. not padding).
+a flattened tensor and padded to the next multiple of block-size, so one stream beat carries one
+block. The data should be packed in *little-endian* format. The output stream is padded the same
+way (the padding bytes are zeros, with `tkeep` asserted for them, so every beat is fully
+populated); `tlast` marks the end of the packet. Receivers should take the true (unpadded) output
+sizes from the program metadata rather than from `tkeep`.
 
 For example, an input of tensor dimension `[62]` to an ip-core with block size 32 should be provided
 as two words, the first with a full 32 brainfloat values, and the second with the remaining 30

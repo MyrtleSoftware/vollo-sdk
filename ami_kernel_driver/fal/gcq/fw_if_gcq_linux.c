@@ -126,7 +126,7 @@ static uint32_t ulProfilesAllocated = 0;
  *
  */
 static inline void prvvWriteMemReg32( uint64_t ullDestAddr, uint32_t ulValue )
-{ 
+{
 #ifdef __KERNEL__
     iowrite32( ulValue, ( void __iomem * ) ullDestAddr );
 #else
@@ -596,7 +596,7 @@ uint32_t ulFW_IF_GCQ_Init( FW_IF_GCQ_INIT_CFG *pxCfg )
     }
     else
     {
-        /* 
+        /*
          * Bind in register and memory R/W function pointers
          * and assign to the local profile to be used by all
          * GCQ instances
@@ -638,7 +638,7 @@ uint32_t ulFW_IF_GCQ_Create( FW_IF_CFG *xFWIf, FW_IF_GCQ_CFG *xGCQCfg )
             .ioctrl         = &prvGCQIOCtrl,
             .bindCallback   = &prvGCQBindCallback,
             .cfg            = ( void* )xGCQCfg,
-            .lowerFirewall  = GCQ_LOWER_FIREWALL    
+            .lowerFirewall  = GCQ_LOWER_FIREWALL
         };
 
         memcpy( xFWIf, &myLocalIf, sizeof( FW_IF_CFG ) );
@@ -647,7 +647,7 @@ uint32_t ulFW_IF_GCQ_Create( FW_IF_CFG *xFWIf, FW_IF_GCQ_CFG *xGCQCfg )
     else
     {
         xRet = FW_IF_ERRORS_INVALID_CFG;
-    } 
+    }
 
     return xRet;
 }
