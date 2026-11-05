@@ -11,6 +11,10 @@ program on a Vollo accelerator.
 The Vollo compiler API also includes functionality to simulate and estimate
 performance of Vollo programs.
 
+The [Vollo Model Zoo](https://github.com/MyrtleSoftware/vollo-model-zoo)
+includes examples of more complex model architectures beyond the examples in
+this user guide.
+
 ## Installation
 
 Set up Vollo environment variables by [sourcing
