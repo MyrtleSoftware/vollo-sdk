@@ -1,5 +1,12 @@
 # Changelog
 
+## 29.1.0
+
+- Support for `torch.expm1` and `torch.special.expm1` with special handling for inputs near zero
+- Improve accuracy of `tanh` for inputs near zero
+- Increase number of Programmable Activation Functions on Versal boards from 4 to 8
+- Speed up model compilation
+
 ## 29.0.0
 
 - Support for `torch.log`, `torch.log2`, `torch.log10` (as well as respective
