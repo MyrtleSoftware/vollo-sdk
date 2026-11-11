@@ -3,13 +3,14 @@
 
 The Vollo compiler supports PyTorch models that use the following operations:
 
-| Operation                | Support Notes                                                                                                          | Fp32 Support                           |
-| ------------------------ | ---------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| Operation                | Support Notes                                                                                                          | Fp32 Support                          |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
 | Pointwise arithmetic ops | `+`, `-`, `*`, `/`, `maximum`, `minimum`, the pointwise overload of `max` and `min`                                    | ✅ `+`, `-`, `*`, `maximum`, `minimum` |
 | Inequality               | `>`, `<`, `>=`, `<=`                                                                                                   | ✅                                     |
 | Clamp ops                | `clamp`, `relu`                                                                                                        | ✅                                     |
 | Matrix multiplication    | `Linear`; `matmul` / `@` where one side is a constant                                                                  | ❌                                     |
-| Convolution              | `torch.nn.Conv1d`, `vollo_torch.nn.PaddedConv1d`; with `groups == 1` or `groups == in_channels == out_channels`        | ❌                                     |
+| Convolution              | `torch.nn.Conv1d`, `torch.nn.Conv2d`, `torch.nn.Conv3d`; with `groups == 1` or `groups == in_channels == out_channels`, and `padding_mode = 'zeros'` | ❌                                     |
+| Streaming convolution    | `vollo_torch.nn.PaddedConv1d`; with `groups == 1` or `groups == in_channels == out_channels`                           | ❌                                     |
 | Pooling                  | `torch.nn.MaxPool1d`, `torch.nn.functional.max_pool1d`; with `padding = 0` and `ceil_mode = False`                     | ✅                                     |
 | LSTM                     | `torch.nn.LSTM`, `vollo_torch.nn.LSTM`                                                                                 | ❌                                     |
 | Indexing / slicing       | Partial square bracket `[]` support; `index_select`, `narrow`                                                          | ✅                                     |

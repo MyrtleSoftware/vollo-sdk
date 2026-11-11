@@ -16,6 +16,13 @@ It currently supports the following accelerator cards:
 | Napatech NT400D11    | Intel Agilex AGF014   | 3.1 Million         |
 | AMD Alveo V80        | AMD Versal XCV80      | 25.2 Million[^note] |
 
+## BIOS Requirements
+
+The BIOS reserves PCIe address space for the card's BARs at boot, sized for the image
+the card boots. Sharing the card through [virtual functions](multiprocess.md)
+needs SR-IOV support turned on in the BIOS. `load-kernel-driver.sh` reports any BAR left without an
+address.
+
 ## Operating System Requirements
 
 Vollo is compatible with Ubuntu 20.04 and later.

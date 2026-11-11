@@ -153,6 +153,10 @@ all_configs = {
 # the value of STREAM_DIM is not important.
 STREAM_DIM = 1
 
+# The models' weights and the example input are random; seeded so that a
+# compile and its VM check are the same every run.
+torch.manual_seed(0)
+
 all_models = {
     "identity-128": (Identity(), [128], {}),
     # mlp models

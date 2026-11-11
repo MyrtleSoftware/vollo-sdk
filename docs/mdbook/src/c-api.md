@@ -63,7 +63,37 @@ void vollo_rt_destroy(vollo_rt_context_t vollo);
  * of PCI addresses. This should be called after `vollo_rt_init` but before `vollo_rt_load_program`
  */
 vollo_rt_error_t vollo_rt_add_accelerator(vollo_rt_context_t vollo, size_t accelerator_index);
+
+/**
+ * Add an accelerator using a device specifier string. This is a more versatile version of
+ * `vollo_rt_add_accelerator` that takes a string instead of just an index.
+ *
+ * `accelerator_index` assigns the logical accelerator slot used by query APIs such as
+ * `vollo_rt_accelerator_num_cores` and `vollo_rt_accelerator_block_size`.
+ *
+ * - `0` -- vollo accelerator 0
+ * - `0.3` -- VF 3 of vollo accelerator 0, numbered from 0 as `vollo-tool list` shows
+ * - `01:00.0` -- vollo accelerator with PCI address 01:00.0
+ * - `vm:vollo` -- anonymous Vollo VM, bit-accurate by default
+ * - `vm+f32:vollo` -- anonymous Vollo VM in non-bit-accurate mode
+ * - `vm:bittware-ia420f-c6b32` -- Vollo VM constrained to the given named hw config preset
+ * - `vm+bit-accurate:bittware-ia420f-c6b32` -- same named VM in bit-accurate mode (the default)
+ * - `vm:path/to/hw-config.json` -- Vollo VM constrained to the given hw config JSON file
+ * - `vm+f32:path/to/hw-config.json` -- same JSON-configured VM in non-bit-accurate mode
+ *
+ * This should be called after `vollo_rt_init` but before `vollo_rt_load_program`.
+ */
+vollo_rt_error_t vollo_rt_add_device(
+  vollo_rt_context_t vollo, size_t accelerator_index, const char* device_spec);
 ```
+
+## Using a virtual function
+
+On a V80, V80LL or Artena card split into virtual functions (VFs), each thread or process that
+drives the card creates its own context and opens its own VF with `vollo_rt_add_device`, naming it as `<card>.<vf>` (such as `"0.3"`) or by its PCI address. It
+then loads the `.vollo-vf` virtual program that `vollo-tool setup-vfs` wrote for that VF with
+`vollo_rt_load_program`, in place of the `.vollo` program. After that, the API works as it does on
+a whole card. See [Configuring the Accelerator for Multiple Processes](multiprocess.md).
 
 ## Loading a program
 
@@ -307,8 +337,8 @@ while copying to/from DMA buffers, avoiding an extra copy.
  * Sets up a computation on the vollo accelerator where the inputs and outputs are in brain-float 16
  * format.
  *
- * Note: The computation is only started on the next call to vollo_rt_poll. This way it is possible
- * to set up several computations that are kicked off at the same time.
+ * Note: The computation may be started by this call, or only on the next call to vollo_rt_poll:
+ * either way it is possible to set up several computations that are kicked off at the same time.
  *
  * - vollo:
  *     the context that the computation should be run on
@@ -380,7 +410,7 @@ update specific indices of the input buffer stored on the accelerator.
 There are two functions to achieve this:
 
 - a simple one for a single bf16 input: `vollo_rt_add_job_bf16_partial_update`
-- a more general one for multiple inputs/outputs and fp32 data: `vollo_rt_add_job_partial_updates`
+- a more general one for multiple inputs/outputs and fp32 data: `vollo_rt_add_job_partial_update`
 
 ```c
 /**
@@ -393,11 +423,12 @@ There are two functions to achieve this:
  * Limitations:
  * - Only single model programs are supported
  * - Only single input models are supported
- * - Only inputs with up to 65536 elements supported (for now)
- * - Currently not supported for a VM
+ * - A full update must be queued before the first partial update
+ * - An update may set at most one value per input element, and at most 65528; a full update
+ *   has no such limit
  *
- * Note: The computation is only started on the next call to vollo_rt_poll. This way it is possible
- * to set up several computations that are kicked off at the same time.
+ * Note: The computation may be started by this call, or only on the next call to vollo_rt_poll:
+ * either way it is possible to set up several computations that are kicked off at the same time.
  *
  * - vollo:
  *     the context that the computation should be run on

@@ -14,24 +14,18 @@ The processes below assume that the V80 has already been successfully programmed
 either via JTAG or PCIe. If you have not yet programmed the card with a `Vollo` image, please follow the instructions
 in [Programming the V80 via JTAG](./programming-the-v80.md#programming-the-fpga-via-jtag).
 
-If you are having trouble while programming the V80 card over PCIe, or if you cannot access sensor data
-from the card, then the first step is to ensure that the `ami` driver is built and loaded correctly.
+If you are having trouble while programming the V80 card over PCIe, then the first step is to ensure
+that all of the card's functions are bound to the Vollo driver:
 
 ```sh
-cd $VOLLO_SDK/ami_kernel_driver
-make
-sudo insmod ami.ko
+sudo $VOLLO_SDK/load-kernel-driver.sh vfio
 ```
 
-If the driver has already been loaded, try unloading and reloading the driver:
+If AMD's `ami` kernel driver from an earlier release is loaded, it holds the card's management function and
+`vollo-tool` cannot program the flash until it is unloaded with `sudo rmmod ami`. Then run
+`load-kernel-driver.sh` again.
 
-```sh
-cd $VOLLO_SDK/ami_kernel_driver
-sudo rmmod ami
-sudo insmod ami.ko
-```
-
-Now that the `ami` driver is correctly loaded, the driver association with the v80 should be visible with an `lspci` command.
+The driver association with the V80 should now be visible with an `lspci` command.
 
 ```sh
 lspci -vvvnn -s $BDF
@@ -64,10 +58,10 @@ Running the full `lspci` command should display the V80 card loaded with a `Voll
         IOMMU group: 13
         Region 0: Memory at fcd0000000 (64-bit, prefetchable) [size=256M]
         Capabilities: <access denied>
-        Kernel driver in use: ami
+        Kernel driver in use: pci-pf-stub
 ```
 
-The last line shows the `ami` driver correctly associated with the `1st` physical function of the board, `01:00.1`.
+The last line shows the `pci-pf-stub` driver correctly associated with the `1st` physical function of the board, `01:00.1`.
 
 This provides access to the OSPI programming functions available on the V80 via PCIe and the normal PCIe programming
 detailed in [Programming the V80 over PCIe](./programming-the-v80.md#programming-the-fpga-over-pcie) should be possible. If not, please continue with
@@ -81,26 +75,8 @@ other troubleshooting steps, including powering down and powering up the host ma
 Such a failure might manifest as follows:
 
 If, while running the PCIe programming commands found in step 2 of [Programming the FPGA over PCIe](./programming-the-v80.md#programming-the-fpga-over-pcie),
-you see a failure that displays as below, then it's possible that the V80 card is in a bad state.
-
-```sh
-----------------------------------------------
-Device | 01:00.1
-----------------------------------------------
-Current Configuration
-----------------------------------------------
-UUID   | 611196598b26d6e6896b650e6357e1ba
-----------------------------------------------
-Incoming Configuration
-----------------------------------------------
-UUID      | 611196598b26d6e6896b650e6357e1ba
-Path      | /home/stuart/Projects/defaultBuilds/v80ll-sensors-amc-update/pdi/amd_v80_gen5x8_nofpt.pdi
-Partition | 0
-----------------------------------------------
-Are you sure you wish to proceed? [Y/n]: Y
-[....................................................................................................] 0% | Error: could not program image
-EIO: File could not be read or written [do_image_download:154 - errno 19 (No such device)].
-```
+`vollo-tool` reports that the card looks "wedged", then the V80 card is in a bad state. `vollo-tool` checks for
+this before it writes anything to the flash, so the image on the card is unchanged.
 
 The suggested solution for stateful failures like this is to:
 

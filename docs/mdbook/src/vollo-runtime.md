@@ -13,6 +13,9 @@ In order to use the Vollo runtime you need to have [an accelerator set up](./acc
 - [A loaded kernel driver and an installed license](./licensing.md)
 - Environment set up with `source setup.sh`
 
+To use one accelerator from several threads or processes at once, split it into virtual functions:
+see [Configuring the Accelerator for Multiple Processes](./multiprocess.md).
+
 ## Python API
 
 The Vollo SDK includes Python bindings for the Vollo runtime. These can be more

@@ -15,6 +15,11 @@ fi
 # Where to put the venv, compiled programs and metrics
 WORKDIR="${WORKDIR:-work}"
 
+# The runtime's MMIO threshold changes every measurement below, so say when it is not the default
+if [[ -n "${VOLLO_MMIO_MAX_SIZE+set}" ]]; then
+  info "VOLLO_MMIO_MAX_SIZE=$VOLLO_MMIO_MAX_SIZE overrides the runtime's default MMIO threshold"
+fi
+
 info "creating work directory $WORKDIR"
 mkdir -p "$WORKDIR"
 cd "$WORKDIR"
@@ -124,7 +129,13 @@ if [[ -n "$RUN_IO_TEST" ]]; then
   echo "------------------------------------------------------------------"
   echo
 
-  echo "input bytes, output bytes, mean latency (us), 99th percentile latency (us)" > io-test-metrics.csv
+  # Each program runs with raw buffers (`--raw-buffer-api`, the fastest path) and with the
+  # application's own buffers, which the runtime copies (`io-test-metrics.csv`). Both send the
+  # input over MMIO or DMA by the runtime's threshold: its default, as in the documented tables,
+  # or `VOLLO_MMIO_MAX_SIZE` to try another.
+  csv_header="input bytes,output bytes,mean latency (us),99th percentile latency (us)"
+  echo "$csv_header" > io-test-raw-buffer-metrics.csv
+  echo "$csv_header" > io-test-metrics.csv
 
   for input_size_pow in $(seq 6 1 14); do
     input_size_bytes=$((2 ** input_size_pow))
@@ -136,8 +147,10 @@ if [[ -n "$RUN_IO_TEST" ]]; then
       m=$($python_cmd "$VOLLO_SDK"/example/io-test-programs.py -c hw_config.json "$input_size_values" "$output_size_values")
 
       info "Program compiled $m, now running inference"
+      echo -n "$input_size_bytes B,$output_size_bytes B," >> io-test-raw-buffer-metrics.csv
+      $cmd --raw-buffer-api --num-inferences=100000 --num-warmup-inferences=10000 --json "$m" | tee /dev/stderr | jq -r '.metrics.latency_us | [.mean, .p99] | join(",")' >> io-test-raw-buffer-metrics.csv
       echo -n "$input_size_bytes B,$output_size_bytes B," >> io-test-metrics.csv
-      $cmd --num-inferences=100000 --json "$m" | tee /dev/stderr | jq -r '.metrics.latency_us | [.mean, .p99] | join(",")' >> io-test-metrics.csv
+      $cmd --num-inferences=100000 --num-warmup-inferences=10000 --json "$m" | tee /dev/stderr | jq -r '.metrics.latency_us | [.mean, .p99] | join(",")' >> io-test-metrics.csv
       echo
 
       # cleanup
