@@ -1,0 +1,556 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Configuring the Accelerator for Multiple Processes - Vollo SDK User Guide</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <!-- Google Tag Manager -->
+        <script>
+            (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                'https://www.googletagmanager.com/gtm.js?id=GTM-PNCNPKTT' + dl;
+            f.parentNode.insertBefore(j, f);
+            })(window, document, 'script', 'dataLayer', 'GTM-PNCNPKTT');
+        </script>
+        <!-- End Google Tag Manager -->
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="shortcut icon" href="assets/vollo-favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <a href="./">
+                  <img class="sidebar-logo">
+                  </img>
+                </a>
+
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="introduction.html">Introduction</a></li><li class="chapter-item expanded "><a href="installation.html"><strong aria-hidden="true">1.</strong> Installation</a></li><li class="chapter-item expanded "><a href="key-features.html"><strong aria-hidden="true">2.</strong> Key Features</a></li><li class="chapter-item expanded "><a href="getting-started.html"><strong aria-hidden="true">3.</strong> Getting Started</a></li><li class="chapter-item expanded "><a href="vollo-compiler.html"><strong aria-hidden="true">4.</strong> Vollo Compiler</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="api.html"><strong aria-hidden="true">4.1.</strong> API Reference</a></li><li class="chapter-item expanded "><a href="supported-models.html"><strong aria-hidden="true">4.2.</strong> Supported Models</a></li><li class="chapter-item expanded "><a href="example-1-mlp.html"><strong aria-hidden="true">4.3.</strong> Example 1: MLP</a></li><li class="chapter-item expanded "><a href="example-2-cnn.html"><strong aria-hidden="true">4.4.</strong> Example 2: CNN</a></li><li class="chapter-item expanded "><a href="example-3-lstm.html"><strong aria-hidden="true">4.5.</strong> Example 3: LSTM</a></li><li class="chapter-item expanded "><a href="example-4-mixed-precision.html"><strong aria-hidden="true">4.6.</strong> Example 4: Mixed Precision</a></li><li class="chapter-item expanded "><a href="example-5-multi-model.html"><strong aria-hidden="true">4.7.</strong> Example 5: Multiple Models in a Vollo Program</a></li><li class="chapter-item expanded "><a href="data-dimension.html"><strong aria-hidden="true">4.8.</strong> The data dimension</a></li><li class="chapter-item expanded "><a href="vollo-onnx.html"><strong aria-hidden="true">4.9.</strong> ONNX Support</a></li></ol></li><li class="chapter-item expanded "><a href="benchmark.html"><strong aria-hidden="true">5.</strong> Benchmarks</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="benchmark-mlp.html"><strong aria-hidden="true">5.1.</strong> MLP</a></li><li class="chapter-item expanded "><a href="benchmark-cnn.html"><strong aria-hidden="true">5.2.</strong> CNN</a></li><li class="chapter-item expanded "><a href="benchmark-lstm.html"><strong aria-hidden="true">5.3.</strong> LSTM</a></li><li class="chapter-item expanded "><a href="benchmark-io.html"><strong aria-hidden="true">5.4.</strong> IO Round Trip</a></li></ol></li><li class="chapter-item expanded "><a href="accelerator-setup.html"><strong aria-hidden="true">6.</strong> Accelerator Setup</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="system-requirements.html"><strong aria-hidden="true">6.1.</strong> System Requirements</a></li><li class="chapter-item expanded "><a href="programming-the-agilex.html"><strong aria-hidden="true">6.2.</strong> Programming the Agilex</a></li><li class="chapter-item expanded "><a href="programming-the-artena.html"><strong aria-hidden="true">6.3.</strong> Programming the Artena</a></li><li class="chapter-item expanded "><a href="programming-the-v80.html"><strong aria-hidden="true">6.4.</strong> Programming the V80</a></li><li class="chapter-item expanded "><a href="troubleshooting-the-v80.html"><strong aria-hidden="true">6.5.</strong> Troubleshooting the V80</a></li><li class="chapter-item expanded "><a href="licensing.html"><strong aria-hidden="true">6.6.</strong> Licensing</a></li><li class="chapter-item expanded "><a href="running-an-example.html"><strong aria-hidden="true">6.7.</strong> Running an Example</a></li><li class="chapter-item expanded "><a href="running-the-benchmark.html"><strong aria-hidden="true">6.8.</strong> Running the Benchmark</a></li><li class="chapter-item expanded "><a href="multiprocess.html" class="active"><strong aria-hidden="true">6.9.</strong> Configuring the Accelerator for Multiple Processes</a></li></ol></li><li class="chapter-item expanded "><a href="vollo-runtime.html"><strong aria-hidden="true">7.</strong> Vollo Runtime</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="c-api.html"><strong aria-hidden="true">7.1.</strong> C API</a></li><li class="chapter-item expanded "><a href="vollo-rt-example.html"><strong aria-hidden="true">7.2.</strong> C Example</a></li><li class="chapter-item expanded "><a href="vollo-rt-python-example.html"><strong aria-hidden="true">7.3.</strong> Python Example</a></li></ol></li><li class="chapter-item expanded "><a href="ip-core/0-intro.html"><strong aria-hidden="true">8.</strong> Vollo IP Core</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="ip-core/1-selecting-an-ip-core.html"><strong aria-hidden="true">8.1.</strong> Selecting an IP Core</a></li><li class="chapter-item expanded "><a href="ip-core/2-interface.html"><strong aria-hidden="true">8.2.</strong> IP Core Interface</a></li><li class="chapter-item expanded "><a href="ip-core/3-quartus-integration.html"><strong aria-hidden="true">8.3.</strong> Quartus Integration</a></li><li class="chapter-item expanded "><a href="ip-core/4-config.html"><strong aria-hidden="true">8.4.</strong> Runtime configuration</a></li><li class="chapter-item expanded "><a href="ip-core/5-example-design.html"><strong aria-hidden="true">8.5.</strong> Example design</a></li><li class="chapter-item expanded "><a href="ip-core/6-simulation-model.html"><strong aria-hidden="true">8.6.</strong> Simulation model</a></li></ol></li><li class="chapter-item expanded "><a href="versions.html"><strong aria-hidden="true">9.</strong> Versions</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="release-notes.html"><strong aria-hidden="true">9.1.</strong> Release Notes</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Vollo SDK User Guide</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="configuring-the-accelerator-for-multiple-processes-sr-iov"><a class="header" href="#configuring-the-accelerator-for-multiple-processes-sr-iov">Configuring the Accelerator for Multiple Processes (SR-IOV)</a></h1>
+<p>By default, <code>vollo-rt</code> uses the accelerator through its PCIe physical function (PF), bound to
+<code>vfio-pci</code>. Only one process can open a <code>vfio-pci</code> device at a time, and a <code>vollo-rt</code> context can
+only be driven from one thread, so only one thread can use the accelerator.</p>
+<p>The V80, V80LL and Artena bitstreams support SR-IOV (single-root I/O virtualisation). This lets you
+split a card into virtual functions (VFs). Each VF is a separate PCIe device with its own <code>vollo-rt</code>
+context, so several threads of one process, several processes, or several virtual machines can each
+drive a VF of their own at the same time. All of the VFs run one program, loaded onto the card's
+cores, and their jobs share those cores. Agilex cards do not support VFs.</p>
+<div class="table-wrapper"><table><thead><tr><th>Card</th><th>Maximum VFs</th></tr></thead><tbody>
+<tr><td>V80, V80LL</td><td>16</td></tr>
+<tr><td>Artena</td><td>8</td></tr>
+</tbody></table>
+</div>
+<p>Setting this up takes three steps:</p>
+<ol>
+<li><a href="#creating-the-vfs">Create the VFs</a> with <code>load-kernel-driver.sh</code>. This needs root.</li>
+<li><a href="#loading-a-program-onto-the-vfs">Load a program onto the VFs</a> with <code>vollo-tool setup-vfs</code>.
+This loads your program onto the card and writes one virtual program file for each VF. It does
+not need root.</li>
+<li><a href="#using-a-vf">Use a VF</a> from each thread or process: open the VF and load its virtual program,
+in place of opening the card and loading the <code>.vollo</code> program.</li>
+</ol>
+<p>The VFs do not survive a reboot, so after every reboot do steps 1 and 2 again. To set up the same
+deployment as before, so that the applications can keep their virtual programs, see <a href="#repeating-a-deployment">Repeating a
+deployment</a>.</p>
+<h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
+<p>In addition to the requirements for using the whole card:</p>
+<ul>
+<li>The card must be a V80, V80LL or Artena.</li>
+<li>SR-IOV support should be turned on in the BIOS. See <a href="system-requirements.html#bios-requirements">BIOS
+Requirements</a>.</li>
+<li>The host must run Linux 4.18 or later built with SR-IOV (<code>CONFIG_PCI_IOV</code>), <code>pci-pf-stub</code>
+(<code>CONFIG_PCI_PF_STUB</code>) and <code>vfio-pci</code> (<code>CONFIG_VFIO_PCI</code>).</li>
+<li>The IOMMU must be turned on, and must put each VF in an IOMMU group of its own.
+<code>load-kernel-driver.sh</code> checks for this.</li>
+<li>The card must be <a href="licensing.html">licensed</a>. <code>setup-vfs</code> checks the licence when it loads the
+program, so set <code>MYRTLE_LICENSE</code> for it as you would for any other program. Applications that use
+a VF do not need the licence.</li>
+</ul>
+<h2 id="creating-the-vfs"><a class="header" href="#creating-the-vfs">Creating the VFs</a></h2>
+<p>First find the card's PCI address. <code>vollo-tool list</code> prints it:</p>
+<pre><code class="language-sh">$ vollo-tool list
+DEVICE  PCI ADDRESS    KIND  DRIVER
+0       01:00.0        PF    vfio-pci
+</code></pre>
+<p>To create 16 VFs on that card (8 on an Artena):</p>
+<pre><code class="language-sh">sudo $VOLLO_SDK/load-kernel-driver.sh vfio --bdf 01:00.0 --num-vfs 16
+</code></pre>
+<p>This binds the PF to <code>pci-pf-stub</code>, creates the VFs, and binds each VF to <code>vfio-pci</code>. <code>--bdf</code> must
+name function 0 of the card. <code>--num-vfs</code> can be at most the number in the table above. The script
+refuses to change anything while the card or any of its VFs is open, and names the processes that
+have it open.</p>
+<p><code>vollo-tool list</code> now shows the card with its VFs:</p>
+<pre><code class="language-text">DEVICE  PCI ADDRESS    KIND  DRIVER
+0       01:00.0        PF    pci-pf-stub  16 VFs
+0.0     01:02.0        VF    vfio-pci
+0.1     01:02.1        VF    vfio-pci
+...
+</code></pre>
+<p>Each VF is named <code>&lt;card&gt;.&lt;vf&gt;</code>, counting from 0. For example, <code>0.3</code> is VF 3 of card 0. Other
+<code>vollo-tool</code> commands and the runtime accept these names.</p>
+<p>If the BIOS reserved no PCIe address space for the VFs, the script stops before changing anything.
+To fix this, turn on SR-IOV support in the BIOS or, if there is free address space beside the card,
+boot Linux with <code>pci=realloc</code>.</p>
+<h2 id="loading-a-program-onto-the-vfs"><a class="header" href="#loading-a-program-onto-the-vfs">Loading a program onto the VFs</a></h2>
+<p>Once the VFs exist, load your program and generate the virtual programs:</p>
+<pre><code class="language-sh">$ vollo-tool setup-vfs --pf 0 --program program.vollo --output virtual-programs
+Virtual programs published at virtual-programs
+  VF 0.0    01:02.0        virtual-programs/vf-000.vollo-vf
+  VF 0.1    01:02.1        virtual-programs/vf-001.vollo-vf
+  ...
+</code></pre>
+<p><code>setup-vfs</code> resets the card's accelerator, loads the program and enables the VFs. Without a
+placement file, every VF can run every model in the program, with the same model indices as in the
+program. The VFs stay set up after <code>setup-vfs</code> exits.</p>
+<p>Each application opens one VF and loads that VF's <code>.vollo-vf</code> file, so it needs to know both, for
+example from its command line or its configuration. The file for VF <code>0.3</code> is <code>vf-003.vollo-vf</code>. See
+<a href="#using-a-vf">Using a VF</a>.</p>
+<ul>
+<li><code>--pf</code> is the card's device index or PCI address, as <code>vollo-tool list</code> shows.</li>
+<li><code>--program</code> is the compiled <code>.vollo</code> program.</li>
+<li><code>--output</code> is the directory for <code>setup-vfs</code> to write one <code>vf-NNN.vollo-vf</code> file for each enabled
+VF into, and a <a href="#repeating-a-deployment"><code>placement.toml</code></a> that records the deployment. It must
+either not exist yet or be the output of an earlier <code>setup-vfs</code>, which <code>setup-vfs</code> replaces as a
+whole once the card is set up, so that a reader sees either the old files or the new ones.</li>
+<li><code>--num-vfs N</code> enables only the first N VFs: <code>--num-vfs 3</code> enables VFs 0, 1 and 2. N can be
+anything from 1 up to the number of VFs you created, and no more than the card can run jobs for.
+The other VFs still exist, but the card runs nothing for them and <code>setup-vfs</code> writes no virtual
+program for them. Without this option, every VF you created is enabled, up to the number the
+card can run jobs for.</li>
+<li><code>--placement placement.toml</code> says which models each VF can run, in place of <code>--num-vfs</code>. See
+<a href="#choosing-models-for-each-vf">Choosing models for each VF</a>.</li>
+<li><code>--cut-through</code>, <code>--share-stateful-models</code> and <code>--no-reset-state-on-load</code> change how the VFs run
+jobs. See <a href="#deployment-settings">Deployment settings</a>.</li>
+</ul>
+<p>If the program has a stateful model, such as a streaming LSTM, read <a href="#stateful-models">Stateful
+models</a> first. By default <code>setup-vfs</code> refuses to put a stateful model on more
+than one VF, so the command above fails unless only one VF is enabled, and even on one VF the model
+must be compiled with <code>generate_state_reset = True</code>.</p>
+<p><code>setup-vfs</code> checks the program and placement before it changes anything on the card. It refuses to
+run while any VF is open (see <a href="#changing-a-deployment">Changing a deployment</a>).</p>
+<h2 id="using-a-vf"><a class="header" href="#using-a-vf">Using a VF</a></h2>
+<p>Each thread or process that drives a VF creates its own context, opens its VF with
+<code>vollo_rt_add_device</code> and loads that VF's virtual program with <code>vollo_rt_load_program</code>, in place of
+the usual <code>vollo_rt_add_accelerator</code> and <code>.vollo</code> program:</p>
+<pre><code class="language-c">vollo_rt_context_t ctx;
+EXIT_ON_ERROR(vollo_rt_init(&amp;ctx));
+EXIT_ON_ERROR(vollo_rt_add_device(ctx, 0, "0.3"));
+EXIT_ON_ERROR(vollo_rt_load_program(ctx, "virtual-programs/vf-003.vollo-vf"));
+</code></pre>
+<p>Here <code>0</code> is the accelerator's index within this context, and <code>"0.3"</code> is the VF to open. The VF's
+PCI address, such as <code>"01:02.3"</code>, works too.</p>
+<p>In Python:</p>
+<pre><code class="language-python">import vollo_rt
+
+with vollo_rt.VolloRTContext() as ctx:
+    ctx.add_device(0, "0.3")
+    ctx.load_program("virtual-programs/vf-003.vollo-vf")
+</code></pre>
+<p>After that, you use <code>vollo-rt</code> exactly as you would with a whole card. See the <a href="c-api.html">C API</a>.
+As with a whole card, each context must be driven from one thread; to drive the card from several
+threads of one process, give each thread a context and a VF of its own.</p>
+<p>The model indices are those of the VF, which are the program's own unless a
+<a href="#choosing-models-for-each-vf">placement</a> says otherwise.</p>
+<p>The example application in the SDK runs on a VF too:</p>
+<pre><code class="language-sh">./example/vollo-example --device 0.3 virtual-programs/vf-003.vollo-vf
+</code></pre>
+<p>See <code>example/multi-process.sh</code> in the SDK for a fully worked example. It runs <code>vollo-tool setup-vfs</code>
+with the placement in <code>example/example-placement.toml</code>, which enables four VFs. It then runs
+<code>vollo-example</code> on the identity program from four processes at once.</p>
+<p>When it loads a virtual program, the runtime checks that the file matches the card's current
+deployment, and refuses a file from an earlier <code>setup-vfs</code> that set up something different. Always
+use the files from the latest <code>setup-vfs</code>.</p>
+<p>A context holds its VF from the moment it opens it until it is destroyed (<code>vollo_rt_destroy</code>).
+Wait for its jobs to complete before destroying it. If a context is destroyed with jobs still
+running, or its process exits or is killed, the kernel resets its VF when it is closed, which
+discards those jobs; the other VFs carry on.</p>
+<h3 id="using-a-vf-in-a-virtual-machine"><a class="header" href="#using-a-vf-in-a-virtual-machine">Using a VF in a virtual machine</a></h3>
+<p>A VF can be assigned to a virtual machine like any other PCIe device. Give the VM the VF behind a
+PCIe root port, so that the VM can reset it. A process in the VM opens the VF by the PCI address the
+VM sees, such as <code>vollo_rt_add_device(ctx, 0, "00:05.0")</code>, since the VM has no PF and so no
+<code>&lt;card&gt;.&lt;vf&gt;</code> names. Copy the VF's <code>.vollo-vf</code> file into the VM.</p>
+<p>A VF assigned to a VM counts as in use only while a context in the VM has it open, so the VM can
+keep its VF while you run <code>setup-vfs</code> again.</p>
+<h2 id="choosing-models-for-each-vf"><a class="header" href="#choosing-models-for-each-vf">Choosing models for each VF</a></h2>
+<p>A placement file is TOML. It says how many VFs to enable and which models each one can run:</p>
+<pre><code class="language-toml">schema = "vollo-vf-placement/v1"
+# The number of VFs to enable, as with --num-vfs. VFs are numbered from 0, so
+# 3 enables VFs 0, 1 and 2.
+vf_count = 3
+
+# Every VF appears in exactly one mapping.
+[[mapping]]
+# VF numbers, or "all".
+vfs = [0, 1]
+# Models by name or by index in the program, or "all".
+models = ["fraud-detector"]
+
+[[mapping]]
+vfs = [2]
+# The order sets the model indices the VF sees: VF 2 runs risk-score as model 0,
+# and fraud-detector as model 1.
+models = ["risk-score", "fraud-detector"]
+</code></pre>
+<p>Pass the file with <code>setup-vfs --placement placement.toml</code>. Models are named as they were when the
+program was compiled, and a name must match exactly one model. A model can appear in several
+mappings, with a different index in each.</p>
+<p>A model can also be given as <code>{ index = 2, name = "risk-score" }</code>, as in the placement that
+<a href="#repeating-a-deployment"><code>setup-vfs</code> writes</a>: this picks model 2 of the program, and <code>setup-vfs</code>
+refuses the placement if that model is not named <code>risk-score</code>.</p>
+<p>A placement can also set the <a href="#deployment-settings">deployment settings</a>. If you use a placement,
+you must set them in the file, not on the command line.</p>
+<h2 id="deployment-settings"><a class="header" href="#deployment-settings">Deployment settings</a></h2>
+<p>These settings apply to every VF. Without a placement they are command-line options of
+<code>setup-vfs</code>; with one, they are keys in the file.</p>
+<div class="table-wrapper"><table><thead><tr><th>Option</th><th>Placement key</th><th>Default</th></tr></thead><tbody>
+<tr><td><code>--cut-through</code></td><td><code>cut_through</code></td><td>false</td></tr>
+<tr><td><code>--share-stateful-models</code></td><td><code>share_stateful_models</code></td><td>false</td></tr>
+<tr><td><code>--no-reset-state-on-load</code></td><td><code>reset_state_on_load</code></td><td>true</td></tr>
+</tbody></table>
+</div>
+<h3 id="cut-through"><a class="header" href="#cut-through">Cut-through</a></h3>
+<p>By default a job starts on the card only once all of its input has arrived there. With cut-through,
+a job starts as soon as its request arrives, before all of its input has. This can reduce latency.
+However, a job whose input stops arriving holds up every VF's jobs until its own VF is reset, as
+happens when its context is destroyed or its process exits. Use cut-through only when every
+application using a VF can be trusted to finish the input of every job it submits.</p>
+<h3 id="stateful-models"><a class="header" href="#stateful-models">Stateful models</a></h3>
+<p>A stateful model, such as a streaming model, keeps a single state on the card. Applications on VFs
+that can both run it would share that state, and interleave their inferences through it. So <code>setup-vfs</code>
+refuses to place a stateful model on more than one VF, including by default when every VF gets
+every model, unless <code>share_stateful_models</code> is set. Set it only when the applications coordinate their
+inferences. <code>Program.model_is_stateful</code> tells you whether a model is stateful.</p>
+<p>When a context loads its virtual program, each stateful model on its VF starts from its initial
+state, as when a program is loaded onto a whole card. For this, a stateful model placed on one VF
+must be compiled with <code>generate_state_reset = True</code>, and <code>setup-vfs</code> refuses it otherwise.
+<code>vollo_rt_add_reset_job</code> works on a VF as it does on a whole card.</p>
+<p>With <code>reset_state_on_load = false</code> (<code>--no-reset-state-on-load</code>), loading a virtual program does
+not reset any state: a stateful model starts from the state the VF's previous user left, and needs
+no <code>generate_state_reset</code>.</p>
+<p>A stateful model shared between VFs is never reset when a VF loads its program, and
+<code>vollo_rt_add_reset_job</code> on it fails, since that would clear the state the other applications are
+using.</p>
+<h2 id="limits"><a class="header" href="#limits">Limits</a></h2>
+<ul>
+<li>A program used on VFs can have at most 256 models. A model compiled with
+<code>generate_state_reset = True</code> counts twice, so a program in which every model has a state reset
+can have at most 128. <code>setup-vfs</code> refuses a program past the limit.</li>
+<li>Partial updates (<code>vollo_rt_add_job_partial_update</code> and its bf16 form) work on a VF only when the
+program has a single model and a single VF is enabled. Elsewhere they fail with an error.</li>
+</ul>
+<h2 id="changing-a-deployment"><a class="header" href="#changing-a-deployment">Changing a deployment</a></h2>
+<p>To change the program, the models or the number of enabled VFs, run <code>setup-vfs</code> again, with the
+same output directory to replace the files in it, or a new one. You do not need to run
+<code>load-kernel-driver.sh</code> again unless you want more VFs than you created.</p>
+<p>First stop everything that uses a VF: stop submitting jobs, poll until every submitted job has
+completed, and destroy the contexts. Keep them stopped until <code>setup-vfs</code> succeeds, then give them
+the new <code>.vollo-vf</code> files. While <code>setup-vfs</code> runs, opening a VF fails with <code>cannot claim &lt;vf&gt;: its PF holds the card</code>.</p>
+<p><code>setup-vfs</code> refuses to start while any process has a VF open, and names the VFs and the processes
+it can see holding them. <code>vollo-tool reset</code> on a card with VFs refuses in the same way.
+<code>vollo-tool reset --force</code> resets the card anyway, discarding the work of every VF.</p>
+<p>If you run <code>setup-vfs</code> again with the same program and the same deployment, the existing
+<code>.vollo-vf</code> files keep working. If you change the program, the enabled VFs, the models a VF can run
+or their order, or cut-through, the runtime refuses the old files. If you change only
+<code>reset_state_on_load</code>, it does not: see <a href="#repeating-a-deployment">Repeating a deployment</a>.</p>
+<h2 id="repeating-a-deployment"><a class="header" href="#repeating-a-deployment">Repeating a deployment</a></h2>
+<p>Every <code>setup-vfs</code> writes a <code>placement.toml</code> beside the virtual programs. It records the deployment
+in full: the number of enabled VFs, all three <a href="#deployment-settings">deployment settings</a>, a digest
+of the <code>.vollo</code> program, and each VF's models by index and name. VFs with the same models share a
+mapping. For the placement in <a href="#choosing-models-for-each-vf">Choosing models for each VF</a>, it reads
+(with the digest shortened):</p>
+<pre><code class="language-toml"># Written by vollo-tool setup-vfs for the card at 0000:01:00.0. Pass it to setup-vfs --placement to set up the same deployment again, on this card or another.
+schema = "vollo-vf-placement/v1"
+vf_count = 3
+cut_through = false
+share_stateful_models = false
+reset_state_on_load = true
+
+[program]
+digest = "sha256:9f2c…"
+
+[[mapping]]
+vfs = [0, 1]
+models = [{ index = 0, name = "fraud-detector" }]
+
+[[mapping]]
+vfs = [2]
+models = [{ index = 2, name = "risk-score" }, { index = 0, name = "fraud-detector" }]
+</code></pre>
+<p>Its main use is to set up the same deployment again, for example after a reboot. Run
+<code>load-kernel-driver.sh</code> as before, then pass the file back with the same program:</p>
+<pre><code class="language-sh">vollo-tool setup-vfs --pf 0 --placement virtual-programs/placement.toml \
+  --program program.vollo --output &lt;dir&gt;
+</code></pre>
+<p>Each <code>.vollo-vf</code> file carries a cookie computed from the program and the deployment: which VFs are
+enabled, cut-through, and each VF's models. The same program and placement give the same cookie,
+so the applications' existing <code>.vollo-vf</code> files keep working, including copies inside virtual
+machines, and there is nothing to hand out again. <code>setup-vfs</code> refuses a different program, with
+<code>the placement was resolved against program sha256:&lt;digest&gt;, but this program is sha256:&lt;digest&gt;</code>.</p>
+<p>To use the placement with a recompiled program, delete its <code>[program]</code> table. <code>setup-vfs</code> then
+accepts any program, but still checks that each model's name matches its index, and fails with
+<code>mapping &lt;m&gt;: program model &lt;index&gt; is "&lt;new name&gt;", not "&lt;name&gt;"</code> if the models have moved,
+rather than give a VF the wrong model. The virtual programs are then new, so hand them out.</p>
+<p><code>reset_state_on_load</code> is recorded in the file but not in the cookie. If you change only that, the
+old <code>.vollo-vf</code> files still load, with the old setting, so hand out the new ones.</p>
+<h2 id="checking-a-deployment"><a class="header" href="#checking-a-deployment">Checking a deployment</a></h2>
+<p><code>vollo-tool list --vf-state</code> also shows which VFs are enabled, and which are open and by which
+processes. While a command such as <code>setup-vfs</code> is working on the card, it shows the card as <code>busy</code>
+and names that command, and shows its VFs' state as <code>unknown</code>.</p>
+<p><code>vollo-tool inspect-vfs</code> shows the card's deployment: how many VFs exist, which are enabled, which
+are held and by whom, whether cut-through is on, and whether the PF holds the card. To check that a
+virtual program matches the card, pass it with <code>--program</code>. To show which models each VF was given,
+pass the <code>placement.toml</code> that <code>setup-vfs</code> wrote with <code>--placement</code>. While a command such as
+<code>setup-vfs</code> is working on the card, <code>inspect-vfs</code> does not read it, and names that command
+instead:</p>
+<pre><code class="language-sh">vollo-tool inspect-vfs --pf 0 \
+  --program virtual-programs/vf-000.vollo-vf \
+  --placement virtual-programs/placement.toml
+</code></pre>
+<p><code>inspect-vfs</code> names only processes whose open files you are allowed to see, so run it as root to
+see them all.</p>
+<h2 id="permissions-and-isolation"><a class="header" href="#permissions-and-isolation">Permissions and isolation</a></h2>
+<p>Only <code>load-kernel-driver.sh</code> needs root. So that you can run <code>setup-vfs</code> without root, it lets every
+user on the host map the PF's registers, and it publishes a copy of the PF's PCIe configuration
+under <code>/run/vollo/pci/</code>. With these default permissions, any user on the host can replace the
+program, change which VFs are enabled, or reset the card. The script also lets every user open
+every VF (<code>/dev/vfio/&lt;group&gt;</code> and the VF's files under <code>/sys/bus/pci/devices/</code>).</p>
+<p>To give VFs to users who do not trust each other, restrict each VF's <code>/dev/vfio/&lt;group&gt;</code> node and
+its files under <code>/sys/bus/pci/devices/&lt;VF&gt;</code> to the user it is for, and the PF's files under
+<code>/sys/bus/pci/devices/&lt;PF&gt;</code> to whoever runs <code>setup-vfs</code>. When <code>load-kernel-driver.sh</code> changes the
+number of VFs, the VFs that remain keep the owner and mode of their <code>/dev/vfio</code> node.</p>
+<p>VFs are isolated from each other's faults: an application that misbehaves or dies on one VF cannot break
+another VF, except as described under <a href="#cut-through">cut-through</a>. They are not isolated from each
+other's monitoring: every VF can read the card's status for all VFs, including how many jobs each
+VF has run and has outstanding, and the card's temperature. Do not rely on VFs to keep one user's
+activity on the card private from another.</p>
+<h2 id="returning-to-using-the-whole-card"><a class="header" href="#returning-to-using-the-whole-card">Returning to using the whole card</a></h2>
+<p>You cannot use the PF in the usual way while VFs exist. To remove them, stop everything that is
+using a VF, then run:</p>
+<pre><code class="language-sh">sudo $VOLLO_SDK/load-kernel-driver.sh vfio --bdf 01:00.0 --num-vfs 0
+</code></pre>
+<p>This removes the VFs and binds the PF to <code>vfio-pci</code> again. <code>load-kernel-driver.sh</code> without
+<code>--num-vfs</code> leaves a card that has VFs alone, so this is the only way back short of a reboot.</p>
+<h2 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h2>
+<ul>
+<li><strong><code>setup-vfs</code> fails.</strong> If it fails while checking the program and placement, it has not changed
+the card. If it fails after that, every VF is left disabled, and the previous deployment is not
+restored. Fix the cause and run <code>setup-vfs</code> again. If it stopped partway, for example because it
+was killed, run it again.</li>
+<li><strong><code>setup-vfs</code> fails with <code>could not enable the VFs, nor gate them again</code>.</strong> Whether each VF is
+usable is unknown, so <code>setup-vfs</code> keeps its output directory, and notes <code>the card stays held, so every tenant is refused until setup-vfs succeeds on it</code>. Fix the cause and run <code>setup-vfs</code>
+again.</li>
+<li><strong>Opening a VF fails with <code>cannot claim &lt;vf&gt;: its PF holds the card</code>.</strong> A <code>vollo-tool</code> command
+holds the card while it works on it, so retry once it has finished. If none is running, one was
+killed while it held the card, for example <code>vollo-tool reset</code>, and <code>vollo-tool release-card --pf &lt;card&gt;</code>, which the message suggests, releases it. After a <code>setup-vfs</code> that stopped partway, run
+<code>setup-vfs</code> again instead.</li>
+<li><strong><code>setup-vfs</code> fails with <code>cannot take &lt;card&gt;: VF &lt;vf&gt; is claimed</code>, but no process has the VF
+open.</strong> The message notes <code>&lt;vf&gt; is claimed but not open: its last tenant stopped without releasing it, and the VF was not reset</code>. A context destroyed with jobs running, or whose process
+exited, holds its VF until the kernel resets the VF. That reset needs the VF's <code>reset_method</code>
+(<code>/sys/bus/pci/devices/&lt;VF&gt;/reset_method</code>) to start with <code>flr</code>, as it does by default.
+<code>setup-vfs</code> and the runtime warn when it does not, with <code>&lt;vf&gt; is not reset by FLR (reset_method: &lt;methods&gt;)</code>. If the kernel could not reset the VF, the VF stays held until it is next opened, or
+until root resets it with <code>echo 1 &gt; /sys/bus/pci/devices/&lt;VF&gt;/reset</code>.</li>
+<li><strong><code>load-kernel-driver.sh</code> fails with <code>the card is in use</code>.</strong> Each note names a VF or the PF and
+the process that has it open, such as <code>VF 0000:01:02.0 is open by pid 4242 (my-app)</code>. Stop those
+processes and run the command again.</li>
+<li><strong><code>load-kernel-driver.sh</code> fails partway.</strong> Stop everything using the card and run the same
+command again.</li>
+<li><strong>Jobs on every VF stop completing.</strong> With <a href="#cut-through">cut-through</a>, a job whose input stopped
+arriving holds up every VF. Destroy the context that submitted it, or stop its process, which
+resets its VF.</li>
+<li><strong>Loading a virtual program fails with <code>the VF's stateful models were not reset within 5s</code>.</strong>
+The card has stopped running jobs, for example because of a stalled cut-through job. Check the
+card with <code>vollo-tool inspect-vfs</code>, then destroy the context and open the VF again: a second
+<code>vollo_rt_load_program</code> on the same context fails.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="running-the-benchmark.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="vollo-runtime.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="running-the-benchmark.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="vollo-runtime.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+
+
+        <!-- Google Tag Manager (noscript) -->
+        <noscript>
+            <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PNCNPKTT" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe>
+        </noscript>
+        <!-- End Google Tag Manager (noscript) -->
+
+    </body>
+</html>
