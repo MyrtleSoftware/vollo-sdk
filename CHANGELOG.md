@@ -1,5 +1,49 @@
 # Changelog
 
+## 30.1.0
+
+- The V80, V80LL and Artena bitstreams support SR-IOV, so one card can be shared by
+  several threads, processes or virtual machines by splitting it into up to 16 virtual
+  functions (VFs) (see the Configuring the Accelerator for Multiple Processes section of
+  the docs)
+- `vollo-tool` programs a V80 or V80LL over PCIe without AMD's `ami` kernel driver,
+  which is no longer shipped with the SDK
+- `vollo-torch`
+  - Support for non-streaming `torch.nn.Conv2d` and `torch.nn.functional.conv2d`,
+    with per-axis `stride`, `dilation` and `padding`
+  - Support for non-streaming `torch.nn.Conv3d` and `torch.nn.functional.conv3d`,
+    with per-axis `stride`, `dilation` and `padding`
+  - Support for `padding` on non-streaming `torch.nn.Conv1d` and
+    `torch.nn.functional.conv1d`, which previously had to be `0`
+- `vollo-compiler`
+  - Programs record which models carry state from one inference to the next. Check it
+    with `Program.model_is_stateful`.
+  - `Program.metrics()` reports `pafs_used`, the number of Programmable Activation
+    Functions each core uses, and `num_paf`, the number available
+  - Fix clamps being dropped from slices that the compiler fuses with a concatenation
+  - `NumberFormat` values no longer compare equal to integers (`NumberFormat.BF16 == 0`
+    used to be `True`) and can now be used as dictionary keys and in sets
+  - `VM.run` methods give correct results for Fortran-ordered and other non-C-contiguous
+    input arrays, which were previously read in memory order
+  - Improve VM cycle count accuracy
+  - Remove the Silicom fb4CGg3 (UltraScale+) hardware config:
+    `vollo_compiler.Config.silicom_fb4cgg3_c3b32()` and its alias `fb4cgg3_c3b32()` are
+    gone, and `"Ultrascale"` is no longer accepted as a `Config` fabric
+- `vollo-rt`
+  - `vollo_rt_add_job` and the other `vollo_rt_add_job_*` functions may start a job
+    straight away, instead of only on the next `vollo_rt_poll`. Set
+    `VOLLO_SUBMIT_ON_ADD=0` to start jobs only on `vollo_rt_poll`, as before.
+  - Fix `libvollo_rt.a` and `libvollo_cfg.a` static libraries to only export their C API
+- Bitstreams
+  - The V80 and V80LL bitstreams link at PCIe Gen5 x8 (32 GT/s) when in a slot that
+    supports it
+  - Reduce the V80, V80LL and Artena bitstreams' host PCIe address space requirements
+  - The V80, V80LL and Artena bitstreams protect the card from overheating by holding
+    new jobs above 100 °C (95 °C on the Artena) until it has cooled
+- IP Core
+  - The Vollo IP Core ships `vollo_ip_core.sdc` to constrain its internal clock-domain
+    crossings (see the Quartus Integration section of the IP Core docs)
+
 ## 29.1.0
 
 - Support for `torch.expm1` and `torch.special.expm1` with special handling for inputs near zero

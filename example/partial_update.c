@@ -447,16 +447,10 @@ static void full_input_inference_start(
   // user_ctx is not needed when doing single shot inferences
   // it can be used when doing multiple jobs concurrently to keep track of which jobs completed
   uint64_t user_ctx = 0;
+  // The job is started either by this call or by the next poll, so there is nothing else to do
+  // here: the poll in block_until_completion kicks it off if it hasn't started already.
   EXIT_ON_ERROR(
     vollo_rt_add_job(ctx, model_index, user_ctx, input_formats, inputs, output_formats, outputs));
-
-  // Single poll to start new job
-  size_t num_completed = 0;
-  const uint64_t* completed_buffer = NULL;
-  EXIT_ON_ERROR(vollo_rt_poll(ctx, &num_completed, &completed_buffer));
-
-  // This example doesn't expect to have any concurrently started jobs reaching completion now
-  ALWAYS_ASSERT(num_completed == 0);
 }
 
 static void partial_input_inference_start(
@@ -470,16 +464,10 @@ static void partial_input_inference_start(
   // it can be used when doing multiple jobs concurrently to keep track of which jobs completed
   uint64_t user_ctx = 0;
 
+  // As in full_input_inference_start, the poll that starts the job (if adding it didn't) is the
+  // one in block_until_completion.
   EXIT_ON_ERROR(vollo_rt_add_job_partial_update(
     ctx, model_index, user_ctx, num_input_updates, input_partial_updates, outputs));
-
-  // Single poll to start new job
-  size_t num_completed = 0;
-  const uint64_t* completed_buffer = NULL;
-  EXIT_ON_ERROR(vollo_rt_poll(ctx, &num_completed, &completed_buffer));
-
-  // This example doesn't expect to have any concurrently started jobs reaching completion now
-  ALWAYS_ASSERT(num_completed == 0);
 }
 
 #define MAX_POLL_COUNT 100000000

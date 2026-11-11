@@ -17,17 +17,17 @@ download the bitstream for the AMD `V80` board with the `c6b32` configuration of
 [Github Release page]: https://github.com/MyrtleSoftware/vollo-sdk/releases/
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v29.1.0/vollo-amd-v80-c6b32-29.1.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v30.1.0/vollo-amd-v80-c6b32-30.1.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-amd-v80-c6b32-29.1.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-amd-v80-c6b32-30.1.tar.gz -C $VOLLO_SDK/bitstream
 ```
 
 Alternatively, for the AMD `V80LL`, use:
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v29.1.0/vollo-amd-v80ll-c6b32-29.1.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v30.1.0/vollo-amd-v80ll-c6b32-30.1.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-amd-v80ll-c6b32-29.1.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-amd-v80ll-c6b32-30.1.tar.gz -C $VOLLO_SDK/bitstream
 ```
 
 ## Programming the FPGA via JTAG
@@ -129,23 +129,28 @@ over JTAG. See [Programming the FPGA via JTAG](#programming-the-fpga-via-jtag).
 Programming over PCIe is the preferred method of programming the board as it is faster than
 programming over JTAG, and does not require a USB programming cable or for Vivado to be installed.
 
-1. Build and insert the ami driver.
+1. Bind the card to the Vollo driver. This takes all of the card's functions, including the
+   management function (`100a`) that programs the flash, so no other driver is needed.
 
    ```sh
-   cd ami_kernel_driver
-   make
-   sudo insmod ami.ko
+   sudo $VOLLO_SDK/load-kernel-driver.sh vfio
    ```
 
-   There may be compilation issues with your version of Linux. This has been checked with Rocky Linux
-   8.10 and Ubuntu 22.04. If there is an issue with your system, please contact us.
+   Earlier releases used AMD's `ami` kernel driver for this step. If it is still loaded from one of
+   them, unload it first with `sudo rmmod ami`.
 
-2. Once the kernel driver is loaded you can program the flash with `vollo-tool` (which uses
-   `ami_tool`). If you only have one board, `device_index` is `0`.
+2. Program the flash with `vollo-tool`. If you only have one board, `device_index` is `0`.
 
    ```sh
    sudo $VOLLO_SDK/bin/vollo-tool fpga-config overwrite-partition ${device_index:?} $VOLLO_SDK/bitstream/vollo-amd-v80-c6b32.pdi USER_IMAGE
    ```
+
+   Use the `vollo-amd-v80ll-c6b32.pdi` file for a V80LL. Before erasing or writing,
+   `vollo-tool` compares the file's target FPGA with the selected card's manufacturing
+   EEPROM, read over PCIe. This requires no JTAG connection and works even when an
+   older V80LL image reports the V80 subsystem ID. A mismatch, unknown part number,
+   or unreadable EEPROM stops the update. The `--ignore-device-mismatch` option
+   bypasses this identity check for recovery; an image for the other FPGA cannot boot.
 
    There will be a progress bar and it should take around 5 minutes to program the flash. You will
    need to power cycle the host for the new bitstream to be loaded.

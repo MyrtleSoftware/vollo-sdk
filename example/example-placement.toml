@@ -1,0 +1,12 @@
+# The VF placement multi-process.sh passes to `vollo-tool setup-vfs --placement`: which VFs to
+# enable, and which of the program's models each one can run.
+schema = "vollo-vf-placement/v1"
+# How many VFs to enable. multi-process.sh runs one process per VF.
+vf_count = 4
+
+# Every enabled VF appears in exactly one mapping.
+[[mapping]]
+vfs = [0, 1, 2, 3]
+# Models by name or index in the program, or "all". identity_b32.vollo has one model, named
+# identity, and each VF runs it as its model 0.
+models = ["identity"]

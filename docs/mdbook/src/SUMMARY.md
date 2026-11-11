@@ -29,6 +29,7 @@
   - [Licensing](licensing.md)
   - [Running an Example](running-an-example.md)
   - [Running the Benchmark](running-the-benchmark.md)
+  - [Configuring the Accelerator for Multiple Processes](multiprocess.md)
 - [Vollo Runtime](vollo-runtime.md)
   - [C API](c-api.md)
   - [C Example](vollo-rt-example.md)

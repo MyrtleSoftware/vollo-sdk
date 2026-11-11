@@ -29,3 +29,16 @@ foreach file [fileutil::findByPattern vollo_ip_core *.mif] {
   set_global_assignment -name MIF_FILE $file
 }
 ```
+
+## Timing constraints
+
+The config and compute clocks may be asynchronous. `vollo_ip_core/vollo_ip_core.sdc` constrains the
+clock-domain crossings inside the IP Core, and applies even when the two clocks are in asynchronous clock
+groups. Bind it to the `vollo_ip_core` entity:
+
+```tcl
+set_global_assignment -entity vollo_ip_core -name SDC_ENTITY_FILE vollo_ip_core/vollo_ip_core.sdc
+```
+
+Timing analysis then reports `Vollo IP core: constrained N of N crossings`. If the message is missing,
+the file isn't bound to the IP Core.

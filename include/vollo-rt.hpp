@@ -9,20 +9,29 @@
 #include <new>
 #include <ostream>
 
-/// The numeric type of an input or output.
-enum class number_format : uint32_t {
-  /// Brain-float 16 format. Corresponds to the C type `bf16`.
-  number_format_bf16 = 0,
-  /// 32-bit floating point format. Corresponds to C type `float`.
-  number_format_fp32 = 1,
-};
-
 /// The accelerator architecture that a loaded program (or hardware bitstream) targets.
 enum class vollo_rt_architecture_t : uint32_t {
   /// Vollo: the neural-network inference accelerator.
   vollo_rt_architecture_vollo = 0,
   /// Vollo Trees: the tree-ensemble inference accelerator.
   vollo_rt_architecture_vollo_trees = 1,
+  /// A tenant VF has not yet loaded its virtual program.
+  vollo_rt_architecture_unknown = 2,
+};
+
+/// The numeric type of an input or output.
+enum class number_format : uint32_t {
+  /// Brain-float 16 format. Corresponds to the C type `bf16`.
+  number_format_bf16 = 0,
+  /// 32-bit floating point format. Corresponds to C type `float`.
+  number_format_fp32 = 1,
+  /// 64-bit floating point format. Corresponds to C type `double`.
+  ///
+  /// Outputs only, and only on Vollo Trees: a tree ensemble whose ONNX states its leaves in
+  /// double precision has an fp64 native output format, and any Vollo Trees output can be
+  /// requested as fp64. No model takes an fp64 input, and Vollo (neural network) models use
+  /// neither, so `vollo_rt_add_job` rejects fp64 anywhere else.
+  number_format_fp64 = 2,
 };
 
 /// Functions in vollo-rt that can return an error return `vollo_rt_error_t`.
@@ -88,6 +97,7 @@ vollo_rt_error_t vollo_rt_add_accelerator(vollo_rt_context_t vollo, size_t accel
 /// `vollo_rt_accelerator_num_cores` and `vollo_rt_accelerator_block_size`.
 ///
 /// - `0` -- vollo accelerator 0
+/// - `0.3` -- VF 3 of vollo accelerator 0, numbered from 0 as `vollo-tool list` shows
 /// - `01:00.0` -- vollo accelerator with PCI address 01:00.0
 /// - `vm:vollo` -- anonymous Vollo VM, bit-accurate by default
 /// - `vm+f32:vollo` -- anonymous Vollo VM in non-bit-accurate mode
@@ -125,8 +135,8 @@ vollo_rt_error_t vollo_rt_add_vm(
 /// Get the number of cores of a Vollo accelerator.
 /// For Vollo Trees accelerators, this will return the number of tree units.
 ///
-/// If used on a VM before loading a program, it will return 0, because the VM hardware config is
-/// determined by the requirements of the loaded program.
+/// If used on a VM or tenant VF before loading a program, it returns 0 because its
+/// hardware config is determined by the loaded program.
 ///
 /// Requirements (panics otherwise):
 /// - The accelerator at `accelerator_index` has already been added to context
@@ -135,8 +145,8 @@ size_t vollo_rt_accelerator_num_cores(vollo_rt_context_t vollo, size_t accelerat
 
 /// Get the block size of a Vollo accelerator.
 ///
-/// If used on a VM before loading a program, it will return 0, because the VM hardware config is
-/// determined by the requirements of the loaded program.
+/// If used on a VM or tenant VF before loading a program, it returns 0 because its
+/// hardware config is determined by the loaded program.
 ///
 /// Requirements (panics otherwise):
 /// - The accelerator at `accelerator_index` has already been added to context
@@ -149,7 +159,8 @@ size_t vollo_rt_accelerator_block_size(vollo_rt_context_t vollo, size_t accelera
 ///
 /// The architecture is determined by the loaded program, or for a hardware accelerator by its
 /// bitstream. It is available after `vollo_rt_add_device` / `vollo_rt_add_accelerator` for a
-/// hardware accelerator, and after `vollo_rt_load_program` for a VM.
+/// PF accelerator, and after `vollo_rt_load_program` for a VM or tenant VF. A tenant VF
+/// returns `vollo_rt_architecture_unknown` until its virtual program is loaded.
 ///
 /// Requirements (panics otherwise):
 /// - The accelerator at `accelerator_index` has already been added to the context.
@@ -359,8 +370,8 @@ bool vollo_rt_model_is_resettable(vollo_rt_context_t vollo, size_t model_index);
 /// Sets up a computation on the vollo accelerator where the inputs and outputs are in brain-float
 /// 16 format.
 ///
-/// Note: The computation is only started on the next call to vollo_rt_poll. This way it is possible
-/// to set up several computations that are kicked off at the same time.
+/// Note: The computation may be started by this call, or only on the next call to vollo_rt_poll:
+/// either way it is possible to set up several computations that are kicked off at the same time.
 /// This is not supported on Vollo Trees (it only supports fp32 activations)
 ///
 /// - vollo:
@@ -405,8 +416,9 @@ vollo_rt_error_t vollo_rt_add_job_bf16(
 /// - By default the input is rounded to bf16 using the round-to-nearest-even rounding mode.
 ///   To disable rounding of the input and truncate instead, set the environment variable
 ///   `VOLLO_FP32_ROUND` to 0.
-/// - The computation is only started on the next call to vollo_rt_poll. This way it is possible
-///   to set up several computations that are kicked off at the same time.
+/// - The computation may be started by this call, or only on the next call to vollo_rt_poll:
+///   either way it is possible to set up several computations that are kicked off at the
+///   same time.
 ///
 /// - vollo:
 ///     the context that the computation should be run on
@@ -448,11 +460,14 @@ vollo_rt_error_t vollo_rt_add_job_fp32(
 ///
 /// The model's native number format can be queried with `vollo_rt_model_input_format` and
 /// `vollo_rt_model_output_format`.
-/// Only fp32 inputs and output are supported on Vollo Trees.
+///
+/// `number_format_fp64` is accepted for Vollo Trees outputs only: Vollo Trees inputs are bf16 or
+/// fp32, and Vollo (neural network) models use neither an fp64 input nor an fp64 output.
 ///
 /// Note:
-/// - The computation is only started on the next call to vollo_rt_poll. This way it is possible
-///   to set up several computations that are kicked off at the same time.
+/// - The computation may be started by this call, or only on the next call to vollo_rt_poll:
+///   either way it is possible to set up several computations that are kicked off at the
+///   same time.
 ///
 /// - vollo:
 ///     the context that the computation should be run on
@@ -502,12 +517,14 @@ vollo_rt_error_t vollo_rt_add_job(
 /// - Only single model programs are supported
 /// - Only single input models are supported
 /// - A full update must be queued before the first partial update
+/// - An update may set at most one value per input element, and at most 65528; a full update
+///   has no such limit
 ///
 /// For a more general version that supports different data types and multiple inputs, see
 /// `vollo_rt_add_job_partial_update`.
 ///
-/// Note: The computation is only started on the next call to vollo_rt_poll. This way it is possible
-/// to set up several computations that are kicked off at the same time.
+/// Note: The computation may be started by this call, or only on the next call to vollo_rt_poll:
+/// either way it is possible to set up several computations that are kicked off at the same time.
 ///
 /// - vollo:
 ///     the context that the computation should be run on
@@ -561,9 +578,11 @@ vollo_rt_error_t vollo_rt_add_job_bf16_partial_update(
 /// Limitations:
 /// - Only single model programs are supported
 /// - A full update must be queued before the first partial update
+/// - An update may set at most one value per input element over all inputs, and at most 65528;
+///   a full update has no such limit
 ///
-/// Note: The computation is only started on the next call to vollo_rt_poll. This way it is possible
-/// to set up several computations that are kicked off at the same time.
+/// Note: The computation may be started by this call, or only on the next call to vollo_rt_poll:
+/// either way it is possible to set up several computations that are kicked off at the same time.
 ///
 /// - vollo:
 ///     the context that the computation should be run on
@@ -686,6 +705,17 @@ bf16* vollo_rt_get_raw_buffer(vollo_rt_context_t vollo, size_t num_elements);
 /// `vollo_rt_destroy`
 void* vollo_rt_get_raw_buffer_bytes(vollo_rt_context_t vollo, size_t num_bytes);
 
+/// Padded byte extent of a model's output transfer.
+///
+/// A caller that wants the device to write its result straight into a raw buffer from
+/// [`vollo_rt_get_raw_buffer_bytes`], rather than into a managed buffer the runtime then copies
+/// back, must size that buffer to this rather than to the output tensor: the transfer is padded
+/// up to whole 64-byte DMA words.
+///
+/// On a VM, which copies the output rather than transferring it, this is enough for the output
+/// in any number format, padded the same way.
+size_t vollo_rt_model_output_transfer_size(vollo_rt_context_t vollo, size_t model_index);
+
 /// Setup a completion check single output of a raw buffer. You can then check for completion for
 /// the next job this buffer is used in using `vollo_rt_check_raw_buffer_output_completion`. This
 /// can be called from a different thread than the one containing the `vollo_rt_context`.
@@ -693,6 +723,9 @@ void* vollo_rt_get_raw_buffer_bytes(vollo_rt_context_t vollo, size_t num_bytes);
 /// This must be called before submitting the job using this buffer. The `transfer_size_bytes` must
 /// match the number of bytes of the output this buffer is used for. After calling this, you must
 /// not modify this buffer until after the corresponding job has been polled to completion.
+///
+/// `buffer` must come from `vollo_rt_get_raw_buffer_bytes` or `vollo_rt_get_raw_buffer`. With any
+/// other buffer the check may never report completion, and this may write past the buffer's end.
 ///
 /// This is an experimental API and may be removed or changed in the future.
 void vollo_rt_prepare_raw_buffer_output_completion(void* buffer, size_t transfer_size_bytes);
@@ -707,6 +740,10 @@ void vollo_rt_prepare_raw_buffer_output_completion(void* buffer, size_t transfer
 /// Once this returns true, the output for this buffer data can be used. The buffer itself is still
 /// owned by the vollo_rt_context and cannot be reused or registered for completion again until the
 /// poll on vollo_rt_context marks the job as complete.
+///
+/// When a model has more than four non-empty outputs, the fourth and later ones share one transfer
+/// and are copied into place by the poll that completes the job, as are outputs the device writes
+/// in another type. Their completion is seen only from that poll.
 ///
 /// This is an experimental API and may be changed or removed in the future.
 bool vollo_rt_check_raw_buffer_output_completion(const void* buffer, size_t transfer_size_bytes);
