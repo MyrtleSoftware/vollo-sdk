@@ -22,7 +22,9 @@ otherwise. MMIO also needs no DMA input in flight and room in the card's input r
 with several inferences in flight a small input can still go over DMA. These tables run
 one inference at a time, so every input up to 8192 B goes over MMIO and only the 16384 B
 column goes over DMA. The `VOLLO_MMIO_MAX_SIZE` environment variable sets the threshold
-in bytes, and `0` sends every input over DMA. Outputs always come back over DMA.
+in bytes, and `0` sends every input over DMA. On an SR-IOV VF, `vollo-tool setup-vfs` chooses
+instead, for the whole card (see [MMIO and DMA inputs on
+VFs](multiprocess.md#mmio-and-dma-inputs-on-vfs)). Outputs always come back over DMA.
 
 ## User buffers
 

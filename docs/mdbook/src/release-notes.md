@@ -1,5 +1,13 @@
 # Release Notes
 
+## 30.1.1
+
+- Fix an inference on an SR-IOV VF occasionally failing with "the accelerator could not read its
+  input from host memory" when VFs on the same card mixed MMIO and DMA inputs. Every VF on a card
+  now sends its inputs in the same way, as chosen by `vollo-tool setup-vfs` (see the MMIO and DMA
+  inputs on VFs section of the docs). Rerun `vollo-tool setup-vfs` after upgrading: virtual
+  programs from 30.1.0 are rejected.
+
 ## 30.1.0
 
 - The V80, V80LL and Artena bitstreams support SR-IOV, so one card can be shared by
