@@ -88,7 +88,6 @@ Once the VFs exist, load your program and generate the virtual programs:
 ```sh
 $ vollo-tool setup-vfs --pf 0 --program program.vollo --output virtual-programs
 Virtual programs published at virtual-programs
-Every VF sends its inputs over MMIO
   VF 0.0    01:02.0        virtual-programs/vf-000.vollo-vf
   VF 0.1    01:02.1        virtual-programs/vf-001.vollo-vf
   ...
@@ -263,32 +262,6 @@ A stateful model shared between VFs is never reset when a VF loads its program, 
 `vollo_rt_add_reset_job` on it fails, since that would clear the state the other applications are
 using.
 
-## MMIO and DMA inputs on VFs
-
-Inputs are sent to the card over MMIO or DMA. Without VFs, the runtime chooses for each input (see
-[IO Round Trip](benchmark-io.md)). With VFs, `setup-vfs` chooses one for the whole card, and every
-VF uses it:
-
-- MMIO, if each model on each VF has inputs totalling at most 8 KiB, and they fit in the VF's input
-  buffer.
-- DMA otherwise.
-
-`setup-vfs` prints which it chose (see [Loading a program onto the
-VFs](#loading-a-program-onto-the-vfs)).
-
-The input buffer of each VF depends on how many VFs are enabled:
-
-| Enabled VFs | Input buffer per VF |
-|-------------|---------------------|
-| 1           | 32 KiB              |
-| 2           | 16 KiB              |
-| 3–4         | 8 KiB               |
-| 5–8         | 4 KiB               |
-| 9–16        | 2 KiB               |
-
-`VOLLO_MMIO_MAX_SIZE` has no effect on a VF. With MMIO, a VF only has as many inferences in flight as
-fit in its buffer: with 16 VFs, a model with 2 KiB of input has one in flight per VF.
-
 ## Limits
 
 - A program used on VFs can have at most 256 models. A model compiled with
@@ -316,9 +289,6 @@ If you run `setup-vfs` again with the same program and the same deployment, the 
 `.vollo-vf` files keep working. If you change the program, the enabled VFs, the models a VF can run
 or their order, or cut-through, the runtime refuses the old files. If you change only
 `reset_state_on_load`, it does not: see [Repeating a deployment](#repeating-a-deployment).
-
-After upgrading the SDK, run `setup-vfs` again: the runtime refuses virtual programs whose format
-differs from its own.
 
 ## Repeating a deployment
 

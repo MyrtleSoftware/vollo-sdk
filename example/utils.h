@@ -44,6 +44,15 @@ static inline const char* default_device_spec(void) {
   return spec != NULL ? spec : "0";
 }
 
+// Byte size of one element in the given number format
+static inline size_t format_size(number_format format) {
+  switch (format) {
+  case number_format_bf16: return sizeof(bf16);
+  case number_format_fp64: return sizeof(double);
+  default: return sizeof(float);
+  }
+}
+
 #define NANOSECONDS (1000 * 1000 * 1000)
 
 double diff_timespec_ns(struct timespec from, struct timespec to);

@@ -11,6 +11,10 @@ The example design contains:
   hooked up to directly MMIO.
   An efficient design should instead control input and output directly from the FPGA, or if
   control from a CPU host is needed then use a proper DMA instead.
+  Its data mover fills each 512-bit Vollo word from the top: the first 64-bit write to the data BAR
+  becomes bits 511:448 of the word (values 28-31) and the eighth becomes bits 63:0 (values 0-3).
+  Output words are read back in the same order, so the runtime sends and reads each word's values
+  last first.
 - `bitstream`:
   this is a pre-built bitstream of the provided RTL, it is provided to speed up testing of the runtime
 - `runtime`:

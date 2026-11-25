@@ -307,40 +307,54 @@ static void vollo_example(ExampleOptions options) {
     }
   }
 
-  void** model_outputs_dyn = (void**)malloc(sizeof(void*) * model_num_outputs);
-  ALWAYS_ASSERT(model_outputs_dyn != NULL);
   number_format* output_buffer_formats
     = (number_format*)malloc(sizeof(number_format) * model_num_outputs);
   ALWAYS_ASSERT(output_buffer_formats != NULL);
 
   for (size_t i = 0; i < model_num_outputs; i++) {
-    size_t num_output_elems = vollo_rt_model_output_num_elements(ctx, model_index, i);
-    number_format fmt;
     if (options.fp32_api) {
-      fmt = number_format_fp32;
+      output_buffer_formats[i] = number_format_fp32;
     } else if (options.bf16_api) {
-      fmt = number_format_bf16;
+      output_buffer_formats[i] = number_format_bf16;
     } else {
-      fmt = vollo_rt_model_output_format(ctx, model_index, i);
+      output_buffer_formats[i] = vollo_rt_model_output_format(ctx, model_index, i);
     }
-    output_buffer_formats[i] = fmt;
+  }
 
-    if (fmt == number_format_fp32) {
-      model_outputs_dyn[i]
-        = options.raw_buffer_api
-            ? vollo_rt_get_raw_buffer_bytes(ctx, sizeof(float) * num_output_elems)
-            : (void*)malloc(sizeof(float) * num_output_elems);
-    } else if (fmt == number_format_fp64) {
-      model_outputs_dyn[i]
-        = options.raw_buffer_api
-            ? vollo_rt_get_raw_buffer_bytes(ctx, sizeof(double) * num_output_elems)
-            : (void*)malloc(sizeof(double) * num_output_elems);
-    } else {
-      model_outputs_dyn[i] = options.raw_buffer_api
-                               ? vollo_rt_get_raw_buffer_bytes(ctx, sizeof(bf16) * num_output_elems)
-                               : (void*)malloc(sizeof(bf16) * num_output_elems);
+  // One set of output buffers per concurrent job, so that no two jobs in flight write to the same
+  // buffer. A raw output buffer MUST NOT be shared between concurrent jobs, and with managed
+  // buffers this keeps each job's result intact until it has been read.
+  //
+  // Jobs of a single model complete in the order they were started, so job n uses set
+  // n % max_concurrent_jobs: by the time that set is reused, the job that last used it has
+  // completed and its outputs have been read.
+  size_t num_output_sets = options.max_concurrent_jobs;
+  void*** model_outputs_dyn = (void***)malloc(sizeof(void**) * num_output_sets);
+  ALWAYS_ASSERT(model_outputs_dyn != NULL);
+
+  for (size_t s = 0; s < num_output_sets; s++) {
+    model_outputs_dyn[s] = (void**)malloc(sizeof(void*) * model_num_outputs);
+    ALWAYS_ASSERT(model_outputs_dyn[s] != NULL);
+
+    for (size_t i = 0; i < model_num_outputs; i++) {
+      size_t num_output_bytes = format_size(output_buffer_formats[i])
+                                * vollo_rt_model_output_num_elements(ctx, model_index, i);
+      if (options.raw_buffer_api) {
+        // The device writes a whole (padded) transfer into a raw output buffer, which can be
+        // larger than the tensor. The runtime only reports the transfer size of single-output
+        // models; raw buffers are also padded to 4 KiB on allocation.
+        if (model_num_outputs == 1) {
+          size_t transfer_bytes = vollo_rt_model_output_transfer_size(ctx, model_index);
+          if (transfer_bytes > num_output_bytes) {
+            num_output_bytes = transfer_bytes;
+          }
+        }
+        model_outputs_dyn[s][i] = vollo_rt_get_raw_buffer_bytes(ctx, num_output_bytes);
+      } else {
+        model_outputs_dyn[s][i] = malloc(num_output_bytes);
+      }
+      ALWAYS_ASSERT(model_outputs_dyn[s][i] != NULL);
     }
-    ALWAYS_ASSERT(model_outputs_dyn[i] != NULL);
   }
 
   struct timespec* start_times
@@ -366,7 +380,7 @@ static void vollo_example(ExampleOptions options) {
 
   // We don't need a user context here
   // Since we're only using 1 model, the inferences are guaranteed to complete
-  // in the same order they were started
+  // in the same order they were started (this also selects each job's output set)
   uint64_t user_ctx = 0;
 
   clock_gettime(CLOCK_MONOTONIC, &start_warmup_time);
@@ -429,7 +443,7 @@ static void vollo_example(ExampleOptions options) {
         (const number_format*)input_buffer_formats,
         (const void* const*)test_inputs_dyn[input_ix],
         (const number_format*)output_buffer_formats,
-        model_outputs_dyn));
+        model_outputs_dyn[inf_started % num_output_sets]));
 
       inf_started++;
       outstanding_jobs++;
@@ -450,6 +464,8 @@ static void vollo_example(ExampleOptions options) {
       clock_gettime(CLOCK_MONOTONIC, &job_completed_time);
 
       for (size_t i = 0; i < num_completed; i++) {
+        void* const* completed_outputs = model_outputs_dyn[inf_completed % num_output_sets];
+
         // Serialize model outputs from first inference if output paths are set
         if (inf_completed == 0 && options.output_paths[0] != NULL) {
           for (size_t j = 0; j < model_num_outputs; j++) {
@@ -461,13 +477,13 @@ static void vollo_example(ExampleOptions options) {
 
             for (size_t k = 0; k < num_output_elems; k++) {
               if (fmt == number_format_fp32) {
-                float* buf = (float*)model_outputs_dyn[j];
+                float* buf = (float*)completed_outputs[j];
                 output_arrays[j].buffer[k] = buf[k];
               } else if (fmt == number_format_fp64) {
-                double* buf = (double*)model_outputs_dyn[j];
+                double* buf = (double*)completed_outputs[j];
                 output_arrays[j].buffer[k] = (float)buf[k];
               } else {
-                bf16* buf = (bf16*)model_outputs_dyn[j];
+                bf16* buf = (bf16*)completed_outputs[j];
                 output_arrays[j].buffer[k] = bf16_to_float(buf[k]);
               }
             }
@@ -559,10 +575,13 @@ static void vollo_example(ExampleOptions options) {
   free(latencies);
   free(start_times);
 
-  for (size_t i = 0; i < model_num_outputs; i++) {
-    if (!options.raw_buffer_api) {
-      free(model_outputs_dyn[i]);
+  for (size_t s = 0; s < num_output_sets; s++) {
+    for (size_t i = 0; i < model_num_outputs; i++) {
+      if (!options.raw_buffer_api) {
+        free(model_outputs_dyn[s][i]);
+      }
     }
+    free(model_outputs_dyn[s]);
   }
   free(model_outputs_dyn);
   free(output_buffer_formats);
@@ -631,6 +650,8 @@ void print_help(const char* example_program) {
 
     "    -R, --raw-buffer-api\n"
     "        Use raw DMA buffers and skip input/output data copy\n"
+    "        Each concurrent job gets its own output buffers; set VOLLO_DMA_ALLOC_SIZE_MB\n"
+    "        if they do not fit\n"
     "\n"
 
     "    -v, --run-in-vm\n"
@@ -833,15 +854,6 @@ int main(int argc, char** argv) {
 
   if (options.fp32_api && options.bf16_api) {
     fprintf(stderr, "Options -F,--fp32-api and -B,--bf16-api are not compatible\n");
-    exit(EXIT_FAILURE);
-  }
-
-  if (options.raw_buffer_api && (options.max_concurrent_jobs > 1)) {
-    fprintf(
-      stderr,
-      "Combination of -R,--raw-buffer-api and -c,--max-concurrent-jobs > 1 is not supported in "
-      "this simple example\n");
-    fprintf(stderr, "NOTE: output raw buffers cannot be reused for concurrent inferences\n");
     exit(EXIT_FAILURE);
   }
 
