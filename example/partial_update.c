@@ -15,11 +15,6 @@
 #include <time.h>
 #include <vollo-rt.h>
 
-// Helper to determine byte size of a given number format
-static size_t format_size(number_format format) {
-  return (format == number_format_bf16) ? sizeof(bf16) : sizeof(float);
-}
-
 static void full_input_inference_start(
   vollo_rt_context_t, const number_format*, const void* const*, const number_format*, void* const*);
 

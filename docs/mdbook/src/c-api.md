@@ -35,6 +35,27 @@ The API is designed to explicitly return errors when it can to let the user hand
 The metadata functions will instead error out themselves if any of the documented pre-conditions they rely on aren't met.
 Any other crash is considered a bug and we would be very grateful if you could tell us about it.
 
+## Errors
+
+Fallible functions return a `vollo_rt_error_t`: NULL for success, otherwise a
+NUL-terminated message. Inspect its category with `vollo_rt_error_code(err)`
+instead of parsing the text:
+
+| Code | Meaning |
+| --- | --- |
+| `vollo_rt_error_success` (0) | The error pointer is NULL. |
+| `vollo_rt_error_other` (1) | An error without a more specific category. Retrying is not necessarily safe. |
+| `vollo_rt_error_would_block` (2) | From `vollo_rt_add_external_input_job`: the job could not be added yet. Nothing was submitted or kept. |
+| `vollo_rt_error_timeout` (3) | From `vollo_rt_poll`: an external-input job has made no progress for a while because some of its input has not arrived, and the card is still running. The job stays pending and keeps its buffers; a later poll returns it once the rest of its input arrives. |
+
+More codes may be added; treat an unrecognized code as an error.
+
+Free errors with `vollo_rt_destroy_err`, not `free`. It accepts NULL, so it can be
+called whether or not the function failed. Pass both functions the original pointer
+from vollo-rt, not a copy of the message or an error from vollo-cfg. The Rust
+wrapper exposes `Error::code()`, `Error::is_would_block()` and `Error::is_timeout()`,
+and frees errors on drop.
+
 ## Initialisation
 
 A vollo context is created by calling `vollo_rt_init`.
@@ -504,3 +525,207 @@ compiled with `generate_state_reset = True`.
  */
 vollo_rt_error_t vollo_rt_add_reset_job(vollo_rt_context_t vollo, size_t model_index);
 ```
+
+## External input (experimental)
+
+An external-input job's inputs are written straight into the card's input
+aperture by a producer outside the runtime, such as a GPU, or by CPU threads
+through `vollo_rt_write_input_cpu`. Its outputs come back through
+`vollo_rt_poll` like any other job's. It works with a card over PCIe, either
+the whole card or a virtual function (see
+[Using a virtual function](#using-a-virtual-function)), including in a virtual
+machine. It does not yet work with the Vollo VM, the software simulator.
+
+The API is experimental: the functions may change or be removed, and the PCIe
+writes the card accepts may change, in a later release.
+
+No other drivers are needed for the card or the GPU, and the runtime does not
+use CUDA. The GPU writes straight to the card, not through host memory.
+Processes without `CAP_SYS_ADMIN` need one NVIDIA driver setting (see
+[Registering the aperture with NVIDIA drivers](#registering-the-aperture-with-nvidia-drivers)).
+Whether peer writes work depends on the PCIe topology, ACS, IOMMU and GPU
+driver, so check that the GPU's writes reach the card correctly on the target
+platform before relying on them.
+
+The SDK's `example/gpu` directory has a complete CUDA example, `gpu_input.cu`,
+with its host setup in the README there.
+
+### Adding a job
+
+1. Get each input's format and size as for any job, with
+   `vollo_rt_model_input_format` and `vollo_rt_model_input_num_elements`, and
+   its padded size with `vollo_rt_model_input_transfer_size`.
+2. For a GPU producer, get the aperture's address and size with
+   `vollo_rt_get_external_input_aperture` and register it with the GPU driver.
+   For CUDA, use `cuMemHostRegister` with
+   `CU_MEMHOSTREGISTER_IOMEMORY | CU_MEMHOSTREGISTER_DEVICEMAP`, then
+   `cuMemHostGetDevicePointer` (with the runtime API, `cudaHostRegister` with
+   `cudaHostRegisterIoMemory | cudaHostRegisterMapped`, then
+   `cudaHostGetDevicePointer`, as the example does). Register once after loading
+   the program; the registration can stay while ordinary jobs are added too.
+   CPU-only use needs neither step.
+3. Add the job with `vollo_rt_add_external_input_job`, giving the producer's
+   address for the start of the aperture (zero for CPU-only use) and an array
+   with room for one `vollo_rt_external_input_t` per model input. The job is
+   submitted at once, in order with the context's other jobs, and its whole
+   padded input is reserved in the card's input ring. The descriptors are
+   opaque: `vollo_rt_external_input_producer_address` gives an input's producer
+   address, and its format and sizes are those from step 1. An input's
+   destination is contiguous even where it wraps around the ring.
+4. Write each input exactly once, by one producer: the GPU, writing the input
+   in its format followed by zeros up to its padded size, or
+   `vollo_rt_write_input_cpu`, which converts from BF16 or FP32 and pads. Inputs
+   can be written in any order. Empty inputs need no writes.
+5. Poll as usual. The job completes once all of its input has arrived; until
+   then, no job added after it completes. No acknowledgement from the producer is
+   needed.
+
+`vollo_rt_error_would_block` means the job could not be added yet: the input
+ring is short of space, the maximum number of jobs is already in flight, or
+earlier jobs added to this context are not yet submitted. Nothing was submitted
+or kept, and the descriptors are unchanged. Poll, then add the job again:
+polling submits queued jobs and returns completed ones.
+A job whose padded input (the sum of its inputs' padded sizes) is larger than
+`vollo_rt_external_input_max_input_bytes`, the context's share of the ring, is
+an ordinary error.
+
+```c
+vollo_rt_external_input_t inputs[NUM_MODEL_INPUTS];
+vollo_rt_error_t err = vollo_rt_add_external_input_job(
+    vollo, model_index, user_ctx, output_formats, output_buffers, producer_aperture, inputs);
+if (vollo_rt_error_code(err) == vollo_rt_error_would_block) {
+    vollo_rt_destroy_err(err);
+    /* Poll, then add the job again. */
+} else if (err != NULL) {
+    fprintf(stderr, "%s\n", err);
+    vollo_rt_destroy_err(err);
+} else {
+    /* Write each input through its producer address or vollo_rt_write_input_cpu. */
+}
+```
+
+A job whose input never arrives does not complete; there is no way to cancel
+it. While some of its input has not arrived, `vollo_rt_poll` returns
+`vollo_rt_error_timeout` each time it has waited a while without that input
+(see [Errors](#errors)).
+
+### Writing input from the CPU
+
+**A CPU must write the aperture with `vollo_rt_write_input_cpu`, never with
+`memcpy` or other stores, even if they appear to work.** The aperture is a
+device port, not memory: the card accepts only whole, aligned 16-byte lanes,
+each written exactly once, and ordinary stores can be split, merged or repeated
+by the compiler or CPU. The function makes stores the card accepts. It takes a
+descriptor, the source's format (BF16 or FP32) and a source holding the whole
+input, aligned for its format and outside the aperture. On return the source
+may be reused.
+
+The function does not use the context, so worker threads can write inputs while
+the context's thread adds and polls jobs. If the context's thread reuses the
+`inputs` array for later jobs, give each worker a copy of its descriptor rather
+than a pointer into the array. A descriptor is valid until its job completes.
+
+| Operations | May overlap? |
+| --- | --- |
+| Writes of different inputs, of the same job or of different jobs | Yes |
+| A CPU write and the context's thread adding or polling jobs | Yes |
+| A CPU write and a GPU write of a different input | Yes |
+| Two writes of the same input, even one after the other | No |
+| Two calls that use the same context | No |
+| Any write and program reload or `vollo_rt_destroy` | No |
+
+Program reload and `vollo_rt_destroy` end the aperture's mapping. Before either,
+stop every writer, including workers that have been given a descriptor but not
+yet called the function, and unregister the aperture from the GPU driver.
+`vollo_rt_destroy` does not synchronise GPU streams.
+
+### GPU writes
+
+The aperture accepts these PCIe writes:
+
+- Each write is a whole number of aligned 16-byte lanes, with every byte enabled.
+- A write is at most `vollo_rt_external_input_max_write_bytes` and does not
+  cross a multiple of `vollo_rt_external_input_write_boundary`. These depend on
+  the bitstream and the card's PCIe settings: either the card's PCIe Max Payload
+  Size (at most 2048 bytes) and 4 KiB, or 64 bytes for both. Set the GPU's Max
+  Payload Size no larger than `vollo_rt_external_input_max_write_bytes`; under
+  different root ports the two can differ, and Linux's `pci=pcie_bus_peer2peer`
+  boot option sets every device to 128 bytes.
+- A write that spans more than one 64-byte word starts on a word.
+- Each 16-byte lane of the input, padding included, is written exactly once, in
+  any order: the card takes a 64-byte word once all four of its lanes have
+  arrived. Nothing is read, nothing outside the job's inputs is written, and an
+  input is not touched after its last write.
+
+These rules are about the writes that reach the card, not the GPU's store
+instructions. No CUDA operation (a vector store, a warp's stores or
+`cuMemcpyAsync`) is guaranteed to produce writes that meet them, and
+synchronising a stream later cannot repair a lane written twice or a write the
+card refused. Check what the GPU sends on the
+target platform.
+
+A GPU may merge stores, including stores from different kernels, into one
+write. A store that leaves a 64-byte word partly written can then be merged
+with the next word's store into a write that starts inside a word and crosses
+into the next, which the card refuses. Write each 64-byte word whole with one
+instruction, for example as 16-byte stores from four adjacent threads of a warp,
+not as separate partial-word stores. Since Volta a warp's threads can diverge and
+store separately, so compute every thread's value without branching on the
+thread, call `__syncwarp()` just before the store, and make the store volatile so
+the compiler neither splits nor merges it. The example's kernel does all of
+this.
+
+```cpp
+void* host_address;
+size_t size_bytes;
+check_vollo(vollo_rt_get_external_input_aperture(context, &host_address, &size_bytes));
+check_cuda(cuMemHostRegister(host_address, size_bytes,
+    CU_MEMHOSTREGISTER_IOMEMORY | CU_MEMHOSTREGISTER_DEVICEMAP));
+CUdeviceptr aperture;
+check_cuda(cuMemHostGetDevicePointer(&aperture, host_address, 0));
+
+// A model with two inputs: the GPU writes one, the CPU the other.
+number_format format0 = vollo_rt_model_input_format(context, model, 0);
+size_t elements0 = vollo_rt_model_input_num_elements(context, model, 0);
+size_t transfer0 = vollo_rt_model_input_transfer_size(context, model, 0);
+vollo_rt_external_input_t inputs[2];
+check_vollo(vollo_rt_add_external_input_job(context, model, user_ctx,
+    output_formats, host_outputs, aperture, inputs));
+launch_producer(stream, vollo_rt_external_input_producer_address(&inputs[0]),
+    format0, elements0, transfer0);
+check_vollo(vollo_rt_write_input_cpu(&inputs[1], number_format_fp32, cpu_input_1));
+poll_until_completed(context, user_ctx);
+
+// Only when the aperture is no longer needed:
+check_cuda(cuStreamSynchronize(stream));
+check_cuda(cuMemHostUnregister(host_address));
+```
+
+### Registering the aperture with NVIDIA drivers
+
+NVIDIA drivers register I/O memory only for processes with `CAP_SYS_ADMIN`. For
+any other user, `cuMemHostRegister` with `CU_MEMHOSTREGISTER_IOMEMORY` fails with
+`CUDA_ERROR_NOT_PERMITTED`
+(`cudaErrorNotPermitted` from the runtime API). To let other users register the aperture, set the
+driver's `PeerMappingOverride` registry key, rebuild the initramfs so that the
+key also applies at boot, and reload the driver:
+
+```sh
+echo 'options nvidia NVreg_RegistryDwords="PeerMappingOverride=1"' |
+    sudo tee /etc/modprobe.d/nvidia-peermapping.conf
+# Ubuntu, among others, loads the driver from the initramfs at boot, with the
+# initramfs's own copy of /etc/modprobe.d.
+sudo update-initramfs -u  # Debian and Ubuntu; sudo dracut -f on Fedora and RHEL
+# Reloading needs a GPU with no users, including a display server.
+sudo systemctl stop nvidia-persistenced  # if it is running
+sudo modprobe -r nvidia_uvm nvidia_drm nvidia_modeset nvidia
+sudo modprobe -a nvidia nvidia_modeset nvidia_drm nvidia_uvm
+sudo systemctl start nvidia-persistenced # if it was running
+grep RegistryDwords /proc/driver/nvidia/params  # shows PeerMappingOverride=1
+```
+
+If another file already sets `NVreg_RegistryDwords`, add the key to that value
+instead, separated by a semicolon. The setting applies to every user of the GPU
+on the host. The driver registers only ranges the calling process has already
+mapped as I/O memory, so a process can direct GPU writes only at device memory
+it has mapped itself, such as the Vollo aperture it opened.

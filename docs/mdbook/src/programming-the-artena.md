@@ -17,18 +17,18 @@ download the bitstream for the Silicom `Artena` board with the `c8b32` configura
 [Github Release page]: https://github.com/MyrtleSoftware/vollo-sdk/releases/
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v30.1.1/vollo-silicom-artena-c8b32-30.1.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v30.2.0/vollo-silicom-artena-c8b32-30.2.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-silicom-artena-c8b32-30.1.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-silicom-artena-c8b32-30.2.tar.gz -C $VOLLO_SDK/bitstream
 ```
 
 An LSTM-only image is available for the Artena which runs at a slightly higher clock frequency than the full-featured-Vollo
 c8b32 version. This may be downloaded as follows:
 
 ```sh
-curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v30.1.1/vollo-silicom-artena-c8b32lstm-30.1.tar.gz
+curl -LO https://github.com/MyrtleSoftware/vollo-sdk/releases/download/v30.2.0/vollo-silicom-artena-c8b32lstm-30.2.tar.gz
 mkdir -p $VOLLO_SDK/bitstream
-tar -xzf vollo-silicom-artena-c8b32lstm-30.1.tar.gz -C $VOLLO_SDK/bitstream
+tar -xzf vollo-silicom-artena-c8b32lstm-30.2.tar.gz -C $VOLLO_SDK/bitstream
 ```
 
 ## Programming the FPGA via JTAG
