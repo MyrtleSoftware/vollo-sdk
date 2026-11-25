@@ -9,6 +9,40 @@
 #include <stdlib.h>
 
 /**
+ * Machine-readable error categories. The numeric values are stable; more may be added.
+ */
+enum vollo_rt_error_code_t
+#if __STDC_VERSION__ >= 202311L
+  : uint32_t
+#endif  // __STDC_VERSION__ >= 202311L
+{
+  /**
+   * No error: the error pointer is NULL.
+   */
+  vollo_rt_error_success = 0,
+  /**
+   * An error without a more specific category. Do not assume retrying is safe.
+   */
+  vollo_rt_error_other = 1,
+  /**
+   * The operation could not be done yet. Nothing was submitted or reserved, and no caller
+   * buffers were kept.
+   */
+  vollo_rt_error_would_block = 2,
+  /**
+   * An external-input job has made no progress for a while because some of its input has
+   * not arrived, and the accelerator is still running. The job stays pending and keeps its
+   * buffers; a later poll returns it once the rest of its input arrives.
+   */
+  vollo_rt_error_timeout = 3,
+};
+#if __STDC_VERSION__ >= 202311L
+typedef enum vollo_rt_error_code_t vollo_rt_error_code_t;
+#else
+typedef uint32_t vollo_rt_error_code_t;
+#endif  // __STDC_VERSION__ >= 202311L
+
+/**
  * The accelerator architecture that a loaded program (or hardware bitstream) targets.
  */
 enum vollo_rt_architecture_t
@@ -72,7 +106,10 @@ typedef uint32_t number_format;
  * NULL is returned where there are no errors, otherwise it is a null-terminated string containing
  * an error message.
  *
- * Error messages are owned by vollo-rt and can be freed with `vollo_rt_destroy_err`
+ * Errors are owned by vollo-rt. Read an error's category with `vollo_rt_error_code` and free it
+ * with `vollo_rt_destroy_err`, not free(); both accept NULL. Pass them the original pointer from
+ * this vollo-rt: not a copy of the message, a pointer into it, or an error from another library
+ * (including vollo-cfg). Do not use an error after freeing it.
  */
 typedef const char* vollo_rt_error_t;
 
@@ -117,12 +154,28 @@ typedef struct partial_update_input {
 } partial_update_input;
 
 /**
+ * One input of a job from `vollo_rt_add_external_input_job`, in model argument order. Opaque:
+ * get its producer address with `vollo_rt_external_input_producer_address`. Its format and data
+ * are as `vollo_rt_model_input_format` and `vollo_rt_model_input_num_elements` give, and its
+ * padded size as `vollo_rt_model_input_transfer_size` does. It is valid until the job completes.
+ */
+typedef struct vollo_rt_external_input_t {
+  uint64_t opaque[8];
+} vollo_rt_external_input_t;
+
+/**
  * Return a static string of the vollo-rt version.
  */
 const char* vollo_rt_version(void);
 
 /**
- * All APIs return the error as a c string. To prevent leaking the memory, destroy it afterwards.
+ * Read an error's category without parsing its message. NULL returns `vollo_rt_error_success`.
+ * See `vollo_rt_error_t` for which pointers are valid.
+ */
+vollo_rt_error_code_t vollo_rt_error_code(vollo_rt_error_t err);
+
+/**
+ * Free an error. NULL is a no-op. See `vollo_rt_error_t` for which pointers are valid.
  */
 void vollo_rt_destroy_err(vollo_rt_error_t err);
 
@@ -137,6 +190,13 @@ vollo_rt_error_t vollo_rt_init(vollo_rt_context_t* context_ptr);
 
 /**
  * Destroy vollo-rt context, releasing its associated resources.
+ *
+ * Before destruction, stop dispatching CPU input work and join/drain every CPU input worker,
+ * including workers that have not entered `vollo_rt_write_input_cpu` yet. Stop all external GPU
+ * writers and unregister any aperture returned by `vollo_rt_get_external_input_aperture`.
+ * Destroying a context does not join CPU workers, synchronize CUDA streams or revoke an external
+ * GPU mapping. Normally poll every job to completion, join/drain CPU workers, stop/synchronize
+ * external GPU users, and unregister the mapping first.
  */
 void vollo_rt_destroy(vollo_rt_context_t vollo);
 
@@ -768,6 +828,12 @@ vollo_rt_error_t vollo_rt_add_reset_job(vollo_rt_context_t vollo, size_t model_i
  * Note: Polling also initiates transfers for new jobs, so poll must be called before any progress
  * on these new jobs can be made. Multiple polls may be necessary for a single job to complete.
  *
+ * `vollo_rt_error_timeout` means an external-input job has made no progress for a while because
+ * some of its input has not arrived, and the card is still running. The job stays pending and
+ * keeps its buffers; a later poll returns it once the rest of its input arrives.
+ *
+ * On error, `num_completed` is zero and `returned_user_ctx` is NULL.
+ *
  *   num_completed: out: the number of completed user_ctx returned
  *   returned_user_ctx: buffer for the returned user_ctx of completed jobs, this will only be
  *                      valid until the next call to vollo_rt_poll.
@@ -833,6 +899,11 @@ void* vollo_rt_get_raw_buffer_bytes(vollo_rt_context_t vollo, size_t num_bytes);
  *
  * On a VM, which copies the output rather than transferring it, this is enough for the output
  * in any number format, padded the same way.
+ *
+ * Requirements (panics otherwise, which aborts the process):
+ * - a program was loaded with `vollo_rt_load_program`
+ * - `model_index < vollo_rt_num_models`
+ * - the model has a single output
  */
 size_t vollo_rt_model_output_transfer_size(vollo_rt_context_t vollo, size_t model_index);
 
@@ -871,3 +942,141 @@ void vollo_rt_prepare_raw_buffer_output_completion(void* buffer, size_t transfer
  * This is an experimental API and may be changed or removed in the future.
  */
 bool vollo_rt_check_raw_buffer_output_completion(const void* buffer, size_t transfer_size_bytes);
+
+/**
+ * The address at which a producer writes this input: its data in its format, then zeros up to
+ * its padded size, exactly once. Zero for an empty input, for a job added with a zero producer
+ * address, or for a NULL `input`.
+ *
+ * Experimental: this may change or be removed in a later release.
+ */
+uint64_t vollo_rt_external_input_producer_address(const struct vollo_rt_external_input_t* input);
+
+/**
+ * Get the external-input aperture of a context with a program loaded on a card: the CPU address
+ * of the card's input port, and its size in bytes.
+ *
+ * Experimental: this may change or be removed in a later release.
+ *
+ * A GPU producer registers the aperture with its driver once (for CUDA, `cuMemHostRegister` with
+ * `CU_MEMHOSTREGISTER_IOMEMORY | CU_MEMHOSTREGISTER_DEVICEMAP`; the C API guide covers NVIDIA's
+ * `PeerMappingOverride`). The registration can stay while jobs of every kind are added. Program
+ * reload and `vollo_rt_destroy` end the mapping: before either, stop every writer, CPU and GPU,
+ * and unregister it.
+ *
+ * The aperture is device I/O memory, not RAM, and is returned without being touched. Never read
+ * it. Write only the inputs of jobs from `vollo_rt_add_external_input_job`, with PCIe writes the
+ * card accepts:
+ * - each write starts 16-byte aligned and is a whole number of 16-byte lanes, every byte enabled;
+ * - a write that spans more than one 64-byte word starts on a word;
+ * - a write is at most `vollo_rt_external_input_max_write_bytes` and does not cross a multiple
+ *   of `vollo_rt_external_input_write_boundary`;
+ * - each 16-byte lane of an input, padding included, is written exactly once, in any order.
+ *
+ * These rules are about the writes that reach the card, not the producer's store instructions.
+ * On error, `host_address` and `size_bytes` are unchanged.
+ */
+vollo_rt_error_t vollo_rt_get_external_input_aperture(
+  vollo_rt_context_t vollo, void** host_address, size_t* size_bytes);
+
+/**
+ * The largest PCIe write the external-input aperture accepts, in bytes: the card's PCIe maximum
+ * payload size, at most 2048, or 64 on a bitstream without wide input writes.
+ *
+ * Experimental: this may change or be removed in a later release.
+ *
+ * Requirements (panics otherwise):
+ * - `vollo_rt_get_external_input_aperture` succeeds on this context
+ */
+size_t vollo_rt_external_input_max_write_bytes(vollo_rt_context_t vollo);
+
+/**
+ * A PCIe write to the external-input aperture must not cross a multiple of this many bytes:
+ * 4096, or 64 on a bitstream without wide input writes.
+ *
+ * Experimental: this may change or be removed in a later release.
+ *
+ * Requirements (panics otherwise):
+ * - `vollo_rt_get_external_input_aperture` succeeds on this context
+ */
+size_t vollo_rt_external_input_write_boundary(vollo_rt_context_t vollo);
+
+/**
+ * The largest padded input of one external-input job this context accepts, in bytes: its share
+ * of the card's input ring. A job whose inputs' `vollo_rt_model_input_transfer_size` add up to
+ * more can never be added.
+ *
+ * Experimental: this may change or be removed in a later release.
+ *
+ * Requirements (panics otherwise):
+ * - a program was loaded on a card with `vollo_rt_load_program`
+ */
+size_t vollo_rt_external_input_max_input_bytes(vollo_rt_context_t vollo);
+
+/**
+ * Get the size in bytes of an input as the card takes it: its data,
+ * `vollo_rt_model_input_num_elements` values in `vollo_rt_model_input_format`, then zeros up to
+ * this size, a multiple of 64. An external-input producer writes all of it.
+ *
+ * Experimental: this may change or be removed in a later release.
+ *
+ * Requirements (panics otherwise):
+ * - a program was loaded on a card with `vollo_rt_load_program`
+ * - `model_index < vollo_rt_num_models`
+ * - `input_index < vollo_rt_model_num_inputs`
+ */
+size_t vollo_rt_model_input_transfer_size(
+  vollo_rt_context_t vollo, size_t model_index, size_t input_index);
+
+/**
+ * Add a job whose inputs a producer outside the runtime writes, and set `inputs` to one descriptor
+ * per model input.
+ *
+ * Experimental: this may change or be removed in a later release.
+ *
+ * `user_ctx`, `output_number_format` and `output_data` are as for `vollo_rt_add_job`.
+ * `producer_mapping_address` is the producer's address for the start of the aperture (for CUDA,
+ * from `cuMemHostGetDevicePointer`), or zero if every input is written with
+ * `vollo_rt_write_input_cpu`. `inputs` must have room for one descriptor per model input.
+ *
+ * The job is submitted at once, after the context's earlier jobs, with its whole padded input
+ * reserved in the card's input ring. `vollo_rt_error_would_block` means it could not be submitted
+ * yet: the ring is short of space, the maximum number of jobs is in flight, or earlier jobs are
+ * not yet submitted.
+ * Nothing was then submitted or kept, and `inputs` is unchanged. A job whose padded input is
+ * larger than `vollo_rt_external_input_max_input_bytes` can never be added, and is an ordinary
+ * error.
+ *
+ * Each input must be written exactly once, by one producer, with the writes the aperture accepts
+ * (see `vollo_rt_get_external_input_aperture`). The
+ * job completes, and `vollo_rt_poll` returns it, once all of its input has arrived. Until then,
+ * no job added after it completes.
+ */
+vollo_rt_error_t vollo_rt_add_external_input_job(
+  vollo_rt_context_t vollo,
+  size_t model_index,
+  uint64_t user_ctx,
+  const number_format* output_number_format,
+  void* const* output_data,
+  uint64_t producer_mapping_address,
+  struct vollo_rt_external_input_t* inputs);
+
+/**
+ * Write one input of an external-input job from CPU memory.
+ *
+ * Experimental: this may change or be removed in a later release.
+ *
+ * A CPU must write the aperture with this function, never with `memcpy` or other stores: it
+ * converts `source` from `source_format` (BF16 or FP32) to the input's format, pads it, and
+ * makes the stores the card needs. `source` holds the whole input, aligned for its format,
+ * outside the aperture; it may be NULL for an empty input. `input` is a descriptor from
+ * `vollo_rt_add_external_input_job`, unmodified, for a job that has not completed. Neither is
+ * checked: a modified descriptor can send the stores anywhere, and one whose job has completed
+ * overwrites a later job's input.
+ *
+ * It does not use the context, so worker threads may call it while the context's thread adds
+ * and polls jobs. On return, `source` may be reused, though the stores may still be on their way
+ * to the card.
+ */
+vollo_rt_error_t vollo_rt_write_input_cpu(
+  const struct vollo_rt_external_input_t* input, number_format source_format, const void* source);
