@@ -137,10 +137,14 @@ if [[ -n "$RUN_IO_TEST" ]]; then
   echo "$csv_header" > io-test-raw-buffer-metrics.csv
   echo "$csv_header" > io-test-metrics.csv
 
-  for input_size_pow in $(seq 6 1 14); do
+  limits=(
+    --num-warmup-inferences=1000000 --max-warmup-duration-ms=200
+    --num-inferences=100000 --max-duration-ms=500
+  )
+  for input_size_pow in $(seq 6 1 17); do
     input_size_bytes=$((2 ** input_size_pow))
     input_size_values=$((input_size_bytes / 2))
-    for output_size_pow in $(seq 6 1 14); do
+    for output_size_pow in $(seq 6 1 17); do
       output_size_bytes=$((2 ** output_size_pow))
       output_size_values=$((output_size_bytes / 2))
       info "Compiling program for IO only test: input_size_bytes=$input_size_bytes, output_size_bytes=$output_size_bytes"
@@ -148,9 +152,9 @@ if [[ -n "$RUN_IO_TEST" ]]; then
 
       info "Program compiled $m, now running inference"
       echo -n "$input_size_bytes B,$output_size_bytes B," >> io-test-raw-buffer-metrics.csv
-      $cmd --raw-buffer-api --num-inferences=100000 --num-warmup-inferences=10000 --json "$m" | tee /dev/stderr | jq -r '.metrics.latency_us | [.mean, .p99] | join(",")' >> io-test-raw-buffer-metrics.csv
+      $cmd --raw-buffer-api "${limits[@]}" --json "$m" | tee /dev/stderr | jq -r '.metrics.latency_us | [.mean, .p99] | join(",")' >> io-test-raw-buffer-metrics.csv
       echo -n "$input_size_bytes B,$output_size_bytes B," >> io-test-metrics.csv
-      $cmd --num-inferences=100000 --num-warmup-inferences=10000 --json "$m" | tee /dev/stderr | jq -r '.metrics.latency_us | [.mean, .p99] | join(",")' >> io-test-metrics.csv
+      $cmd "${limits[@]}" --json "$m" | tee /dev/stderr | jq -r '.metrics.latency_us | [.mean, .p99] | join(",")' >> io-test-metrics.csv
       echo
 
       # cleanup

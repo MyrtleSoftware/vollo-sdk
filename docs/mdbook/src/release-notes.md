@@ -1,5 +1,14 @@
 # Release Notes
 
+## 30.2.0
+
+- `vollo-rt` has an experimental external-input API, through which a GPU or other producer
+  outside the runtime writes a job's inputs straight to the card (see the External Input
+  section of the C API docs). `example/gpu` in the SDK has a CUDA example.
+- Fix the V80 and V80LL bitstreams occasionally failing to read an input from host memory
+  when VFs on the same card mix MMIO and DMA inputs
+- Higher MMIO input throughput and lower latency on the Agilex bitstreams
+
 ## 30.1.1
 
 - Fix an inference on an SR-IOV VF occasionally failing with "the accelerator could not read its

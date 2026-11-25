@@ -29,7 +29,7 @@ models on the accelerator to measure the performance.
    ```
 
    With `RUN_IO_TEST=1` it also measures the [IO round trip](benchmark-io.md) for
-   input and output sizes from 64 B to 16 KiB, using the runtime's defaults. It
+   input and output sizes from 64 B to 128 KiB, using the runtime's defaults. It
    writes `work/io-test-metrics.csv`, to compare with the "User buffers" tables, and
    `work/io-test-raw-buffer-metrics.csv`, to compare with the "Raw DMA buffers" tables.
 
